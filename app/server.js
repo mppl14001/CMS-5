@@ -1,4 +1,5 @@
-GLOBAL.config = require('nconf').file({ file: 'config.json' })
+var path = require('path')
+GLOBAL.config = require('nconf').file({ file: path.join(__dirname, 'config.json') })
 
 var models = require('./models')
 
