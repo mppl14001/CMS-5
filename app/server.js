@@ -1,1 +1,1 @@
-var config = require('nconf').file({ file: 'config.json' })
+GLOBAL.config = require('nconf').file({ file: 'config.json' })
