@@ -1,0 +1,1 @@
+var config = require('nconf').file({ file: 'config.json' })
