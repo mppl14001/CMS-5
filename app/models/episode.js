@@ -2,9 +2,6 @@ module.exports = function(sequelize, DataTypes) {
 
 	return sequelize.define('Episode', {
 
-		// Todo: Add author relationship
-		// Todo: Add tags relationship
-
 		title: {
 			type: DataTypes.STRING
 		},
