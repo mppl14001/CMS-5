@@ -9,5 +9,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/CodePilotCo/CMS/issues"
+  },
+  "dependencies": {
+    "express": "~3.4.3",
+    "sequelize": "~2.0.0-beta.0"
   }
 }
