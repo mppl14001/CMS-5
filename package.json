@@ -1,0 +1,13 @@
+{
+  "name": "CodePilotCMS",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodePilotCo/CMS.git"
+  },
+  "author": "Will Smidlein <Will@WillSmidlein.com> (http://willsmidlein.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CodePilotCo/CMS/issues"
+  }
+}
