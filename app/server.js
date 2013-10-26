@@ -4,6 +4,7 @@ var models = require('./models')
 
 var Episode = models.episode
 var Shownotes = models.shownotes
+var User = models.user
 
 var express = require('express')
 var app = express()
