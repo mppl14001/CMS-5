@@ -4,7 +4,6 @@ module.exports = function(sequelize, DataTypes) {
 
 		// Todo: Add author relationship
 		// Todo: Add tags relationship
-		// Todo: Add shownote translations relationship
 
 		title: {
 			type: DataTypes.STRING
