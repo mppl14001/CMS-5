@@ -1,0 +1,1 @@
+// http://redotheweb.com/2013/02/20/sequelize-the-javascript-orm-in-practice.html
