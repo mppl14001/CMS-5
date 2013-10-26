@@ -39,6 +39,6 @@ module.exports = function(sequelize, DataTypes) {
 				return [this.first_name, this.last_name].join(' ')
 			}
 		}
-	)
+	})
 
 };
