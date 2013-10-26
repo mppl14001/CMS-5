@@ -10,8 +10,12 @@ var User = models.user
 var express = require('express')
 var app = express()
 
-app.get('/', function(req, res){
+var exphbs = require('express3-handlebars')
+app.engine('handlebars', exphbs({defaultLayout: 'main'}))
+app.set('view engine', 'handlebars')
 
+app.get('/', function(req, res){
+	res.render('home')
 })
 
 app.get('/:id', function(req, res) {
