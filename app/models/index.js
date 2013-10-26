@@ -13,5 +13,7 @@ module.exports['shownotes'].sync()
 module.exports['user'].sync()
 
 module.exports['episode'].hasMany(module.exports['shownotes'], {as: 'shownotes_translations'})
+module.exports['user'].hasMany(module.exports['episode'], {as: 'episodes'})
+module.exports['episodes'].hasOne(module.exports['user'], {as: 'author'})
 
 module.exports.sequelize = sequelize
