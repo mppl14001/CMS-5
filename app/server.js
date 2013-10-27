@@ -19,10 +19,10 @@ app.get('/', function(req, res){
 })
 
 app.get('/:id', function(req, res) {
-  Episode.find(parseInt(req.param('id'), 10)).success(function(episodes) {
-    // this gets the episode
-    res.end()
-  })
+	Episode.find(parseInt(req.param('id'), 10)).success(function(episodes) {
+		// this gets the episode
+		res.end()
+	})
 })
 
 app.listen(config.get('port') || 3000)
