@@ -13,7 +13,10 @@ module.exports = function(sequelize, DataTypes) {
 			// 4: Viewer
 			
 			allowNull: false,
-			type: DataTypes.INTEGER
+			type: DataTypes.INTEGER,
+			validate: {
+				isIn: [1, 2, 3, 4]
+			}
 		},
 		twitter_username: {
 			allowNull: false,

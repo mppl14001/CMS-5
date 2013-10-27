@@ -1,7 +1,7 @@
 {
 	"db": {
-		"name": "",
-		"user": "",
+		"name": "cms",
+		"user": "root",
 		"password": ""
 	},
 	"port": 3000,
