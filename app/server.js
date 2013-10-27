@@ -52,6 +52,7 @@ app.use(express.cookieParser())
 app.use(express.bodyParser())
 app.use(express.methodOverride())
 app.use(express.session({ secret: 'CodePilot' }))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -77,6 +78,58 @@ app.get('/:id(\\d+)', function(req, res) {
 		// this gets the episode
 		res.end()
 	})
+})
+
+app.get('/admin/', /*requireAdmin,*/ function(req, res) {
+	var data = {
+		boxes: [
+			{
+				title: "Video views today",
+				data: "12,428"
+			},
+			{
+				title: "Videos awaiting approval",
+				data: 40
+			},
+			{
+				title: "Transcriptions awaiting approval",
+				data: 12
+			},
+			{
+				title: "Some title here",
+				data: "Data"
+			},
+			{
+				title: "Some title here",
+				data: "Data"
+			},
+			{
+				title: "Some title here",
+				data: "Data"
+			}
+		]
+	}
+	res.render('admin', data)
+})
+
+app.get('/admin/episodes/', /*requireAdmin,*/ function(req, res) {
+	res.render('admin')
+})
+
+app.get('/admin/episodes/pending/', /*requireAdmin,*/ function(req, res) {
+	res.render('admin')
+})
+
+app.get('/admin/episodes/:id', /*requireAdmin,*/ function(req, res) {
+	res.render('admin')
+})
+
+app.get('/admin/users/', /*requireAdmin,*/ function(req, res) {
+	res.render('admin')
+})
+
+app.get('/admin/users/:id', /*requireAdmin,*/ function(req, res) {
+	res.render('admin')
 })
 
 app.listen(config.get('port') || 3000)
