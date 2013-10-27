@@ -158,7 +158,28 @@ module.exports.addTag = function(req, res) {
 
 module.exports.changeUserRole = function(req, res) {
 	if (req.xhr) {
-		
+
+	}
+}
+
+module.exports.addUser = function(req, res) {
+	if (req.xhr) {
+		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (?, ?, ?, ?, ?)', null, {raw: true}, {res.body.name, res.body.role, res.body.twHandle, res.body.twAccessToken, res.body.twAccessSecret}).success(function(user) {
+			var json = {
+				status:'ok',
+				rowsModified:1
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status:'error',
+				rowsModified:null,
+				error: error
+			}
+			res.write(JSON.stringify(errorJson))
+			res.end()
+		})
 	}
 }
 

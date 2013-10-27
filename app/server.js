@@ -108,4 +108,8 @@ app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
 
 app.post('/api/admin/episode/approve', adminController.postApproveScreencast)
 
+app.post('/api/admin/user/add', adminController.addUser)
+
+app.post('/api/admin/user/delete', adminController.deleteUser)
+
 app.listen(config.get('port') || 3000)
