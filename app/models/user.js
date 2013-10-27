@@ -30,6 +30,11 @@ module.exports = function(sequelize, DataTypes) {
 		twitter_access_secret: {
 			allowNull: false,
 			type: DataTypes.STRING
+		},
+		active: {
+			type: DataTypes.INTEGER,
+			defaultValue: '1',
+			allowNull:false
 		}
 
 	})

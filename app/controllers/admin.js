@@ -187,7 +187,7 @@ module.exports.approveScreencast = function(req, res) {
 
 module.exports.removeScreencast = function(req, res) {
 	if (req.xhr) {
-
+		
 	}
 }
 
