@@ -7,6 +7,8 @@ var Sequelize = require('sequelize')
 GLOBAL.async = require('async')
 var express = require('express')
 var exphbs = require('express3-handlebars')
+var RedisStore = require('connect-redis')(express);
+var sessionStore = new RedisStore
 
 // Config
 GLOBAL.config = nconf.file({ file: path.join(__dirname, 'config.json') })
@@ -25,6 +27,7 @@ var User = models.user
 // Controllers
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
+var userController = require('./controllers/user.js')
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
@@ -62,12 +65,15 @@ passport.use(new TwitterStrategy({
 var app = express()
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
-app.engine('handlebars', exphbs({defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')}))
+app.engine('handlebars', exphbs({
+	partialsDir: path.join(__dirname, 'views', 'partials'),
+	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')
+}))
 app.use(express.cookieParser())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.methodOverride())
-app.use(express.session({ secret: 'CodePilot' }))
+app.use(express.session({ secret: 'CodePilot', store: sessionStore }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -180,6 +186,14 @@ app.post('/api/admin/episode/remove', adminController.approveScreencast)
 
 app.post('/api/admin/user/add', adminController.addUser)
 
-app.post('/api/admin/user/delete', adminController.deleteUser)
+app.post('/api/admin/user/deactivate', adminController.deactivateUser)
+
+app.post('/api/admin/user/activate', adminController.activateUser)
+
+// Screencaster APIs
+
+app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
+
+app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
 app.listen(config.get('port') || 3000)

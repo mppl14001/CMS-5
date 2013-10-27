@@ -115,8 +115,8 @@ module.exports.getPendingEpisodes = function(req, res) {
 }
 
 module.exports.getEpisodeById = function(req, res) {
-	var dataTest = {
-		name: "Joe Learns to Code",
+	var data = {
+		title: "Joe Learns to Code",
 		thumbnail: "http://cdn.panasonic.com/images/imageNotFound400.jpg",
 		video: null,
 		author: "Joe Torraca",
@@ -148,8 +148,16 @@ module.exports.getEpisodeById = function(req, res) {
 			}
 		]
 	}
-	console.log(dataTest)
-	res.render('admin/admin-episodes-specific', dataTest)
+	async.parallel([
+		function (callback) {
+			sequelize.query('SELECT title, ytURL, approved, UserId').success(function(data) {
+				callback(null, data)
+			})
+		}
+	], function callback(err, results) {
+		res.render('admin/admin-episodes-specific', data)
+	})
+	console.log(data)
 }
 
 module.exports.getUsers = function(req, res) {
@@ -159,7 +167,6 @@ module.exports.getUsers = function(req, res) {
 		})
 	})
 }
-
 
 module.exports.getUserById = function(req, res) {
 	res.render('admin/admin')
@@ -224,33 +231,59 @@ module.exports.addUser = function(req, res) {
 	}
 }
 
-module.exports.deleteUser = function(req, res) {
+module.exports.deactivateUser = function(req, res) {
 	if (req.xhr) {
-		if (req.body.confirmation === true) {
-			sequelize.query('DELETE FROM Users WHERE twitter_username = :username AND role = :role', null, {raw: true}, {username: res.body.twHandle, role: res.body.role}).success(function(deleted) {
-				var successJson = {
-					status: 'ok',
-					rowsModified: 1,
-					recordRemoved: req.body.twHandle
-				}
-				res.write(JSON.stringify(successJson))
-				res.end()
-			}).error(function(error) {
-				var errorJson = {
-					status: 'error',
-					rowsModified: null,
-					error: 'sequelize'
-				}
-				res.write(JSON.stringify(errorJson))
-				res.end()
-			})
-		} else {
+		var roles = {
+			"admin": 1,
+			"screencaster": 2,
+			"moderator": 3,
+			"viewer":4
+		}
+		sequelize.query('UPDATE Users SET active = 0 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1,
+				recordRemoved: req.body.twHandle
+			}
+			res.write(JSON.stringify(successJson))
+			res.end()
+		}).error(function(error) {
 			var errorJson = {
 				status: 'error',
 				rowsModified: null,
-				error: "Nil confirmation"
+				error: 'sequelize'
 			}
+			res.write(JSON.stringify(errorJson))
+			res.end()
+		})
+	}
+}
+
+module.exports.activateUser = function(req, res) {
+	if (req.xhr) {
+		var roles = {
+			"admin": 1,
+			"screencaster": 2,
+			"moderator": 3,
+			"viewer":4
 		}
+		sequelize.query('UPDATE Users SET active = 1 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1,
+				recordRemoved: req.body.twHandle
+			}
+			res.write(JSON.stringify(successJson))
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null,
+				error: 'sequelize'
+			}
+			res.write(JSON.stringify(errorJson))
+			res.end()
+		})
 	}
 }
 

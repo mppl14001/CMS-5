@@ -6,8 +6,9 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING
 		},
 		ytURL: {
-			type: DataTypes.STRING
-			// Todo: Add YouTube URL validation
+			type: DataTypes.STRING,
+			isURL: true,
+			is: ["^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))(?:\S+)?$"]
 		},
 		published: {
 			type: DataTypes.BOOLEAN,

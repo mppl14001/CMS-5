@@ -1,12 +1,3 @@
-<div class="btn-group sub-view">
-	<a class="btn btn-primary" href="/admin/users"><i class="fa fa-user"></i> Users</a>
-	<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-	<ul class="dropdown-menu">
-		<li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-		<li><a href="/admin/episodes"><i class="fa fa-caret-square-o-right"></i> Episodes</a></li>
-		<li><a href="/admin/users"><i class="fa fa-user"></i> Users</a></li>
-	  </ul>
-</div>
 <section class="users" style="box-sizing:border-box;margin-top:25px;">
 	<table class="table table-striped">
 		<thead>
@@ -20,14 +11,18 @@
 		</thead>
 		<tbody>
 		{{#each users}}
-			<tr>
-				<td>{{this.id}}</td>
-				<td>@{{this.twitter_username}}</td>
+			<tr data-id="{{this.id}}">
+				<td class="id">{{this.id}}</td>
+				<td class="twitter">@{{this.twitter_username}}</td>
 				<td>{{this.createdAt}}</td>
-				<td>Active</td>
-				<td>
+				{{#if this.active}}
+					<td class="status">Active</td>
+				{{else}}
+					<td class="status error">Inactive</td>
+				{{/if}}
+				<td class="buttons col-md-5">
 					<div class="btn-group level">
-						<a class="btn btn-primary" href="#"><i class="fa fa-user"></i> Admin</a>
+						<a class="btn btn-primary active-role" href="#" data-role="admin"><i class="fa fa-user"></i> Admin</a>
 						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="#"><i class="fa fa-pencil"></i> Viewer</a></li>
@@ -36,10 +31,56 @@
 							<li><a href="#"><i class="fa fa-ban"></i> Admin</a></li>
 						  </ul>
 					</div>
-					<button type="button" class="btn btn-danger">Close Account</button>
+					{{#if this.active}}
+						<button type="button" name="manage" class="btn btn-danger" onclick="deactivateAccount({{this.id}});">Close Account</button>
+					{{else}}
+						<button type="button" name="manage" class="btn btn-success" onclick="activateAccount({{this.id}});">Reactivate</button>
+					{{/if}}
 				</td>
 			</tr>
 		{{/each}}
 		</tbody>
 	</table>
+	<script type="text/javascript">
+		function deactivateAccount(id) {
+			$.ajax({
+				url: '/api/admin/user/deactivate',
+				type: 'POST',
+				data: {
+					id: id,
+					role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
+				},
+				success:function(data) {
+					var json = $.parseJSON(data)
+					if (json.status == 'ok') {
+						$(".users table tbody tr[data-id="+id+"] .status").text("Inactive")
+						$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
+						$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-success" onclick="activateAccount('+id+');" style="margin-left:5px;">Reactivate</button>')
+					} else {
+						console.log("There was a fucking error")
+					}
+				}
+			})
+		}
+		function activateAccount(id) {
+			$.ajax({
+				url: '/api/admin/user/activate',
+				type: 'POST',
+				data: {
+					id: id,
+					role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
+				},
+				success:function(data) {
+					var json = $.parseJSON(data)
+					if (json.status == 'ok') {
+						$(".users table tbody tr[data-id="+id+"] .status").text("Active")
+						$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
+						$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-danger" onclick="deactivateAccount('+id+');" style="margin-left:5px;">Close Account</button>')						
+					} else {
+						console.log("There was a fucking error")
+					}
+				}
+			})
+		}
+	</script>
 </section>
