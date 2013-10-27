@@ -1,24 +1,27 @@
+// Node Module Requirements
 var path = require('path')
-GLOBAL.config = require('nconf').file({ file: path.join(__dirname, 'config.json') })
+var nconf = require('nconf')
+var passport = require('passport')
+var Sequelize = require('sequelize')
+var async = require('async')
+var express = require('express')
+var exphbs = require('express3-handlebars')
 
+// Models
 var models = require('./models')
-
 var Episode = models.episode
 var Shownotes = models.shownotes
 var User = models.user
 
+// Config
+GLOBAL.config = nconf.file({ file: path.join(__dirname, 'config.json') })
 var twitterConfig = config.get('twitter')
-
-var passport = require('passport')
-
-var Sequelize = require('sequelize')
-
 var dbConfig = config.get('db')
 
-var async = require('async')
-
+// DB
 var sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
 
+// Passport
 var TwitterStrategy = require('passport-twitter').Strategy
 passport.serializeUser(function(user, done) {
 	done(null, user.id)
@@ -50,9 +53,7 @@ passport.use(new TwitterStrategy({
 	})
 }))
 
-var exphbs = require('express3-handlebars')
-
-var express = require('express')
+// Express
 var app = express()
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
@@ -232,6 +233,8 @@ app.get('/admin/users/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
 })
 
 app.listen(config.get('port') || 3000)
+
+// Passport roles
 
 function requireViewer(req, res, next) {
 	if (req.user && req.user.role === 4) {
