@@ -102,6 +102,26 @@ app.get('/:id(\\d+)', function(req, res) {
 	}
 })
 
+/*
+	Screencast submission
+*/
+
+app.get('/screencaster', function(req, res) {
+	/*
+	if (!req.user || req.user.role == 4) {
+		res.redirect('../')
+	}
+	*/
+
+	// Access Granted
+	res.render("screencasters/screencasters-episodes-list")
+
+})
+
+/* 
+	Super Secret Admin Area
+*/
+
 app.get('/admin', /*requireAdmin,*/ function(req, res) {
 	var data = {
 		boxes: [
