@@ -7,15 +7,6 @@ var Episode = models.episode
 var Shownotes = models.shownotes
 var User = models.user
 
-var express = require('express')
-var app = express()
-app.set('views', __dirname + '/views')
-app.set('view engine', 'handlebars')
-app.use(express.cookieParser())
-app.use(express.bodyParser())
-app.use(express.methodOverride())
-app.use(express.session({ secret: 'CodePilot' }))
-
 var twitterConfig = config.get('twitter')
 
 var passport = require('passport')
@@ -50,17 +41,36 @@ passport.use(new TwitterStrategy({
 		return done(error, null)
 	})
 }))
+
+var exphbs = require('express3-handlebars')
+
+var express = require('express')
+var app = express()
+app.engine('handlebars', exphbs({defaultLayout: 'main'}))
+app.set('view engine', 'handlebars')
+app.set('views', __dirname + '/views')
+app.use(express.cookieParser())
+app.use(express.bodyParser())
+app.use(express.methodOverride())
+app.use(express.session({ secret: 'CodePilot' }))
 app.use(passport.initialize())
 app.use(passport.session())
-
-app.get('/', function(req, res) {
-	res.send('')
-})
 
 app.get('/auth/twitter', passport.authenticate('twitter'))
 
 app.get('/auth/twitter/callback', passport.authenticate('twitter', {failureRedirect: '/auth/twitter'}), function(req, res) {
 	res.redirect('/')
+})
+
+app.get('/', function(req, res){
+	res.render('home')
+})
+
+app.get('/:id', function(req, res) {
+	Episode.find(parseInt(req.param('id'), 10)).success(function(episodes) {
+		// this gets the episode
+		res.end()
+	})
 })
 
 app.listen(config.get('port') || 3000)
