@@ -7,6 +7,8 @@ var Sequelize = require('sequelize')
 GLOBAL.async = require('async')
 var express = require('express')
 var exphbs = require('express3-handlebars')
+var RedisStore = require('connect-redis')(express);
+var sessionStore = new RedisStore
 
 // Config
 GLOBAL.config = nconf.file({ file: path.join(__dirname, 'config.json') })
@@ -71,7 +73,7 @@ app.use(express.cookieParser())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.methodOverride())
-app.use(express.session({ secret: 'CodePilot' }))
+app.use(express.session({ secret: 'CodePilot', store: sessionStore }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use(passport.session())
