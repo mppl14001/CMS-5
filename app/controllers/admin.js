@@ -95,18 +95,19 @@ module.exports.getPendingEpisodes = function(req, res) {
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
+				console.log(eId);
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-					shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-					if (shownotes) {
+					if (shownotes.length > 0) {
 						element.shownotes = shownotes
+						shownotes[0].content = shownotes[0].content.toString()
+					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 					} else {
 						element.shownotes = null
 					}
 					console.log(element)
-					res.render('admin/admin-episodes-pending', data)
 				})
 			}
+			res.render('admin/admin-episodes-pending', data)
 		} else {
 			res.render('admin/admin-episodes-pending')
 		}
@@ -152,7 +153,11 @@ module.exports.getEpisodeById = function(req, res) {
 }
 
 module.exports.getUsers = function(req, res) {
-	res.render('admin/admin-users')
+	sequelize.query('SELECT * FROM Users').success(function(query) {
+		res.render('admin/admin-users', {
+			users: query
+		})
+	})
 }
 
 
@@ -200,7 +205,7 @@ module.exports.changeUserRole = function(req, res) {
 
 module.exports.addUser = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (:name, :role, :twUsername, :twAccessToken, :twAccessSecret)', null, {raw: true}, {name:req.body.name, role:req.body.role, twUsername:req.body.twHandle, twAccessToken: req.body.twAccessToken, twAccessSecret: req.body.twAccessSecret}).success(function(user) {
+		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (:name, :role, :twitter_username, :twitter_access_token, :twitter_access_secret)', null, {raw: true}, {name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret}).success(function(user) {
 			var json = {
 				status:'ok',
 				rowsModified:1
@@ -222,7 +227,7 @@ module.exports.addUser = function(req, res) {
 module.exports.deleteUser = function(req, res) {
 	if (req.xhr) {
 		if (req.body.confirmation === true) {
-			sequelize.query('DELETE FROM Users WHERE twitter_username = :twUsername AND role = :role', null, {raw: true}, {twUsername: req.body.twHandle, role: req.body.role}).success(function(deleted) {
+			sequelize.query('DELETE FROM Users WHERE twitter_username = :username AND role = :role', null, {raw: true}, {username: res.body.twHandle, role: res.body.role}).success(function(deleted) {
 				var successJson = {
 					status: 'ok',
 					rowsModified: 1,

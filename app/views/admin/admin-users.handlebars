@@ -12,17 +12,18 @@
 		<thead>
 			<tr>
 				<td>#</td>
-				<td>Email</td>
+				<td>Twitter Handle</td>
 				<td>Created on</td>
 				<td>Status</td>
 				<td style="width: auto;"></td>
 			</tr>
 		</thead>
 		<tbody>
+		{{#each users}}
 			<tr>
-				<td>1</td>
-				<td>joe@joetorraca.com</td>
-				<td>10/15/2013</td>
+				<td>{{this.id}}</td>
+				<td>@{{this.twitter_username}}</td>
+				<td>{{this.createdAt}}</td>
 				<td>Active</td>
 				<td>
 					<div class="btn-group level">
@@ -38,6 +39,7 @@
 					<button type="button" class="btn btn-danger">Close Account</button>
 				</td>
 			</tr>
+		{{/each}}
 		</tbody>
 	</table>
 </section>

@@ -60,11 +60,12 @@ passport.use(new TwitterStrategy({
 
 // Express
 var app = express()
-app.engine('handlebars', exphbs({defaultLayout: 'main'}))
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
-app.set('views', __dirname + '/views')
+app.engine('handlebars', exphbs({defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')}))
 app.use(express.cookieParser())
-app.use(express.bodyParser())
+app.use(express.json())
+app.use(express.urlencoded())
 app.use(express.methodOverride())
 app.use(express.session({ secret: 'CodePilot' }))
 app.use(express.static(path.join(__dirname, 'public')))
