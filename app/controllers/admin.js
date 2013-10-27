@@ -154,6 +154,69 @@ module.exports.postApproveScreencast = function(req, res) {
 	}
 }
 
+module.exports.addTag = function(req, res) {
+	if (req.xhr) {
+
+	}
+}
+
+module.exports.changeUserRole = function(req, res) {
+	if (req.xhr) {
+
+	}
+}
+
+module.exports.addUser = function(req, res) {
+	if (req.xhr) {
+		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (:name, :role, :twitter_username, :twitter_access_token, :twitter_access_secret)', null, {raw: true}, {name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret}).success(function(user) {
+			var json = {
+				status:'ok',
+				rowsModified:1
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status:'error',
+				rowsModified:null,
+				error: error
+			}
+			res.write(JSON.stringify(errorJson))
+			res.end()
+		})
+	}
+}
+
+module.exports.deleteUser = function(req, res) {
+	if (req.xhr) {
+		if (req.body.confirmation === true) {
+			sequelize.query('DELETE FROM Users WHERE twitter_username = :username AND role = :role', null, {raw: true}, {username: res.body.twHandle, role: res.body.role}).success(function(deleted) {
+				var successJson = {
+					status: 'ok',
+					rowsModified: 1,
+					recordRemoved: req.body.twHandle
+				}
+				res.write(JSON.stringify(successJson))
+				res.end()
+			}).error(function(error) {
+				var errorJson = {
+					status: 'error',
+					rowsModified: null,
+					error: 'sequelize'
+				}
+				res.write(JSON.stringify(errorJson))
+				res.end()
+			})
+		} else {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null,
+				error: "Nil confirmation"
+			}
+		}
+	}
+}
+
 function requireViewer(req, res, next) {
 	if (req.user && req.user.role === 4) {
 		next()
