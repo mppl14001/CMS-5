@@ -83,10 +83,22 @@ app.get('/logout', function(req, res) {
 })
 
 app.get('/:id(\\d+)', function(req, res) {
-	Episode.find(parseInt(req.param('id'), 10)).success(function(episodes) {
-		// this gets the episode
-		res.end()
-	})
+	var episodeNumber = parseInt(req.param('id'), 10)
+
+	if(episodeNumber){
+
+		Episode.find(episodeNumber).success(function(episode) {
+
+			if(episode){
+				// Return episode
+				res.end()
+			}
+			else {
+				res.send(404, 'Episode not found.')
+			}
+		})
+
+	}
 })
 
 app.get('/admin', /*requireAdmin,*/ function(req, res) {
@@ -147,7 +159,7 @@ app.get('/admin', /*requireAdmin,*/ function(req, res) {
 	})
 })
 
-app.get('/admin/episodes/', /*requireAdmin,*/ function(req, res) {
+app.get('/admin/episodes', /*requireAdmin,*/ function(req, res) {
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 1').success(function(query) {
 		if (query.length > 0) {
 			var data = {
@@ -175,7 +187,7 @@ app.get('/admin/episodes/', /*requireAdmin,*/ function(req, res) {
 	})
 })
 
-app.get('/admin/episodes/pending/', /*requireAdmin,*/ function(req, res) {
+app.get('/admin/episodes/pending', /*requireAdmin,*/ function(req, res) {
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
 		if (query.length > 0) {
 			var data = {
