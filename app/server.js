@@ -1,25 +1,29 @@
+// Node Module Requirements
 var path = require('path')
-GLOBAL.config = require('nconf').file({ file: path.join(__dirname, 'config.json') })
+var nconf = require('nconf')
+var passport = require('passport')
+var passportTwitter = require('passport-twitter')
+var Sequelize = require('sequelize')
+var async = require('async')
+var express = require('express')
+var exphbs = require('express3-handlebars')
 
+// Config
+GLOBAL.config = nconf.file({ file: path.join(__dirname, 'config.json') })
+var twitterConfig = config.get('twitter')
+var dbConfig = config.get('db')
+
+// Models
 var models = require('./models')
-
 var Episode = models.episode
 var Shownotes = models.shownotes
 var User = models.user
 
-var twitterConfig = config.get('twitter')
-
-var passport = require('passport')
-
-var Sequelize = require('sequelize')
-
-var dbConfig = config.get('db')
-
-var async = require('async')
-
+// DB
 var sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
 
-var TwitterStrategy = require('passport-twitter').Strategy
+// Passport
+var TwitterStrategy = passportTwitter.Strategy
 passport.serializeUser(function(user, done) {
 	done(null, user.id)
 })
@@ -50,9 +54,7 @@ passport.use(new TwitterStrategy({
 	})
 }))
 
-var exphbs = require('express3-handlebars')
-
-var express = require('express')
+// Express
 var app = express()
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
@@ -85,6 +87,7 @@ app.get('/logout', function(req, res) {
 app.get('/:id(\\d+)', function(req, res) {
 	var episodeNumber = parseInt(req.param('id'), 10)
 
+<<<<<<< HEAD
 	if(episodeNumber) {
 
 		Episode.find(episodeNumber).success(function(episode) {
@@ -96,10 +99,25 @@ app.get('/:id(\\d+)', function(req, res) {
 				res.send(404, 'Episode not found.')
 			}
 		})
+=======
+	if(episodeNumber){
+
+		Episode.find(episodeNumber).success(function(episode) {
+
+			if(episode){
+				// Return episode
+				res.end()
+			}
+			else {
+				res.send(404, 'Episode not found.')
+			}
+		})
+
+>>>>>>> a5920e47820120c555e92447fcc2eee3a3a590f0
 	}
 })
 
-app.get('/admin/', /*requireAdmin,*/ function(req, res) {
+app.get('/admin', /*requireAdmin,*/ function(req, res) {
 	var data = {
 		boxes: [
 			{
@@ -231,6 +249,8 @@ app.get('/admin/users/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
 })
 
 app.listen(config.get('port') || 3000)
+
+// Passport roles
 
 function requireViewer(req, res, next) {
 	if (req.user && req.user.role === 4) {
