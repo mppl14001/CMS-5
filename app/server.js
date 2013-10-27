@@ -96,7 +96,7 @@ app.get('/admin/episodes',/*requireAdmin,*/ adminController.getEpisodes)
 
 app.get('/admin/episodes/pending',/*requireAdmin,*/ adminController.getPendingEpisodes)
 
-app.get('/admin/episodes/pending/:id(\\d+)',/*requireAdming,*/ adminController.getPendingEpisodeById)
+app.get('/admin/episodes/pending/:id(\\d+)',/*requireAdming,*/ adminController.getEpisodeById)
 
 app.get('/admin/episodes/:id(\\d+)',/*requireAdmin,*/ adminController.getEpisodeById)
 
@@ -106,7 +106,9 @@ app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
 
 // Admin APIs
 
-app.post('/api/admin/episode/approve', adminController.postApproveScreencast)
+app.post('/api/admin/episode/approve', adminController.approveScreencast)
+
+app.post('/api/admin/episode/remove', adminController.approveScreencast)
 
 app.post('/api/admin/user/add', adminController.addUser)
 

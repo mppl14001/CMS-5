@@ -85,10 +85,6 @@ module.exports.getEpisodes = function(req, res) {
 		})
 }
 
-module.exports.getEpisodeById = function(req, res) {
-	res.render('admin/admin-episodes-specific')
-}
-
 module.exports.getPendingEpisodes = function(req, res) {
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
 		if (query.length > 0) {
@@ -117,8 +113,42 @@ module.exports.getPendingEpisodes = function(req, res) {
 	})
 }
 
-module.exports.getPendingEpisodeById = function(req, res) {
-	res.render('admin/admin-episodes-specific')
+module.exports.getEpisodeById = function(req, res) {
+	var dataTest = {
+		name: "Joe Learns to Code",
+		thumbnail: "http://cdn.panasonic.com/images/imageNotFound400.jpg",
+		video: null,
+		author: "Joe Torraca",
+		shownotes: "Lorem Ipsum",
+		tags: [
+			"Node.js",
+			"Language",
+			"MySQL",
+			"Database"
+		],
+		status: {
+			approval: "unapproved"
+		},
+		transcriptions: [
+			{
+				language: "English",
+				status: "Active",
+				showApproval: false
+			},
+			{
+				language: "Spanish",
+				status: "Active",
+				showApproval: false
+			},
+			{
+				language: "German",
+				status: "Not active",
+				showApproval: true
+			}
+		]
+	}
+	console.log(dataTest)
+	res.render('admin/admin-episodes-specific', dataTest)
 }
 
 module.exports.getUsers = function(req, res) {
@@ -130,7 +160,7 @@ module.exports.getUserById = function(req, res) {
 	res.render('admin/admin')
 }
 
-module.exports.postApproveScreencast = function(req, res) {
+module.exports.approveScreencast = function(req, res) {
 	if (req.xhr) {
 		sequelize.query('UPDATE Episodes SET approved = 1 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
 			var successJson = {
@@ -150,6 +180,12 @@ module.exports.postApproveScreencast = function(req, res) {
 	}
 }
 
+module.exports.removeScreencast = function(req, res) {
+	if (req.xhr) {
+
+	}
+}
+
 module.exports.addTag = function(req, res) {
 	if (req.xhr) {
 
@@ -164,7 +200,7 @@ module.exports.changeUserRole = function(req, res) {
 
 module.exports.addUser = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (?, ?, ?, ?, ?)', null, {raw: true}, {res.body.name, res.body.role, res.body.twHandle, res.body.twAccessToken, res.body.twAccessSecret}).success(function(user) {
+		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (:name, :role, :twUsername, :twAccessToken, :twAccessSecret)', null, {raw: true}, {name:req.body.name, role:req.body.role, twUsername:req.body.twHandle, twAccessToken: req.body.twAccessToken, twAccessSecret: req.body.twAccessSecret}).success(function(user) {
 			var json = {
 				status:'ok',
 				rowsModified:1
@@ -186,7 +222,7 @@ module.exports.addUser = function(req, res) {
 module.exports.deleteUser = function(req, res) {
 	if (req.xhr) {
 		if (req.body.confirmation === true) {
-			sequelize.query('DELETE FROM Users WHERE twitter_username = ? AND role = ?', null, {raw: true}, {res.body.twHandle, res.body.role}).success(function(deleted) {
+			sequelize.query('DELETE FROM Users WHERE twitter_username = :twUsername AND role = :role', null, {raw: true}, {twUsername: req.body.twHandle, role: req.body.role}).success(function(deleted) {
 				var successJson = {
 					status: 'ok',
 					rowsModified: 1,
@@ -244,7 +280,3 @@ function requireAdmin(req, res, next) {
 		res.redirect('/')
 	}
 }
-
-
-
-

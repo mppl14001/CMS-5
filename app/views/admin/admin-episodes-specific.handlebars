@@ -20,21 +20,20 @@
 		<img src="http://cdn.panasonic.com/images/imageNotFound400.jpg" width="150" height="75" />
 	</div>	
 	<div class="header col-md-9">
-		<h2>Joe Learns to English</h2>
-		<p style="color:#aaa">By: Joe Torraca</p>
+		<h2>{{name}}</h2>
+		<p style="color:#aaa">By: {{author}}</p>
 	</div>
 </div>
 <div class="description col-md-12" style="margin-top:25px;">
 	<h3>Description</h3>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dapibus vestibulum tempor. Proin nunc mauris, gravida et tellus quis, tempor egestas ante. Donec hendrerit in augue quis feugiat. Duis imperdiet arcu nulla, vitae tincidunt elit aliquet nec. Vivamus imperdiet justo sed augue placerat pharetra. Ut id interdum nulla, sit amet mattis ligula. Nulla facilisi. Suspendisse fringilla nunc et nisl commodo suscipit. Integer et felis nunc. Duis viverra nisl mauris, eu ornare enim ornare sit amet. Praesent posuere, quam non eleifend sagittis, sem purus posuere risus, at lobortis neque quam molestie libero.</p>
+	<p>{{shownotes}}</p>
 </div>
 <div class="tags col-md-12" style="margin-top:25px;">
 	<h3>Tags</h3>
 	<ul style="list-style-type:none;">
-		<li>Node.js</li>
-		<li>Langauge</li>
-		<li>MySQL</li>
-		<li>Database</li>
+		{{#tags}}
+			<li>{{this}}</li>
+		{{/tags}}
 		<li>
 			<a href="#" class=""><i class="fa fa-plus"></i>Add more</a>
 		</li>
@@ -44,8 +43,13 @@
 	<h3>Status</h3>
 	<div class="col-md-6 text-center approval">
 		<h4>Visibility</h4>
+		{{#if status.approval}}
+		<p class="active">Approval</p>
+		<button type="button" class="btn btn-error" name="removeVideo">Remove</button>
+		{{else}}
 		<p class="warning">Awaiting approval</p>
 		<button type="button" class="btn btn-success" name="approveVideo">Approve</button>
+		{{/if}}
 	</div>
 	<div class="col-md-6 text-center">
 		<h4>Title</h4>
@@ -59,31 +63,22 @@
 			<tr>
 				<td>Language</td>
 				<td class="col-md-5">Status</td>
-				<td>Controls</td>
+				<td class="col-md-3">Controls</td>
 			</tr>
 		</thead>
 		<tbody>
+			{{#transcriptions}}
 			<tr>
-				<td>English</td>
-				<td><p class="active">Active</p></td>
+				<td>{{this.language}}</td>
+				<td><p class="active">{{this.status}}</p></td>
 				<td>
 					<button type="button" class="btn btn-default">Edit</button>
+					{{#if showApproval}}
+					<button type="button" class="btn btn-success">Approve</button>					
+					{{/if}}
 				</td>
 			</tr>
-			<tr>
-				<td>Spanish</td>
-				<td><p class="active">Active</p></td>
-				<td>
-					<button type="button" class="btn btn-default">Edit</button>
-				</td>
-			</tr>
-			<tr>
-				<td>German</td>
-				<td><p class="error">Not active</p></td>
-				<td>
-					<button type="button" class="btn btn-default">Edit</button>
-				</td>
-			</tr>
+			{{/transcriptions}}
 		</tbody>
 	</table>
 </div>
