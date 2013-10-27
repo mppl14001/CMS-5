@@ -12,10 +12,10 @@ var twitterConfig = config.get('twitter')
 var passport = require('passport')
 var TwitterStrategy = require('passport-twitter').Strategy
 passport.serializeUser(function(user, done) {
-	done(null, user)
+	done(null, user.id)
 })
 passport.deserializeUser(function(obj, done) {
-	User.find(obj.id).success(function(user) {
+	User.find(obj).success(function(user) {
 		done(null, user)
 	}).failure(function(error) {
 		done(error, null)
@@ -26,7 +26,6 @@ passport.use(new TwitterStrategy({
 	consumerSecret: twitterConfig.secret,
 	callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback'
 }, function(token, tokenSecret, profile, done) {
-	console.log(profile)
 	User.findOrCreate({
 		twitter_access_token: token
 	}, {
@@ -56,17 +55,24 @@ app.use(express.session({ secret: 'CodePilot' }))
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.get('/', function(req, res){
+	res.render('home', {
+		user: req.user
+	})
+})
+
 app.get('/auth/twitter', passport.authenticate('twitter'))
 
-app.get('/auth/twitter/callback', passport.authenticate('twitter', {failureRedirect: '/auth/twitter'}), function(req, res) {
+app.get('/auth/twitter/callback', passport.authenticate('twitter', {failureRedirect: '/'}), function(req, res) {
 	res.redirect('/')
 })
 
-app.get('/', function(req, res){
-	res.render('home')
+app.get('/logout', function(req, res) {
+	req.logout()
+	res.redirect('/')
 })
 
-app.get('/:id', function(req, res) {
+app.get('/episodes/:id', function(req, res) {
 	Episode.find(parseInt(req.param('id'), 10)).success(function(episodes) {
 		// this gets the episode
 		res.end()

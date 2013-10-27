@@ -1,1 +1,7 @@
 <h1>HEY</h1>
+{{#if user.name}}
+<h3>Welcome, {{user.name}}</h3>
+<h3><a href="/logout">Click here to log out</a></h3>
+{{else}}
+<h3>You are not logged in. <a href="/auth/twitter">Click here to log in</a></h3>
+{{/if}}
