@@ -2,10 +2,16 @@
 var path = require('path')
 var nconf = require('nconf')
 var passport = require('passport')
+var passportTwitter = require('passport-twitter')
 var Sequelize = require('sequelize')
 var async = require('async')
 var express = require('express')
 var exphbs = require('express3-handlebars')
+
+// Config
+GLOBAL.config = nconf.file({ file: path.join(__dirname, 'config.json') })
+var twitterConfig = config.get('twitter')
+var dbConfig = config.get('db')
 
 // Models
 var models = require('./models')
@@ -13,16 +19,11 @@ var Episode = models.episode
 var Shownotes = models.shownotes
 var User = models.user
 
-// Config
-GLOBAL.config = nconf.file({ file: path.join(__dirname, 'config.json') })
-var twitterConfig = config.get('twitter')
-var dbConfig = config.get('db')
-
 // DB
 var sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
 
 // Passport
-var TwitterStrategy = require('passport-twitter').Strategy
+var TwitterStrategy = passportTwitter.Strategy
 passport.serializeUser(function(user, done) {
 	done(null, user.id)
 })
