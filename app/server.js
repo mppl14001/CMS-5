@@ -72,7 +72,7 @@ app.get('/logout', function(req, res) {
 	res.redirect('/')
 })
 
-app.get('/episodes/:id', function(req, res) {
+app.get('/:id(\\d+)', function(req, res) {
 	Episode.find(parseInt(req.param('id'), 10)).success(function(episodes) {
 		// this gets the episode
 		res.end()
