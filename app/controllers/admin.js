@@ -122,7 +122,11 @@ module.exports.getPendingEpisodeById = function(req, res) {
 }
 
 module.exports.getUsers = function(req, res) {
-	res.render('admin/admin-users')
+	sequelize.query('SELECT * FROM Users').success(function(query) {
+		res.render('admin/admin-users', {
+			users: query
+		})
+	})
 }
 
 
