@@ -85,35 +85,34 @@ app.get('/logout', function(req, res) {
 })
 
 app.get('/:id(\\d+)', function(req, res) {
+
 	var episodeNumber = parseInt(req.param('id'), 10)
 
-<<<<<<< HEAD
-	if(episodeNumber) {
+	if (episodeNumber) {
 
 		Episode.find(episodeNumber).success(function(episode) {
 
-			if(episode) {
+			if (episode) {
 				// Return episode
 				res.end()
 			} else {
 				res.send(404, 'Episode not found.')
 			}
 		})
-=======
-	if(episodeNumber){
+		
+	}
+
+	if (episodeNumber) {
 
 		Episode.find(episodeNumber).success(function(episode) {
 
-			if(episode){
+			if (episode) {
 				// Return episode
 				res.end()
-			}
-			else {
+			} else {
 				res.send(404, 'Episode not found.')
 			}
 		})
-
->>>>>>> a5920e47820120c555e92447fcc2eee3a3a590f0
 	}
 })
 
