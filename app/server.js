@@ -33,7 +33,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitterStrategy({
 	consumerKey: twitterConfig.key,
 	consumerSecret: twitterConfig.secret,
-	callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback'
+	callbackURL: 'http://127.0.0.1:'+config.get('port')+'/auth/twitter/callback'
 }, function(token, tokenSecret, profile, done) {
 	User.findOrCreate({
 		twitter_access_token: token
