@@ -237,12 +237,12 @@ app.get('/admin/users/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
 
 app.post('/api/admin/episode/approve', function(req, res) {
 	if (req.xhr) {
-		sequelize.query('UPDATE Episodes SET approved = 1 WHERE id = ?', null, {raw: true}, [req.body.id]).success(function(approved) {
+		sequelize.query('UPDATE Episodes SET approved = 1 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
 			var successJson = {
 				status: 'ok',
 				rowsModified: 1
 			}
-			res.write(successJson)
+			res.write(JSON.stringify(successJson))
 			res.end()
 		}).error(function(error) {
 			var errorJson = {

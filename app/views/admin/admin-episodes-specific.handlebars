@@ -137,9 +137,10 @@ html[xmlns] .clearfix {
 				data: {id:'1'},
 				type: 'POST',
 				success:function(v) {
-					if (v.status == "ok") {
+					var json = $.parseJSON(v)
+					if (json.status === "ok") {
 						$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
-						$(this).remove();
+						$('.status .approval button[name=\'approveVideo\']').remove();
 					} else {
 						console.log("An error has occured")
 					}
