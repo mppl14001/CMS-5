@@ -231,33 +231,59 @@ module.exports.addUser = function(req, res) {
 	}
 }
 
-module.exports.deleteUser = function(req, res) {
+module.exports.deactivateUser = function(req, res) {
 	if (req.xhr) {
-		if (req.body.confirmation === true) {
-			sequelize.query('DELETE FROM Users WHERE id = :id AND role = :role', null, {raw: true}, {id: res.body.id, role: res.body.role}).success(function(deleted) {
-				var successJson = {
-					status: 'ok',
-					rowsModified: 1,
-					recordRemoved: req.body.twHandle
-				}
-				res.write(JSON.stringify(successJson))
-				res.end()
-			}).error(function(error) {
-				var errorJson = {
-					status: 'error',
-					rowsModified: null,
-					error: 'sequelize'
-				}
-				res.write(JSON.stringify(errorJson))
-				res.end()
-			})
-		} else {
+		var roles = {
+			"admin": 1,
+			"screencaster": 2,
+			"moderator": 3,
+			"viewer":4
+		}
+		sequelize.query('UPDATE Users SET active = 0 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1,
+				recordRemoved: req.body.twHandle
+			}
+			res.write(JSON.stringify(successJson))
+			res.end()
+		}).error(function(error) {
 			var errorJson = {
 				status: 'error',
 				rowsModified: null,
-				error: "Nil confirmation"
+				error: 'sequelize'
 			}
+			res.write(JSON.stringify(errorJson))
+			res.end()
+		})
+	}
+}
+
+module.exports.activateUser = function(req, res) {
+	if (req.xhr) {
+		var roles = {
+			"admin": 1,
+			"screencaster": 2,
+			"moderator": 3,
+			"viewer":4
 		}
+		sequelize.query('UPDATE Users SET active = 1 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1,
+				recordRemoved: req.body.twHandle
+			}
+			res.write(JSON.stringify(successJson))
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null,
+				error: 'sequelize'
+			}
+			res.write(JSON.stringify(errorJson))
+			res.end()
+		})
 	}
 }
 

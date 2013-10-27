@@ -119,11 +119,14 @@ app.post('/api/admin/episode/remove', adminController.approveScreencast)
 
 app.post('/api/admin/user/add', adminController.addUser)
 
-app.post('/api/admin/user/delete', adminController.deleteUser)
+app.post('/api/admin/user/deactivate', adminController.deactivateUser)
+
+app.post('/api/admin/user/activate', adminController.activateUser)
 
 // Screencaster APIs
 
 app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
+
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
 app.listen(config.get('port') || 3000)
