@@ -28,20 +28,58 @@
 	<h3>Description</h3>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dapibus vestibulum tempor. Proin nunc mauris, gravida et tellus quis, tempor egestas ante. Donec hendrerit in augue quis feugiat. Duis imperdiet arcu nulla, vitae tincidunt elit aliquet nec. Vivamus imperdiet justo sed augue placerat pharetra. Ut id interdum nulla, sit amet mattis ligula. Nulla facilisi. Suspendisse fringilla nunc et nisl commodo suscipit. Integer et felis nunc. Duis viverra nisl mauris, eu ornare enim ornare sit amet. Praesent posuere, quam non eleifend sagittis, sem purus posuere risus, at lobortis neque quam molestie libero.</p>
 </div>
+<div class="tags col-md-12" style="margin-top:25px;">
+	<h3>Tags</h3>
+	<ul style="list-style-type:none;">
+		<li>Node.js</li>
+		<li>Langauge</li>
+		<li>MySQL</li>
+		<li>Database</li>
+		<li>
+			<a href="#" class=""><i class="glyphicon glyphicon-plus"></i>Add more</a>
+		</li>
+	</ul>
+</div>
+<div class="statis col-md-12 clearfix" style="margin-top:25px;">
+	<h3>Status</h3>
+	<div class="col-md-6 text-center">
+		<h4>Visibility</h4>
+		<p class="warning">Awaiting approval</p>
+		<button type="button" class="btn btn-success">Approve</button>
+	</div>
+	<div class="col-md-6 text-center">
+		<h4>Title</h4>
+		<p>Data</p>
+	</div>
+</div>
 <div class="transcriptions col-md-12" style="margin-top:25px;">
 	<h3>Transcriptions</h3>
 	<table class="table table-striped">
 		<thead>
 			<tr>
 				<td>Language</td>
-				<td>Status</td>
+				<td class="col-md-5">Status</td>
 				<td>Controls</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>English</td>
-				<td>Active</td>
+				<td><p class="active">Active</p></td>
+				<td>
+					<button type="button" class="btn btn-default">Edit</button>
+				</td>
+			</tr>
+			<tr>
+				<td>Spanish</td>
+				<td><p class="active">Active</p></td>
+				<td>
+					<button type="button" class="btn btn-default">Edit</button>
+				</td>
+			</tr>
+			<tr>
+				<td>German</td>
+				<td><p class="error">Not active</p></td>
 				<td>
 					<button type="button" class="btn btn-default">Edit</button>
 				</td>
@@ -69,6 +107,24 @@ html[xmlns] .clearfix {
  
 * html .clearfix {
 	height: 1%;
+}
+.active {
+	color:#34b611;
+}
+.error {
+	color:#db0b0b;
+}
+.warning {
+	color:#debb1a;
+}
+.tags ul li {
+	display:inline-block;
+	background-color:#eee;
+	padding:5px 10px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	-o-border-radius:4px;
+	border-radius:4px;
 }
 </style>
 <script src="/javascript/jquery.min.js"></script>

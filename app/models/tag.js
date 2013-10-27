@@ -4,6 +4,10 @@ module.exports = function(sequelize, DataTypes) {
 
 		text: {
 			type: DataTypes.STRING
+		},
+		episodeId: {
+			type: DataTypes.INTEGER,
+			allowNull: true
 		}
 
 	})
