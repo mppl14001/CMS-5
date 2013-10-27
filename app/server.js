@@ -89,7 +89,7 @@ app.get('/:id(\\d+)', function(req, res) {
 	})
 })
 
-app.get('/admin/', /*requireAdmin,*/ function(req, res) {
+app.get('/admin', /*requireAdmin,*/ function(req, res) {
 	var data = {
 		boxes: [
 			{
