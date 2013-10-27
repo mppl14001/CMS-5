@@ -9,16 +9,13 @@ It was built in a weekend.
 
 **Special thanks to:** (in no particular order)
 
-Joe Torraca
-
-Lenny Khazan
-
-Ross Penman
-
-Charley Hutchison
-
-Nick Frey
-
-Andrew
-
-Daniel Tomlinson
+|    Contributor    |      GitHub     |    Twitter    |
+|:-----------------:|:---------------:|:-------------:|
+|   Will Smidlein   |        ws       |       ws      |
+|    Joe Torraca    |     jtorraca    |    jtorraca   |
+|    Lenny Khazan   |   LennyKhazan‎  |  LennyKhazan‎ |
+|    Ross Penman    |    rosspenman   |  PenmanRoss‎  |
+| Charley Hutchison |    glenwayguy   |   glenwayguy  |
+|     Nick Frey     |    NickFrey‎    |   NickFrey‎   |
+|       Andrew      | NerdYouDontKnow | TheNERDAndrew |
+|  Daniel Tomlinson |     dantoml‎    |    dantoml‎   |
