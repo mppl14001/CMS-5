@@ -1,5 +1,3 @@
-
-
 module.exports.get = function(req, res) {
 	var data = {
 			boxes: [

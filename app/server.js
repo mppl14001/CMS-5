@@ -4,7 +4,7 @@ var nconf = require('nconf')
 var passport = require('passport')
 var passportTwitter = require('passport-twitter')
 var Sequelize = require('sequelize')
-var async = require('async')
+GLOBAL.async = require('async')
 var express = require('express')
 var exphbs = require('express3-handlebars')
 
