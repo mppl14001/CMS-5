@@ -150,6 +150,48 @@ module.exports.postApproveScreencast = function(req, res) {
 	}
 }
 
+module.exports.addTag = function(req, res) {
+	if (req.xhr) {
+
+	}
+}
+
+module.exports.changeUserRole = function(req, res) {
+	if (req.xhr) {
+		
+	}
+}
+
+module.exports.deleteUser = function(req, res) {
+	if (req.xhr) {
+		if (req.body.confirmation === true) {
+			sequelize.query('DELETE FROM Users WHERE twitter_username = ? AND role = ?', null, {raw: true}, {res.body.twHandle, res.body.role}).success(function(deleted) {
+				var successJson = {
+					status: 'ok',
+					rowsModified: 1,
+					recordRemoved: req.body.twHandle
+				}
+				res.write(JSON.stringify(successJson))
+				res.end()
+			}).error(function(error) {
+				var errorJson = {
+					status: 'error',
+					rowsModified: null,
+					error: 'sequelize'
+				}
+				res.write(JSON.stringify(errorJson))
+				res.end()
+			})
+		} else {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null,
+				error: "Nil confirmation"
+			}
+		}
+	}
+}
+
 function requireViewer(req, res, next) {
 	if (req.user && req.user.role === 4) {
 		next()
