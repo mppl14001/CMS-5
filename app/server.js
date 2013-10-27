@@ -23,7 +23,6 @@ var User = models.user
 var sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
 
 var adminController = require('./controllers/admin.js')
-console.log(adminController)
 var episodeController = require('./controllers/episode.js')
 
 // Passport
