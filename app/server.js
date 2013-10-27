@@ -179,7 +179,7 @@ app.get('/admin/episodes', /*requireAdmin,*/ function(req, res) {
 						element.shownotes = null
 					}
 					console.log(element)
-					res.render('admin-episodes', data)
+					res.render('admin/admin-episodes', data)
 				})
 			}
 		} else {
@@ -231,6 +231,28 @@ app.get('/admin/users/', /*requireAdmin,*/ function(req, res) {
 
 app.get('/admin/users/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
 	res.render('admin/admin')
+})
+
+// Admin APIs
+
+app.post('/api/admin/episode/approve', function(req, res) {
+	if (req.xhr) {
+		sequelize.query('UPDATE Episodes SET approved = 1 WHERE id = ?', null, {raw: true}, [req.body.id]).success(function(approved) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1
+			}
+			res.write(successJson)
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null
+			}
+			res.write(errorJson)
+			res.end()
+		})
+	}
 })
 
 app.listen(config.get('port') || 3000)
