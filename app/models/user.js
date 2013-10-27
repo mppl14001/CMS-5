@@ -1,12 +1,8 @@
 module.exports = function(sequelize, DataTypes) {
 
-	return sequelize.define('Shownotes', {
+	return sequelize.define('User', {
 
-		first_name: {
-			allowNull: false,
-			type: DataTypes.STRING
-		},
-		last_name: {
+		name: {
 			allowNull: false,
 			type: DataTypes.STRING
 		},
@@ -32,13 +28,6 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING
 		}
 
-	},
-	{
-		instanceMethods: {
-			getName: function() {
-				return [this.first_name, this.last_name].join(' ')
-			}
-		}
 	})
 
 };
