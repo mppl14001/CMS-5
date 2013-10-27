@@ -115,6 +115,7 @@ app.post('/api/admin/user/delete', adminController.deleteUser)
 
 // Screencaster APIs
 
-app.post('/api/approvedEpisodes', userController.getApprovedEpisodes)
+app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
+app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
 app.listen(config.get('port') || 3000)
