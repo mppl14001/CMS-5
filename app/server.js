@@ -43,7 +43,7 @@ passport.use(new TwitterStrategy({
 		twitter_access_token: token
 	}, {
 		name: profile.displayName,
-		role: 5,
+		role: 4,
 		twitter_username: profile.username,
 		twitter_access_token: token,
 		twitter_access_secret: tokenSecret
