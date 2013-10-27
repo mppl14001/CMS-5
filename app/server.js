@@ -91,7 +91,6 @@ app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
 app.get('/admin',/*requireAdmin,*/ adminController.get)
 
-
 app.get('/admin/episodes',/*requireAdmin,*/ adminController.getEpisodes)
 
 app.get('/admin/episodes/pending',/*requireAdmin,*/ adminController.getPendingEpisodes)
