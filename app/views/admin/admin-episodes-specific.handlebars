@@ -15,7 +15,7 @@
 		<li><a href="/admin/episodes/pending/"><i class="icon-trash"></i> Pending</a></li>
 	  </ul>
 </div>
-<section class="header" style="box-sizing:border-box;margin-top:25px;">
+<div class="header col-md-12 clearfix" style="box-sizing:border-box;margin-top:25px;">
 	<div class="thumbnail col-md-3">
 		<img src="http://cdn.panasonic.com/images/imageNotFound400.jpg" width="150" height="75" />
 	</div>	
@@ -23,9 +23,53 @@
 		<h2>Joe Learns to English</h2>
 		<p style="color:#aaa">By: Joe Torraca</p>
 	</div>
-</section>
-<section class="description" style="margin-top:25px;">
+</div>
+<div class="description col-md-12" style="margin-top:25px;">
+	<h3>Description</h3>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dapibus vestibulum tempor. Proin nunc mauris, gravida et tellus quis, tempor egestas ante. Donec hendrerit in augue quis feugiat. Duis imperdiet arcu nulla, vitae tincidunt elit aliquet nec. Vivamus imperdiet justo sed augue placerat pharetra. Ut id interdum nulla, sit amet mattis ligula. Nulla facilisi. Suspendisse fringilla nunc et nisl commodo suscipit. Integer et felis nunc. Duis viverra nisl mauris, eu ornare enim ornare sit amet. Praesent posuere, quam non eleifend sagittis, sem purus posuere risus, at lobortis neque quam molestie libero.</p>
-</section>
+</div>
+<div class="transcriptions col-md-12" style="margin-top:25px;">
+	<h3>Transcriptions</h3>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<td>Language</td>
+				<td>Status</td>
+				<td>Controls</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>English</td>
+				<td>Active</td>
+				<td>
+					<button type="button" class="btn btn-default">Edit</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<style type="text/css">
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+</style>
 <script src="/javascript/jquery.min.js"></script>
 <script src="/javascript/bootstrap.min.js"></script>
