@@ -186,7 +186,7 @@ module.exports.addUser = function(req, res) {
 module.exports.deleteUser = function(req, res) {
 	if (req.xhr) {
 		if (req.body.confirmation === true) {
-			sequelize.query('DELETE FROM Users WHERE twitter_username = ? AND role = ?', null, {raw: true}, {res.body.twHandle, res.body.role}).success(function(deleted) {
+			sequelize.query('DELETE FROM Users WHERE twitter_username = :username AND role = :role', null, {raw: true}, {username: res.body.twHandle, role: res.body.role}).success(function(deleted) {
 				var successJson = {
 					status: 'ok',
 					rowsModified: 1,
