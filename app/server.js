@@ -225,7 +225,7 @@ app.get('/admin/episodes/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
 	res.render('admin/admin-episodes-specific')
 })
 
-app.get('/admin/users/', /*requireAdmin,*/ function(req, res) {
+app.get('/admin/users', /*requireAdmin,*/ function(req, res) {
 	res.render('admin/admin-users')
 })
 
