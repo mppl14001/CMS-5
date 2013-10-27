@@ -99,20 +99,6 @@ app.get('/:id(\\d+)', function(req, res) {
 				res.send(404, 'Episode not found.')
 			}
 		})
-		
-	}
-
-	if (episodeNumber) {
-
-		Episode.find(episodeNumber).success(function(episode) {
-
-			if (episode) {
-				// Return episode
-				res.end()
-			} else {
-				res.send(404, 'Episode not found.')
-			}
-		})
 	}
 })
 
