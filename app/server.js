@@ -141,7 +141,7 @@ app.get('/admin/', /*requireAdmin,*/ function(req, res) {
 				data['boxes'][i].data = callback[i][1]
 			} else {
 				data['boxes'][i].data = callback[i]
-				if (i == callback.length - 1) res.render('admin', data)				
+				if (i == callback.length - 1) res.render('admin/admin', data)				
 			}
 		}
 	})
@@ -170,7 +170,7 @@ app.get('/admin/episodes/', /*requireAdmin,*/ function(req, res) {
 				})
 			}
 		} else {
-			res.render('admin-episodes')
+			res.render('admin/admin-episodes')
 		}
 	})
 })
@@ -194,29 +194,29 @@ app.get('/admin/episodes/pending/', /*requireAdmin,*/ function(req, res) {
 						element.shownotes = null
 					}
 					console.log(element)
-					res.render('admin-episodes-pending', data)
+					res.render('admin/admin-episodes-pending', data)
 				})
 			}
 		} else {
-			res.render('admin-episodes-pending')
+			res.render('admin/admin-episodes-pending')
 		}
 	})
 })
 
 app.get('/admin/episodes/pending/:id(\\d+)', /*requireAdming,*/ function(req, res) {
-	res.render('admin-episodes-specific')
+	res.render('admin/admin-episodes-specific')
 })
 
 app.get('/admin/episodes/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
-	res.render('admin-episodes-specific')
+	res.render('admin/admin-episodes-specific')
 })
 
 app.get('/admin/users/', /*requireAdmin,*/ function(req, res) {
-	res.render('admin-users')
+	res.render('admin/admin-users')
 })
 
 app.get('/admin/users/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
-	res.render('admin')
+	res.render('admin/admin')
 })
 
 app.listen(config.get('port') || 3000)
