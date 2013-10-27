@@ -18,4 +18,4 @@ It was built in a weekend.
 | Charley Hutchison |    glenwayguy   |   glenwayguy  |
 |     Nick Frey     |    NickFrey‎    |   NickFrey‎   |
 |       Andrew      | NerdYouDontKnow | TheNERDAndrew |
-|  Daniel Tomlinson |     dantoml‎    |    dantoml‎   |
+| Daniel Tomlinson  | DanielTomlinson |    dantoml‎   |
