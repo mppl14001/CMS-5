@@ -10,6 +10,15 @@ var User = models.user
 var twitterConfig = config.get('twitter')
 
 var passport = require('passport')
+
+var Sequelize = require('sequelize')
+
+var dbConfig = config.get('db')
+
+var async = require('async')
+
+var sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
+
 var TwitterStrategy = require('passport-twitter').Strategy
 passport.serializeUser(function(user, done) {
 	done(null, user.id)
@@ -85,15 +94,15 @@ app.get('/admin/', /*requireAdmin,*/ function(req, res) {
 		boxes: [
 			{
 				title: "Video views today",
-				data: "12,428"
+				data: 0
 			},
 			{
 				title: "Videos awaiting approval",
-				data: 40
+				data: 0
 			},
 			{
 				title: "Transcriptions awaiting approval",
-				data: 12
+				data: 0
 			},
 			{
 				title: "Some title here",
@@ -109,26 +118,104 @@ app.get('/admin/', /*requireAdmin,*/ function(req, res) {
 			}
 		]
 	}
-	res.render('admin', data)
+	async.parallel([
+		function(callback) { // Total views
+			callback(null, '12,428')
+		}, 
+		function(callback) { // Videos awaiting approval
+			sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
+				var grammar = query.length === 1 ?
+							  'Video awaiting approval' :
+							  'Videos awaiting approval'
+				callback(null, [grammar, query.length])
+			})
+		},
+		function(callback) {
+			callback(null, 15)
+		}
+	],
+	function(err, callback) {
+		for (var i in callback) {
+			if (typeof(callback[i]) === 'object') { // Grammar easter egg
+				data['boxes'][i].title = callback[i][0]
+				data['boxes'][i].data = callback[i][1]
+			} else {
+				data['boxes'][i].data = callback[i]
+				if (i == callback.length - 1) res.render('admin', data)				
+			}
+		}
+	})
 })
 
 app.get('/admin/episodes/', /*requireAdmin,*/ function(req, res) {
-	res.render('admin')
+	sequelize.query('SELECT * FROM Episodes WHERE approved = 1').success(function(query) {
+		if (query.length > 0) {
+			var data = {
+				videos: []
+			};
+			data['videos'] = query;
+			for (var i=0;i<data['videos'].length;i++) {
+				var element = data['videos'][i]
+				var eId = element.id
+				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
+					shownotes[0].content = shownotes[0].content.toString()
+					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+					if (shownotes) {
+						element.shownotes = shownotes
+					} else {
+						element.shownotes = null
+					}
+					console.log(element)
+					res.render('admin-episodes', data)
+				})
+			}
+		} else {
+			res.render('admin-episodes')
+		}
+	})
 })
 
 app.get('/admin/episodes/pending/', /*requireAdmin,*/ function(req, res) {
-	res.render('admin')
+	sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
+		if (query.length > 0) {
+			var data = {
+				videos: []
+			}
+			data['videos'] = query;
+			for (var i=0;i<data['videos'].length;i++) {
+				var element = data['videos'][i]
+				var eId = element.id
+				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
+					shownotes[0].content = shownotes[0].content.toString()
+					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+					if (shownotes) {
+						element.shownotes = shownotes
+					} else {
+						element.shownotes = null
+					}
+					console.log(element)
+					res.render('admin-episodes-pending', data)
+				})
+			}
+		} else {
+			res.render('admin-episodes-pending')
+		}
+	})
 })
 
-app.get('/admin/episodes/:id', /*requireAdmin,*/ function(req, res) {
-	res.render('admin')
+app.get('/admin/episodes/pending/:id(\\d+)', /*requireAdming,*/ function(req, res) {
+	res.render('admin-episodes-specific')
+})
+
+app.get('/admin/episodes/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
+	res.render('admin-episodes-specific')
 })
 
 app.get('/admin/users/', /*requireAdmin,*/ function(req, res) {
-	res.render('admin')
+	res.render('admin-users')
 })
 
-app.get('/admin/users/:id', /*requireAdmin,*/ function(req, res) {
+app.get('/admin/users/:id(\\d+)', /*requireAdmin,*/ function(req, res) {
 	res.render('admin')
 })
 
