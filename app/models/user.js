@@ -15,7 +15,8 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			type: DataTypes.INTEGER,
 			validate: {
-				isIn: [1, 2, 3, 4]
+				min: 1,
+				max: 4
 			}
 		},
 		twitter_username: {
