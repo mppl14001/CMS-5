@@ -1,7 +1,3 @@
-
-
-
-
 module.exports.getEpisodeById = function(req, res) {
 
 	var episodeNumber = parseInt(req.param('id'), 10)
