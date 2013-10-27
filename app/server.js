@@ -25,6 +25,7 @@ var User = models.user
 // Controllers
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
+var userController = require('./controllers/user.js')
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
@@ -114,5 +115,10 @@ app.post('/api/admin/episode/remove', adminController.approveScreencast)
 app.post('/api/admin/user/add', adminController.addUser)
 
 app.post('/api/admin/user/delete', adminController.deleteUser)
+
+// Screencaster APIs
+
+app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
+app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
 app.listen(config.get('port') || 3000)
