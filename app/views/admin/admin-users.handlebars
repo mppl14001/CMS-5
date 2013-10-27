@@ -20,14 +20,14 @@
 		</thead>
 		<tbody>
 		{{#each users}}
-			<tr>
-				<td>{{this.id}}</td>
-				<td>@{{this.twitter_username}}</td>
+			<tr data-id="{{this.id}}">
+				<td class="id">{{this.id}}</td>
+				<td class="twitter">@{{this.twitter_username}}</td>
 				<td>{{this.createdAt}}</td>
-				<td>Active</td>
+				<td class="status">Active</td>
 				<td>
 					<div class="btn-group level">
-						<a class="btn btn-primary" href="#"><i class="fa fa-user"></i> Admin</a>
+						<a class="btn btn-primary active-role" href="#" data-role="admin"><i class="fa fa-user"></i> Admin</a>
 						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="#"><i class="fa fa-pencil"></i> Viewer</a></li>
@@ -36,10 +36,32 @@
 							<li><a href="#"><i class="fa fa-ban"></i> Admin</a></li>
 						  </ul>
 					</div>
-					<button type="button" class="btn btn-danger">Close Account</button>
+					<button type="button" class="btn btn-danger" onclick="deleteAccount({{this.id}});">Close Account</button>
 				</td>
 			</tr>
 		{{/each}}
 		</tbody>
 	</table>
+	<script type="text/javascript">
+		function deleteAccount(id) {
+			console.log(id)
+			$.ajax({
+				url: '/api/admin/user/delete',
+				type: 'POST',
+				data: {
+					confirmation: true, 
+					id: id,
+					role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
+				},
+				success:function(data) {
+					var json = $.parseJSON(data)
+					if (json.status == 'ok') {
+
+					} else {
+						console.log("There was a fucking error")
+					}
+				}
+			})
+		}
+	</script>
 </section>

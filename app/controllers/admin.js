@@ -115,8 +115,8 @@ module.exports.getPendingEpisodes = function(req, res) {
 }
 
 module.exports.getEpisodeById = function(req, res) {
-	var dataTest = {
-		name: "Joe Learns to Code",
+	var data = {
+		title: "Joe Learns to Code",
 		thumbnail: "http://cdn.panasonic.com/images/imageNotFound400.jpg",
 		video: null,
 		author: "Joe Torraca",
@@ -148,8 +148,16 @@ module.exports.getEpisodeById = function(req, res) {
 			}
 		]
 	}
-	console.log(dataTest)
-	res.render('admin/admin-episodes-specific', dataTest)
+	async.parallel([
+		function (callback) {
+			sequelize.query('SELECT title, ytURL, approved, UserId').success(function(data) {
+				callback(null, data)
+			})
+		}
+	], function callback(err, results) {
+		res.render('admin/admin-episodes-specific', data)
+	})
+	console.log(data)
 }
 
 module.exports.getUsers = function(req, res) {
@@ -159,7 +167,6 @@ module.exports.getUsers = function(req, res) {
 		})
 	})
 }
-
 
 module.exports.getUserById = function(req, res) {
 	res.render('admin/admin')
@@ -187,7 +194,7 @@ module.exports.approveScreencast = function(req, res) {
 
 module.exports.removeScreencast = function(req, res) {
 	if (req.xhr) {
-		
+
 	}
 }
 
@@ -227,7 +234,7 @@ module.exports.addUser = function(req, res) {
 module.exports.deleteUser = function(req, res) {
 	if (req.xhr) {
 		if (req.body.confirmation === true) {
-			sequelize.query('DELETE FROM Users WHERE twitter_username = :username AND role = :role', null, {raw: true}, {username: res.body.twHandle, role: res.body.role}).success(function(deleted) {
+			sequelize.query('DELETE FROM Users WHERE id = :id AND role = :role', null, {raw: true}, {id: res.body.id, role: res.body.role}).success(function(deleted) {
 				var successJson = {
 					status: 'ok',
 					rowsModified: 1,
