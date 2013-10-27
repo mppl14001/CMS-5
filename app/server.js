@@ -63,7 +63,10 @@ passport.use(new TwitterStrategy({
 var app = express()
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
-app.engine('handlebars', exphbs({defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')}))
+app.engine('handlebars', exphbs({
+	partialsDir: path.join(__dirname, 'views', 'partials'),
+	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')
+}))
 app.use(express.cookieParser())
 app.use(express.json())
 app.use(express.urlencoded())
