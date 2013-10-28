@@ -21,7 +21,11 @@
 				{{#if user.name}}
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.name}} <b class="caret"></b></a>
 				<ul class="dropdown-menu">
+<<<<<<< HEAD
+					<li><a href="/logout">Logout</a></li> <!-- Todo: Implement -->
+=======
 					<li><a href="/logout">Logout</a></li>
+>>>>>>> a626da108ceebf67b721c62f45d68373bc2466c7
 					<li><a href="#">Settings</a></li> <!-- Todo: Implement -->
 				</ul>
 				{{else}}

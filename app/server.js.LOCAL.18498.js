@@ -68,14 +68,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
 app.engine('handlebars', exphbs({
 	partialsDir: path.join(__dirname, 'views', 'partials'),
-	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars'),
-	helpers: {
-		activeHelper: function(that, page){
-			if(that.page == page){
-				return 'active'
-			}
-		}
-	}
+	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')
 }))
 app.use(express.cookieParser())
 app.use(express.json())
@@ -85,12 +78,6 @@ app.use(express.session({ secret: 'CodePilot', store: sessionStore }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use(passport.session())
-
-app.use(function(req, res, next) {
-	res.locals.user = req.user
-	res.locals.showNav = true // TODO: Hide if it needs to be hidden
-	next()
-})
 
 app.get('/', function(req, res){
 	res.render('home', {
@@ -109,75 +96,6 @@ app.get('/logout', function(req, res) {
 	res.redirect('/')
 })
 
-
-/*
-	Screencast submission
-*/
-
-app.get('/screencaster', function(req, res) {
-	if (!req.user || req.user.role == 4) {
-		res.redirect('../')
-	}
-	// Access Granted
-	sequelize.query('SELECT * FROM Episodes WHERE approved = 0 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
-			}
-			data['videos'] = query;
-			for (var i=0;i<data['videos'].length;i++) {
-				var element = data['videos'][i]
-				var eId = element.id
-				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-					if (shownotes.length > 0) {
-						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-						element.shownotes = shownotes
-					} else {
-						element.shownotes = null
-					}
-					console.log(element)
-					res.render("screencasters/screencasters-episodes-waiting-list", data)
-				})
-			}
-		} else {
-			res.render("screencasters/screencasters-episodes-waiting-list")
-		}
-	})
-})
-
-app.get('/screencaster/approved', function(req, res) {
-	if (!req.user || req.user.role == 4) {
-		res.redirect('../')
-	}
-	// Access Granted
-	sequelize.query('SELECT * FROM Episodes WHERE approved = 1 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
-			}
-			data['videos'] = query;
-			for (var i=0;i<data['videos'].length;i++) {
-				var element = data['videos'][i]
-				var eId = element.id
-				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-					if (shownotes.length > 0) {
-						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-						element.shownotes = shownotes
-					} else {
-						element.shownotes = null
-					}
-					console.log(element)
-					res.render("screencasters/screencasters-episodes-approved-list", data)
-				})
-			}
-		} else {
-			res.render("screencasters/screencasters-episodes-approved-list")
-		}
-	})
-})
-
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
 app.get('/transcription/:id', episodeController.getTranscription)
@@ -192,7 +110,7 @@ app.get('/admin/episodes',/*requireAdmin,*/ adminController.getEpisodes)
 
 app.get('/admin/episodes/pending',/*requireAdmin,*/ adminController.getPendingEpisodes)
 
-app.get('/admin/episodes/pending/:id(\\d+)', /*requireAdmin,*/ adminController.getEpisodeById)
+app.get('/admin/episodes/pending/:id(\\d+)',/*requireAdming,*/ adminController.getEpisodeById)
 
 app.get('/admin/episodes/:id(\\d+)',/*requireAdmin,*/ adminController.getEpisodeById)
 
@@ -204,24 +122,15 @@ app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
 
 app.post('/api/admin/episode/approve', adminController.approveScreencast)
 
-app.post('/api/admin/episode/remove', adminController.removeScreencast)
-
-app.post('/api/admin/episode/tags/add', adminController.addTag)
-
-app.post('/api/admin/episode/tags/remove', adminController.removeTag)
+app.post('/api/admin/episode/remove', adminController.approveScreencast)
 
 app.post('/api/admin/user/add', adminController.addUser)
 
-app.post('/api/admin/user/deactivate', adminController.deactivateUser)
-
-app.post('/api/admin/user/activate', adminController.activateUser)
-
-app.post('/api/admin/user/role', adminController.changeRole)
+app.post('/api/admin/user/delete', adminController.deleteUser)
 
 // Screencaster APIs
 
 app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
-
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
 app.listen(config.get('port') || 3000)

@@ -15,24 +15,44 @@
 	<h3>Tags</h3>
 	<ul style="list-style-type:none;">
 		{{#tags}}
-			<li>{{this}}</li>
+			<li style="margin-bottom:5px;">{{this}}</li>
 		{{/tags}}
 		<li>
-			<a href="#" class=""><i class="fa fa-plus"></i>Add more</a>
+			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i>Add more</a>
 		</li>
 	</ul>
+</div>
+<div class="modal fade" id="addTag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Add tag</h4>
+			</div>
+			<div class="modal-body">
+				<label for="newTag">Tag</label>
+			    <input type="text" class="form-control" id="newTag" placeholder="Enter tag">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onclick="addTag({{id}}, $('#addTag .modal-body input').val());">Add</button>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="status col-md-12 clearfix" style="margin-top:25px;">
 	<h3>Status</h3>
 	<div class="col-md-6 text-center approval">
 		<h4>Visibility</h4>
-		{{#if status.approval}}
-		<p class="active">Approval</p>
-		<button type="button" class="btn btn-error" name="removeVideo">Remove</button>
-		{{else}}
-		<p class="warning">Awaiting approval</p>
-		<button type="button" class="btn btn-success" name="approveVideo">Approve</button>
-		{{/if}}
+		<div class="button-cont">
+			{{#if status.approval}}
+			<p class="active">Approved</p>
+			<button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo({{id}});">Remove</button>
+			{{else}}
+			<p class="warning">Awaiting approval</p>
+			<button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo({{id}});">Approve</button>
+			{{/if}}
+		</div>
 	</div>
 	<div class="col-md-6 text-center">
 		<h4>Title</h4>
@@ -106,22 +126,60 @@ html[xmlns] .clearfix {
 }
 </style>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('.status .approval button[name=\'approveVideo\']').on('click', function() {
-			$.ajax({
-				url: '/api/admin/episode/approve/',
-				data: {id:'1'},
-				type: 'POST',
-				success:function(v) {
-					var json = $.parseJSON(v)
-					if (json.status === "ok") {
-						$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
-						$('.status .approval button[name=\'approveVideo\']').remove();
-					} else {
-						console.log("An error has occured")
-					}
+	function approveVideo(id) {
+		$.ajax({
+			url: '/api/admin/episode/approve/',
+			data: {id:id},
+			type: 'POST',
+			success:function(v) {
+				var json = $.parseJSON(v)
+				if (json.status === "ok") {
+					$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
+					$('.status .approval button[name=\'approveVideo\']').remove();
+					$('.status .approval .button-cont').html('<p class="active">Approved</p><button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo('+id+');">Remove</button>')
+				} else {
+					console.log("An error has occured")
 				}
-			})
+			}
 		})
-	})
+	}
+	function deleteVideo(id) {
+		$.ajax({
+			url: '/api/admin/episode/remove/',
+			data: {id:id},
+			type: 'POST',
+			success:function(v) {
+				var json = $.parseJSON(v)
+				if (json.status === "ok") {
+					$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
+					$('.status .approval button[name=\'approveVideo\']').remove();
+					$('.status .approval .button-cont').html('<p class="warning">Awaiting approval</p><button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo('+id+');">Approve</button>')
+				} else {
+					console.log('An error has occured')
+				}
+			}
+		})
+	}
+	function addTag(id, tag) {
+		$.ajax({
+			url: '/api/admin/episode/tags/add',
+			data: {
+				id: id,
+				tag: tag
+			},
+			type: 'POST',
+			success:function(b) {
+				var json = $.parseJSON(b)
+				if (json.status === 'ok') {
+					$("<li style='margin-bottom:5px;'>"+json.tagAdded+"</li>").insertBefore($(".tags ul li:last-child"))
+					$('#addTag').modal('hide')
+				} else {
+					console.log('An error has occured.')
+				}
+			}
+		})
+	}
+	function removeTag(id, tag) {
+
+	}
 </script>
