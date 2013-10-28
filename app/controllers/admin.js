@@ -33,7 +33,7 @@ module.exports.get = function(req, res) {
 				callback(null, '12,428')
 			}, 
 			function(callback) { // Videos awaiting approval
-				sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
+				Episode.findAll({ where: { approved: 0 } }).success(function(query) {
 					var grammar = query.length === 1 ?
 								  'Video awaiting approval' :
 								  'Videos awaiting approval'
@@ -60,7 +60,7 @@ module.exports.get = function(req, res) {
 
 module.exports.getEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
-	sequelize.query('SELECT * FROM Episodes WHERE approved = 1').success(function(query) {
+	Episode.findAll({ where: { approved: 1 } }).success(function(query) {
 			if (query.length > 0) {
 				var data = {
 					videos: []
@@ -69,10 +69,11 @@ module.exports.getEpisodes = function(req, res) {
 				for (var i=0;i<data['videos'].length;i++) {
 					var element = data['videos'][i]
 					var eId = element.id
-					sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-						if (shownotes.length > 0) {
-							shownotes[0].content = shownotes[0].content.toString()
-							shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+
+					Shownote.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
+						shownotes[0].content = shownotes[0].content.toString()
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+						if (shownotes) {
 							element.shownotes = shownotes
 						} else {
 							element.shownotes = null
@@ -89,7 +90,7 @@ module.exports.getEpisodes = function(req, res) {
 
 module.exports.getPendingEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
-	sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
+	Episode.findAll({ where: { approved: 0 } }).success(function(query) {
 		if (query.length > 0) {
 			var data = {
 				videos: []
@@ -98,8 +99,8 @@ module.exports.getPendingEpisodes = function(req, res) {
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
-				console.log(eId)
-				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
+
+				Shownote.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
 					if (shownotes.length > 0) {
 						shownotes[0].content = shownotes[0].content.toString()
 						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
@@ -178,7 +179,7 @@ module.exports.getEpisodeById = function(req, res) {
 
 module.exports.getUsers = function(req, res) {
 	res.locals.page = 'users'
-	sequelize.query('SELECT * FROM Users').success(function(query) {
+	User.findAll().success(function(query) {
 		res.render('admin/admin-users', {
 			users: query
 		})
