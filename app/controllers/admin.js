@@ -157,10 +157,6 @@ module.exports.getEpisodeById = function(req, res) {
 					data.author = user[0].name
 					callback(returned)
 				})
-				sequelize.query('SELECT content, language FORM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: data.id}).success(function(shownotes) {
-					data.shownotes = shownotes[0].content
-					data.shownotesLang = shownotes[0].language
-				})
 			})
 		}
 	], function callback(err, results) {
