@@ -8,15 +8,19 @@ It was built in a weekend.
 Screencast 1: Installing CodePilot CMS
 --------------------------------------
 This project is currently in heavy development and things might be horribly broken. 
-Make sure you have node (+ npm), MySQL, and Redis installed and running.
+Make sure you have [Node.js](http://nodejs.org/) (& [NPM](http://npmjs.org/)), [MySQL](http://www.mysql.com/), and [Redis](http://redis.io/) installed and running.
 
-1. Clone app/config.example.json  
-Fill in your MySQL details and Twitter OAuth Key details. Don't worry about migrations, those are handled behind the scenes.
-2. Run npm install  
+1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MySQL details and Twitter OAuth Key details. Don't worry about migrations, those are handled behind the scenes.
+2. Run `npm install`
 This'll take a while as it fetches CodePilot's dependencies.
-3. Run npm start  
-Assuming everything is okay, you'll be able to access CodePilot at http://localhost:3000/
+3. Run `npm start`
+Assuming everything is okay, you'll be able to access CodePilot at `http://localhost:3000/`
 
+### Common Errors and how to fix them
+
+#### `TypeError: Uncaught, unspecified "error" event.`
+
+This is most likely caused because your MySQL server is not running. Start the server and try again.
 
 ---
 

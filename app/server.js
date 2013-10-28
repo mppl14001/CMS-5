@@ -7,7 +7,7 @@ var Sequelize = require('sequelize')
 GLOBAL.async = require('async')
 var express = require('express')
 var exphbs = require('express3-handlebars')
-var RedisStore = require('connect-redis')(express);
+var RedisStore = require('connect-redis')(express)
 var sessionStore = new RedisStore
 
 // Config
@@ -19,10 +19,11 @@ var dbConfig = config.get('db')
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
 
 // Models
-var models = require('./models')
+GLOBAL.models = require('./models')
 GLOBAL.Episode = models.episode
 GLOBAL.Shownotes = models.shownotes
 GLOBAL.User = models.user
+GLOBAL.Transcription = models.transcriptions
 
 // Controllers
 var adminController = require('./controllers/admin.js')
@@ -55,7 +56,7 @@ passport.use(new TwitterStrategy({
 		twitter_access_token: token,
 		twitter_access_secret: tokenSecret
 	}).success(function(user) {
-		return done(null, user) 
+		return done(null, user)
 	}).failure(function(error) {
 		return done(error, null)
 	})
@@ -119,11 +120,11 @@ app.get('/screencaster', function(req, res) {
 	}
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
+		if (query.length > 0) {
+			var data = {
+				videos: []
 			}
-			data['videos'] = query;
+			data['videos'] = query
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
@@ -151,11 +152,11 @@ app.get('/screencaster/approved', function(req, res) {
 	}
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 1 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
+		if (query.length > 0) {
+			var data = {
+				videos: []
 			}
-			data['videos'] = query;
+			data['videos'] = query
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
@@ -178,6 +179,12 @@ app.get('/screencaster/approved', function(req, res) {
 })
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
+
+app.get('/transcription/:id', episodeController.getTranscription)
+
+app.post('/transcription/:id', episodeController.postTranscription)
+
+app.get('/transcript/:id', episodeController.getTranscript)
 
 app.get('/admin',/*requireAdmin,*/ adminController.get)
 
@@ -216,5 +223,26 @@ app.post('/api/admin/user/role', adminController.changeRole)
 app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
 
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
+
+app.get('/spencer/awsSign/:filename', function(req, res){
+
+	var s3Config = config.get('s3')
+
+	var knox = require('knox')
+	var s3Client = knox.createClient({
+		key: s3.key,
+		secret: s3.secret,
+		bucket: s3.bucket
+	})
+	function getS3Url(filename) {
+		var expires = new Date()
+		expires.setMinutes(expires.getMinutes() + 30)
+		return s3Client.signedUrl(filename, expires)
+	}
+	var url = getS3Url(req.params.filename)
+	var sig = url.substring(url.lastIndexOf('=')+1, url.length)
+	res.send(sig)
+
+})
 
 app.listen(config.get('port') || 3000)
