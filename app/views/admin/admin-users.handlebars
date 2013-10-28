@@ -22,13 +22,13 @@
 				{{/if}}
 				<td class="buttons col-md-5">
 					<div class="btn-group level">
-						<a class="btn btn-primary active-role" href="#" data-role="admin"><i class="fa fa-user"></i> Admin</a>
+						<a class="btn btn-primary active-role" href="#" data-role="admin"><i class="fa fa-user"></i> <span>Admin</span></a>
 						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="#" onclick="changeRoleViewer({{this.id}});"><i class="fa fa-pencil"></i> Viewer</a></li>
-							<li><a href="#" onclick="changeRoleModerator({{this.id}});"><i class="fa fa-trash-o"></i> Moderator</a></li>
-							<li><a href="#" onclick="changeRoleScreencaster({{this.id}});"><i class="fa fa-pencil"></i> Screencaster</a></li>
-							<li><a href="#" onclick="changeRoleAdmin({{this.id}});"><i class="fa fa-ban"></i> Admin</a></li>
+							<li><a href="#" onclick="changeRoleViewer({{this.id}});"><i class="fa fa-pencil"></i> <span>Viewer</span></a></li>
+							<li><a href="#" onclick="changeRoleModerator({{this.id}});"><i class="fa fa-trash-o"></i> <span>Moderator</span></a></li>
+							<li><a href="#" onclick="changeRoleScreencaster({{this.id}});"><i class="fa fa-pencil"></i> <span>Screencaster</span></a></li>
+							<li><a href="#" onclick="changeRoleAdmin({{this.id}});"><i class="fa fa-ban"></i> <span>Admin</span></a></li>
 						  </ul>
 					</div>
 					{{#if this.active}}
@@ -93,7 +93,8 @@
 				success:function(data) {
 					var json = $.parseJSON(data)
 					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").html('<i class="fa fa-user"></i> Admin').data("role", "admin")
+						$(".users table tr[data-id="+id+"] .active-role").data("role", "admin")
+						$(".users table tr[data-id="+id+"] .active-role span").text('Admin').data("role", "admin")
 					} else {
 						console.log("There was a fucking error")
 					}
@@ -111,7 +112,9 @@
 				success:function(data) {
 					var json = $.parseJSON(data)
 					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").html('<i class="fa fa-user"></i> Admin').data("role", "admin")
+						$(".users table tr[data-id="+id+"] .active-role").data("role", "screencaster")
+						$(".users table tr[data-id="+id+"] .active-role span").text('Screencaster')
+						$(".users table tr[data-id="+id+"] .active-role i").
 					} else {
 						console.log("There was a fucking error")
 					}
@@ -129,7 +132,8 @@
 				success:function(data) {
 					var json = $.parseJSON(data)
 					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").html('<i class="fa fa-user"></i> Admin').data("role", "admin")
+						$(".users table tr[data-id="+id+"] .active-role").data("role", "moderator")
+						$(".users table tr[data-id="+id+"] .active-role span").text('Moderator').data("role", "moderator")
 					} else {
 						console.log("There was a fucking error")
 					}
@@ -147,7 +151,8 @@
 				success:function(data) {
 					var json = $.parseJSON(data)
 					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").html('<i class="fa fa-user"></i> Admin').data("role", "admin")
+						$(".users table tr[data-id="+id+"] .active-role").data("role", "viwer")
+						$(".users table tr[data-id="+id+"] .active-role span").text('Viewer').data("role", "viwer")
 					} else {
 						console.log("There was a fucking error")
 					}

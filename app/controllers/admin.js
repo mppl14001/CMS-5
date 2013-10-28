@@ -116,17 +116,14 @@ module.exports.getPendingEpisodes = function(req, res) {
 
 module.exports.getEpisodeById = function(req, res) {
 	var data = {
-		title: "Joe Learns to Code",
-		thumbnail: "http://cdn.panasonic.com/images/imageNotFound400.jpg",
+		title: null,
+		id: null,
+		thumbnail: null,
 		video: null,
-		author: "Joe Torraca",
-		shownotes: "Lorem Ipsum",
-		tags: [
-			"Node.js",
-			"Language",
-			"MySQL",
-			"Database"
-		],
+		author: null,
+		shownotes: null,
+		shownotesLang: null,
+		tags: [],
 		status: {
 			approval: "unapproved"
 		},
@@ -150,8 +147,20 @@ module.exports.getEpisodeById = function(req, res) {
 	}
 	async.parallel([
 		function (callback) {
-			sequelize.query('SELECT title, ytURL, approved, UserId').success(function(data) {
-				callback(null, data)
+			sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
+				data.title = returned[0].title
+				data.video = returned[0].ytURL
+				data.status.approval = returned[0].approved
+				data.id = returned[0].id
+				console.log(returned)
+				sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
+					data.author = user[0].name
+					callback(returned)
+				})
+				sequelize.query('SELECT content, language FORM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: data.id}).success(function(shownotes) {
+					data.shownotes = shownotes[0].content
+					data.shownotesLang = shownotes[0].language
+				})
 			})
 		}
 	], function callback(err, results) {
