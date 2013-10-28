@@ -233,7 +233,7 @@ module.exports.addUser = function(req, res) {
 
 module.exports.changeRole = function(req, res) {
 	if (req.xhr) {
-		
+
 	}
 }
 
@@ -278,6 +278,33 @@ module.exports.activateUser = function(req, res) {
 				status: 'ok',
 				rowsModified: 1,
 				recordRemoved: req.body.twHandle
+			}
+			res.write(JSON.stringify(successJson))
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null,
+				error: 'sequelize'
+			}
+			res.write(JSON.stringify(errorJson))
+			res.end()
+		})
+	}
+}
+
+module.exports.changeRole = function(req, res) {
+	if (req.xhr) {
+		var roles = {
+			"admin": 1,
+			"screencaster": 2,
+			"moderator": 3,
+			"viewer":4
+		}
+		sequelize.query('Update Users SET role = :role WHERE id = :id', null, {raw: true}, {role: roles[req.body.role], id:req.body.id}).success(function(data) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1
 			}
 			res.write(JSON.stringify(successJson))
 			res.end()

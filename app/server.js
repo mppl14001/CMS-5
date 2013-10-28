@@ -123,6 +123,8 @@ app.post('/api/admin/user/deactivate', adminController.deactivateUser)
 
 app.post('/api/admin/user/activate', adminController.activateUser)
 
+app.post('/api/admin/user/role', adminController.changeRole)
+
 // Screencaster APIs
 
 app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
