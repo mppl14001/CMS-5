@@ -16,6 +16,11 @@ This'll take a while as it fetches CodePilot's dependencies.
 3. Run `npm start`
 Assuming everything is okay, you'll be able to access CodePilot at `http://localhost:3000/`
 
+### Common Errors and how to fix them
+
+#### `TypeError: Uncaught, unspecified "error" event.`
+
+This is most likely caused because your MySQL server is not running. Start the server and try again.
 
 ---
 
