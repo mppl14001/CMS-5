@@ -30,5 +30,4 @@ Assuming everything is okay, you'll be able to access CodePilot at http://localh
 |    Ross Penman    |      [rosspenman](https://github.com/rosspenman)      |    [PenmanRoss‎](https://twitter.com/PenmanRoss‎)    |
 | Charley Hutchison |      [glenwayguy](https://github.com/glenwayguy)      |    [glenwayguy](https://twitter.com/glenwayguy)    |
 |     Nick Frey     |        [NickFrey‎](https://github.com/NickFrey‎)        |      [NickFrey‎](https://twitter.com/NickFrey‎)      |
-|       Andrew      | [NerdYouDontKnow](https://github.com/NerdYouDontKnow) | [TheNERDAndrew](https://twitter.com/TheNERDAndrew) |
 | Daniel Tomlinson  | [DanielTomlinson](https://github.com/DanielTomlinson) |       [dantoml‎](https://twitter.com/dantoml‎)       |
