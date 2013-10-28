@@ -14,7 +14,7 @@
 			<tr data-id="{{this.id}}">
 				<td class="id">{{this.id}}</td>
 				<td class="twitter"><a href="http://twitter.com/{{this.twitter_username}}">@{{this.twitter_username}}</a></td>
-				<td><script type="text/javascript">document.write(moment('{{this.createdAt}}').fromNow())</script></td>
+				<td class="moment">{{this.createdAt}}</td>
 				{{#if this.active}}
 					<td class="status">Active</td>
 				{{else}}
@@ -74,8 +74,15 @@ html[xmlns] .clearfix {
 }
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
-<script> moment().format(); </script>
-<script type="text/javascript">
+<script>
+	moment().format()
+
+	// do the moment stuff
+	$(".moment").each(function() {
+		var $this = $(this)
+		$this.html(moment($this.html()).fromNow())
+	})
+
 	$('.dropdown-menu.user-role li a').on('click', function() {
 		var id = $(this).closest('tr').attr('data-id')
 		var newRole = $(this).attr('data-role')
