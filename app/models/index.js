@@ -85,7 +85,9 @@ FROM ' + table + ' AS d WHERE d.id = OLD.id', callback)
 			])
 		}
 	], function(error, results) {
-		console.log(error)
+		if (error) {
+			console.log(error)
+		}
 	})
 }
 
