@@ -78,6 +78,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use(function(req, res, next) {
+	res.locals.user = req.user
+	next()
+})
+
 app.get('/', function(req, res){
 	res.render('home', {
 		user: req.user
