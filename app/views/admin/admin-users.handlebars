@@ -26,10 +26,9 @@
 		})
 		$('.btn.account-closed').on('click', function() {
 			var id = $(this).closest('tr').attr('data-id')
-			var action = $(this).attr('data-action');
+			var action = $(this).attr('data-action')
 			var status = $(this).closest('tr').find('.status')
-			var button = $(this);
-			
+			var button = $(this)
 			$.ajax({
 				url: '/api/admin/user/'+action,
 				type: 'POST',
@@ -39,6 +38,16 @@
 					if (json.status == 'ok') {
 						var accountClosed = (action == 'deactivate')
 						status.text(accountClosed ? 'Inactive' : 'Active')
+						if (accountClosed) {
+							status.addClass("error")
+						} else {
+							status.removeClass("error")
+						}
+						if (accountClosed) {
+							button.removeClass('btn-danger').addClass('btn-success')
+						} else {
+							button.removeClass('btn-success').addClass('btn-danger')
+						}
 						button.attr('data-action', accountClosed ? 'activate' : 'deactivate').text(accountClosed ? 'Reactivate' : 'Close Account')
 					} else {
 						console.log("There was a fucking error")
@@ -92,3 +101,43 @@
 		</tbody>
 	</table>
 </section>
+<style type="text/css">
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+.active {
+	color:#34b611;
+}
+.error {
+	color:#db0b0b;
+}
+.warning {
+	color:#debb1a;
+}
+.tags ul li {
+	display:inline-block;
+	background-color:#eee;
+	padding:5px 10px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	-o-border-radius:4px;
+	border-radius:4px;
+}
+</style>
