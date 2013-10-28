@@ -231,6 +231,12 @@ module.exports.addUser = function(req, res) {
 	}
 }
 
+module.exports.changeRole = function(req, res) {
+	if (req.xhr) {
+		
+	}
+}
+
 module.exports.deactivateUser = function(req, res) {
 	if (req.xhr) {
 		var roles = {
