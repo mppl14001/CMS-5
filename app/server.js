@@ -236,25 +236,4 @@ app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
 
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
-app.get('/spencer/awsSign/:filename', function(req, res){
-
-	var s3Config = config.get('s3')
-
-	var knox = require('knox')
-	var s3Client = knox.createClient({
-		key: s3.key,
-		secret: s3.secret,
-		bucket: s3.bucket
-	})
-	function getS3Url(filename) {
-		var expires = new Date()
-		expires.setMinutes(expires.getMinutes() + 30)
-		return s3Client.signedUrl(filename, expires)
-	}
-	var url = getS3Url(req.params.filename)
-	var sig = url.substring(url.lastIndexOf('=')+1, url.length)
-	res.send(sig)
-
-})
-
 app.listen(config.get('port') || 3000)
