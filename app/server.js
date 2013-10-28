@@ -101,6 +101,75 @@ app.get('/logout', function(req, res) {
 	res.redirect('/')
 })
 
+
+/*
+	Screencast submission
+*/
+
+app.get('/screencaster', function(req, res) {
+	if (!req.user || req.user.role == 4) {
+		res.redirect('../')
+	}
+	// Access Granted
+	sequelize.query('SELECT * FROM Episodes WHERE approved = 0 & userId =' + req.user.id).success(function(query) {
+			if (query.length > 0) {
+				var data = {
+					videos: []
+			}
+			data['videos'] = query;
+			for (var i=0;i<data['videos'].length;i++) {
+				var element = data['videos'][i]
+				var eId = element.id
+				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
+					shownotes[0].content = shownotes[0].content.toString()
+					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+					if (shownotes) {
+						element.shownotes = shownotes
+					} else {
+						element.shownotes = null
+					}
+					console.log(element)
+					res.render("screencasters/screencasters-episodes-waiting-list", data)
+				})
+			}
+		} else {
+			res.render("screencasters/screencasters-episodes-waiting-list")
+		}
+	})
+})
+
+app.get('/screencaster/approved', function(req, res) {
+	if (!req.user || req.user.role == 4) {
+		res.redirect('../')
+	}
+	// Access Granted
+	sequelize.query('SELECT * FROM Episodes WHERE approved = 1 & userId =' + req.user.id).success(function(query) {
+			if (query.length > 0) {
+				var data = {
+					videos: []
+			}
+			data['videos'] = query;
+			for (var i=0;i<data['videos'].length;i++) {
+				var element = data['videos'][i]
+				var eId = element.id
+				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
+					shownotes[0].content = shownotes[0].content.toString()
+					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+					if (shownotes) {
+						element.shownotes = shownotes
+					} else {
+						element.shownotes = null
+					}
+					console.log(element)
+					res.render("screencasters/screencasters-episodes-approved-list", data)
+				})
+			}
+		} else {
+			res.render("screencasters/screencasters-episodes-approved-list")
+		}
+	})
+})
+
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
 app.get('/admin',/*requireAdmin,*/ adminController.get)
@@ -108,8 +177,6 @@ app.get('/admin',/*requireAdmin,*/ adminController.get)
 app.get('/admin/episodes',/*requireAdmin,*/ adminController.getEpisodes)
 
 app.get('/admin/episodes/pending',/*requireAdmin,*/ adminController.getPendingEpisodes)
-
-app.get('/admin/episodes/pending/:id(\\d+)',/*requireAdming,*/ adminController.getEpisodeById)
 
 app.get('/admin/episodes/:id(\\d+)',/*requireAdmin,*/ adminController.getEpisodeById)
 
