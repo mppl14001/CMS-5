@@ -16,7 +16,9 @@ var twitterConfig = config.get('twitter')
 var dbConfig = config.get('db')
 
 // DB
-GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
+GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
+	logging: false
+})
 
 // Models
 GLOBAL.models = require('./models')
