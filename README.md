@@ -11,7 +11,7 @@ This project is currently in heavy development and things might be horribly brok
 Make sure you have node (+ npm), MySQL, and Redis installed and running.
 
 1. Copy app/config.example.json to app/config.json
-Fill in your MySQL details and Twitter OAuth Key details. Don't worry about migrations, those are handled behind the scenes.
+In app/config.json, fill in your MySQL details and Twitter OAuth Key details. Don't worry about migrations, those are handled behind the scenes.
 2. Run npm install  
 This'll take a while as it fetches CodePilot's dependencies.
 3. Run npm start  
