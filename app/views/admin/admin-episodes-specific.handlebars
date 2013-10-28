@@ -15,7 +15,7 @@
 	<h3>Tags</h3>
 	<ul style="list-style-type:none;">
 		{{#tags}}
-			<li>{{this}}</li>
+			<li style="margin-bottom:5px;">{{this}}</li>
 		{{/tags}}
 		<li>
 			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i>Add more</a>
@@ -170,8 +170,8 @@ html[xmlns] .clearfix {
 			type: 'POST',
 			success:function(b) {
 				var json = $.parseJSON(b)
-				if (json.success === 'ok') {
-					console.log("Will add new tag")
+				if (json.status === 'ok') {
+					$("<li style='margin-bottom:5px;'>"+json.tagAdded+"</li>").insertBefore($(".tags ul li:last-child"))
 					$('#addTag').modal('hide')
 				} else {
 					console.log('An error has occured.')
