@@ -100,7 +100,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 				var element = data['videos'][i]
 				var eId = element.id
 
-				Shownotes.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
+				Shownotesw.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
 					if (shownotes.length > 0) {
 						shownotes[0].content = shownotes[0].content.toString()
 						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
