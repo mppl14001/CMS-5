@@ -48,10 +48,11 @@ passport.use(new TwitterStrategy({
 	callbackURL: 'http://127.0.0.1:'+config.get('port')+'/auth/twitter/callback'
 }, function(token, tokenSecret, profile, done) {
 	User.findOrCreate({
-		twitter_access_token: token
+		twitter_id: profile.id
 	}, {
 		name: profile.displayName,
 		role: 4,
+		twitter_id: profile.id,
 		twitter_username: profile.username,
 		twitter_access_token: token,
 		twitter_access_secret: tokenSecret
@@ -80,8 +81,8 @@ app.engine('handlebars', exphbs({
 				case 1:  return "Admin"
 				case 2:  return "Screencaster"
 				case 3:  return "Moderator"
-				case 4:  return "Viewer"
-				default: return ""
+				// 4 should be viewer, so just let it hit default.
+				default: return "Viewer"
 			}
 		}
 	}

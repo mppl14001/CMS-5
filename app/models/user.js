@@ -15,6 +15,10 @@ module.exports = function(sequelize, DataTypes) {
 				max: 4
 			}
 		},
+		twitter_id: {
+			allowNull: false,
+			type: DataTypes.STRING
+		},
 		twitter_username: {
 			allowNull: false,
 			type: DataTypes.STRING
