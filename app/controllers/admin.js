@@ -32,7 +32,7 @@ module.exports.get = function(req, res) {
 				callback(null, '12,428')
 			}, 
 			function(callback) { // Videos awaiting approval
-				sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
+				Episode.findAll({ where: { approved: 0 } }).success(function(query) {
 					var grammar = query.length === 1 ?
 								  'Video awaiting approval' :
 								  'Videos awaiting approval'
@@ -58,7 +58,7 @@ module.exports.get = function(req, res) {
 
 
 module.exports.getEpisodes = function(req, res) {
-	sequelize.query('SELECT * FROM Episodes WHERE approved = 1').success(function(query) {
+	Episode.findAll({ where: { approved: 1 } }).success(function(query) {
 			if (query.length > 0) {
 				var data = {
 					videos: []
@@ -86,7 +86,7 @@ module.exports.getEpisodes = function(req, res) {
 }
 
 module.exports.getPendingEpisodes = function(req, res) {
-	sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
+	Episode.findAll({ where: { approved: 0 } }).success(function(query) {
 		if (query.length > 0) {
 			var data = {
 				videos: []
@@ -161,7 +161,7 @@ module.exports.getEpisodeById = function(req, res) {
 }
 
 module.exports.getUsers = function(req, res) {
-	sequelize.query('SELECT * FROM Users').success(function(query) {
+	User.findAll().success(function(query) {
 		res.render('admin/admin-users', {
 			users: query
 		})
