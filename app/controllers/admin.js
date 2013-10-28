@@ -149,31 +149,25 @@ module.exports.getEpisodeById = function(req, res) {
 			}
 		]
 	}
-	async.parallel([
-		function (callback) {
-			sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
-				data.title = returned[0].title
-				data.video = returned[0].ytURL
-				data.status.approval = returned[0].approved
-				data.id = returned[0].id
-				sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
-					data.author = user[0].name
-					sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
-						if (shownotes.length > 0) {
-							data.shownotes = shownotes[0].content.toString()
-							data.shownotesLang = shownotes[0].language
-						} else {
-							data.shownotes = null
-							data.shownotesLang = null
-						}
-						callback(returned)
-					})
-				})
+	sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
+		data.title = returned[0].title
+		data.video = returned[0].ytURL
+		data.status.approval = returned[0].approved
+		data.id = returned[0].id
+		sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
+			data.author = user[0].name
+			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
+				if (shownotes.length > 0) {
+					data.shownotes = shownotes[0].content.toString()
+					data.shownotesLang = shownotes[0].language
+				} else {
+					data.shownotes = null
+					data.shownotesLang = null
+				}
+				res.render('admin/admin-episodes-specific', data)
+				console.log(data)
 			})
-		}
-	], function callback(err, results) {
-		res.render('admin/admin-episodes-specific', data)
-		console.log(data)
+		})
 	})
 }
 
