@@ -10,29 +10,46 @@ module.exports['transcriptions'] = sequelize.import(__dirname + '/transcription.
 
 var forceDatabaseUpgrade = false
 
-module.exports['episode'].sync({force: forceDatabaseUpgrade}).success(function(results) {
-	trackChanges('Episodes')
-})
-module.exports['shownotes'].sync({force: forceDatabaseUpgrade}).success(function(results) {
-	trackChanges('Shownotes')
-})
-module.exports['user'].sync({force: forceDatabaseUpgrade}).success(function(results) {
-	trackChanges('Users')
-})
-module.exports['tag'].sync({force: forceDatabaseUpgrade}).success(function(results) {
-	trackChanges('Tags')
-})
-module.exports['transcriptions'].sync({force: forceDatabaseUpgrade}).success(function(results) {
-	trackChanges('Transcriptions')
+async.parallel([
+	function(callback) {
+		module.exports['episode'].sync({force: forceDatabaseUpgrade}).success(function(results) {
+			callback(null, null)
+			trackChanges('Episodes')
+		})
+	}, function(callback) {
+		module.exports['shownotes'].sync({force: forceDatabaseUpgrade}).success(function(results) {
+			callback(null, null)
+			trackChanges('Shownotes')
+		})	
+	}, function(callback) {
+		module.exports['user'].sync({force: forceDatabaseUpgrade}).success(function(results) {
+			callback(null, null)
+			trackChanges('Users')
+		})
+	}, function(callback) {
+		module.exports['tag'].sync({force: forceDatabaseUpgrade}).success(function(results) {
+			callback(null, null)
+			trackChanges('Tags')
+		})
+	}, function(callback) {
+		module.exports['transcriptions'].sync({force: forceDatabaseUpgrade}).success(function(results) {
+			callback(null, null)
+			trackChanges('Transcriptions')
+		})
+	}
+], function() {
+	if (forceDatabaseUpgrade) {
+		seedData()
+	}
 })
 
 module.exports['episode'].hasMany(module.exports['shownotes'], {as: 'shownotes_translations'})
 module.exports['user'].hasMany(module.exports['episode'], {as: 'episodes'})
-module.exports['episode'].hasOne(module.exports['user'], {as: 'author'})
+module.exports['episode'].belongsTo(module.exports['user'], {as: 'author'})
 module.exports['episode'].hasMany(module.exports['tag'], {as: 'tags'})
 module.exports['tag'].hasMany(module.exports['episode'], {as: 'episode'})
-module.exports['transcriptions'].hasOne(module.exports['episode'], {as: 'episode'})
-module.exports['episode'].hasOne(module.exports['transcriptions'], {as: "transcript"})
+module.exports['transcriptions'].belongsTo(module.exports['episode'], {as: 'episode'})
+module.exports['episode'].hasMany(module.exports['transcriptions'], {as: "transcripts"})
 
 //prepare to enter into the depths of SQL hell...
 function trackChanges(table) {
@@ -74,7 +91,6 @@ FROM ' + table + ' AS d WHERE d.id = OLD.id', callback)
 				console.log('Error occurred while attempting to set up change tracking: ' + error)
 			}
 		})
-		seedData();
 	}
 }
 
@@ -88,10 +104,10 @@ function executeQuery(query, callback) {
 
 function seedData() {
 	User.create({
-		name: 'Will Smidlein',
+		name: 'Random Tester',
 		role: 1,
-		twitter_id: '18194756',
-		twitter_username: 'ws',
+		twitter_id: '12345678',
+		twitter_username: 'RandoTester11',
 		twitter_access_token: '<redacted>',
 		twitter_access_secret: '<redacted>',
 		active: 1
@@ -102,10 +118,10 @@ function seedData() {
 	})
 
 	User.create({
-		name: 'Lenny Khazan',
+		name: 'Lester Tester',
 		role: 2,
-		twitter_id: '114487028',
-		twitter_username: 'LennyKhazan',
+		twitter_id: '876432',
+		twitter_username: 'LesterTheTester00',
 		twitter_access_token: '<redacted>',
 		twitter_access_secret: '<redacted>',
 		active: 1
@@ -116,10 +132,10 @@ function seedData() {
 	})
 
 	User.create({
-		name: 'Joe Torraca',
+		name: 'CodePilot ROX',
 		role: 3,
-		twitter_id: '333665491',
-		twitter_username: 'jtorraca',
+		twitter_id: '97656454',
+		twitter_username: 'CODEPILOTROX987',
 		twitter_access_token: '<redacted>',
 		twitter_access_secret: '<redacted>',
 		active: 0
@@ -130,10 +146,10 @@ function seedData() {
 	})
 
 	User.create({
-		name: 'Ross Penman',
+		name: 'T E S T',
 		role: 4,
-		twitter_id: '485076559',
-		twitter_username: 'PenmanRoss',
+		twitter_id: '834579384',
+		twitter_username: 'TESTING14',
 		twitter_access_token: '<redacted>',
 		twitter_access_secret: '<redacted>',
 		active: 0
@@ -143,18 +159,52 @@ function seedData() {
 		console.log('Failed to seed user with error: ' + error)
 	})
 
-	var episodeIds = []
-	Episode.create({
-		title: 'Screencast #1: How to Setup Your Development Environment',
-		ytURL: 'http://www.youtube.com/watch?v=xRopHl9ouvY',
-		published: true,
-		approved: true
-	}).success(function(episode) {
-		console.log('Seeded episode: ' + episode.title)
-		episodeIds.push(episode.id)
-	}).failure(function(error) {
-		console.log('Failed to seed episode with error: ' + error)
-	})
+	var transcriptions = []
+	async.series([
+		function(callback) {
+			Transcription.create({
+				approved: true,
+				text: 'I code stuff.',
+				language: 'en'
+			}).success(function(transcription) {
+				transcriptions.push(transcription)
+				callback(null, transcription)
+			}).failure(function(error) {
+				console.log('Failed to seed transcription with error: ' + error)
+				callback(error, null)
+			})
+		}, function(callback) {
+			Transcription.create({
+				approved: false,
+				text: 'I code more stuff.',
+				language: 'es'
+			}).success(function(transcription) {
+				transcriptions.push(transcription)
+				callback(null, transcription)
+			}).failure(function(error) {
+				console.log('Failed to seed transcription with error: ' + error)
+				callback(error, null)
+			})
+		}, function(callback) {
+			Episode.create({
+				title: 'Screencast #1: How to Setup Your Development Environment',
+				ytURL: 'http://www.youtube.com/watch?v=xRopHl9ouvY',
+				published: true,
+				approved: true
+			}).success(function(episode) {
+				console.log('Seeded episode: ' + episode.title)
+				episode.setTranscripts(transcriptions).success(function() {
+					callback(null, null)
+				}).failure(function(error) {
+					console.log('Failed to set relationship between transcripts and episode.')
+					callback(error, null)
+				})
+			}).failure(function(error) {
+				console.log('Failed to seed episode with error: ' + error)
+				callback(error, null)
+			})
+		}
+	])
 
 	Episode.create({
 		title: 'Screencast #2: Customizing Sublime Text',
@@ -163,7 +213,6 @@ function seedData() {
 		approved: true
 	}).success(function(episode) {
 		console.log('Seeded episode: ' + episode.title)
-		episodeIds.push(episode.id)
 	}).failure(function(error) {
 		console.log('Failed to seed episode with error: ' + error)
 	})
@@ -175,11 +224,9 @@ function seedData() {
 		approved: false
 	}).success(function(episode) {
 		console.log('Seeded episode: ' + episode.title)
-		episodeIds.push(episode.id)
 	}).failure(function(error) {
 		console.log('Failed to seed episode with error: ' + error)
 	})
-
 }
 
 module.exports.sequelize = sequelize
