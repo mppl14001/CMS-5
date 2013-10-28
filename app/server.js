@@ -7,7 +7,7 @@ var Sequelize = require('sequelize')
 GLOBAL.async = require('async')
 var express = require('express')
 var exphbs = require('express3-handlebars')
-var RedisStore = require('connect-redis')(express);
+var RedisStore = require('connect-redis')(express)
 var sessionStore = new RedisStore
 
 // Config
@@ -16,7 +16,9 @@ var twitterConfig = config.get('twitter')
 var dbConfig = config.get('db')
 
 // DB
-GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
+GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
+	logging: config.get('logging').sequelize
+})
 
 // Models
 GLOBAL.models = require('./models')
@@ -48,10 +50,11 @@ passport.use(new TwitterStrategy({
 	callbackURL: 'http://127.0.0.1:'+config.get('port')+'/auth/twitter/callback'
 }, function(token, tokenSecret, profile, done) {
 	User.findOrCreate({
-		twitter_access_token: token
+		twitter_id: profile.id
 	}, {
 		name: profile.displayName,
 		role: 4,
+		twitter_id: profile.id,
 		twitter_username: profile.username,
 		twitter_access_token: token,
 		twitter_access_secret: tokenSecret
@@ -73,6 +76,15 @@ app.engine('handlebars', exphbs({
 		activeHelper: function(that, page){
 			if(that.page == page){
 				return 'active'
+			}
+		},
+		userRoleToString: function(role) {
+			switch (role) {
+				case 1:  return "Admin"
+				case 2:  return "Screencaster"
+				case 3:  return "Moderator"
+				// 4 should be viewer, so just let it hit default.
+				default: return "Viewer"
 			}
 		}
 	}
@@ -124,7 +136,7 @@ app.get('/screencaster', function(req, res) {
 			var data = {
 				videos: []
 			}
-			data['videos'] = query;
+			data['videos'] = query
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
@@ -156,7 +168,7 @@ app.get('/screencaster/approved', function(req, res) {
 			var data = {
 				videos: []
 			}
-			data['videos'] = query;
+			data['videos'] = query
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
@@ -223,26 +235,5 @@ app.post('/api/admin/user/role', adminController.changeRole)
 app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
 
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
-
-app.get('/spencer/awsSign/:filename', function(req, res){
-
-	var s3Config = config.get('s3');
-
-	var knox = require('knox');
-	var s3Client = knox.createClient({
-		key: s3.key,
-		secret: s3.secret,
-		bucket: s3.bucket
-	});
-	function getS3Url(filename) {
-		var expires = new Date();
-		expires.setMinutes(expires.getMinutes() + 30);
-		return s3Client.signedUrl(filename, expires);
-	}
-	var url = getS3Url(req.params.filename)
-	var sig = url.substring(url.lastIndexOf('=')+1, url.length)
-	res.send(sig)
-
-})
 
 app.listen(config.get('port') || 3000)
