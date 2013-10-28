@@ -7,11 +7,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING
 		},
 		role: {
-			// 1: Admin
-			// 2: Screencaster
-			// 3: Moderator
-			// 4: Viewer
-			
+			// documented in userRoleToString (server.js)
 			allowNull: false,
 			type: DataTypes.INTEGER,
 			validate: {
