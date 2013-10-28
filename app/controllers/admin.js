@@ -70,9 +70,9 @@ module.exports.getEpisodes = function(req, res) {
 					var element = data['videos'][i]
 					var eId = element.id
 					sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-						if (shownotes) {
+						if (shownotes.length > 0) {
+							shownotes[0].content = shownotes[0].content.toString()
+							shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 							element.shownotes = shownotes
 						} else {
 							element.shownotes = null
@@ -101,9 +101,9 @@ module.exports.getPendingEpisodes = function(req, res) {
 				console.log(eId);
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
 					if (shownotes.length > 0) {
-						element.shownotes = shownotes
 						shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
 					}
