@@ -55,7 +55,7 @@ passport.use(new TwitterStrategy({
 		twitter_access_token: token,
 		twitter_access_secret: tokenSecret
 	}).success(function(user) {
-		return done(null, user) 
+		return done(null, user)
 	}).failure(function(error) {
 		return done(error, null)
 	})
@@ -119,9 +119,9 @@ app.get('/screencaster', function(req, res) {
 	}
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
+		if (query.length > 0) {
+			var data = {
+				videos: []
 			}
 			data['videos'] = query;
 			for (var i=0;i<data['videos'].length;i++) {
@@ -151,9 +151,9 @@ app.get('/screencaster/approved', function(req, res) {
 	}
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 1 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
+		if (query.length > 0) {
+			var data = {
+				videos: []
 			}
 			data['videos'] = query;
 			for (var i=0;i<data['videos'].length;i++) {
