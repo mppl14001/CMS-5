@@ -128,9 +128,9 @@ app.get('/screencaster', function(req, res) {
 				var element = data['videos'][i]
 				var eId = element.id
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-					shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-					if (shownotes) {
+					if (shownotes.length > 0) {
+						shownotes[0].content = shownotes[0].content.toString()
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
@@ -160,9 +160,9 @@ app.get('/screencaster/approved', function(req, res) {
 				var element = data['videos'][i]
 				var eId = element.id
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-					shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-					if (shownotes) {
+					if (shownotes.length > 0) {
+						shownotes[0].content = shownotes[0].content.toString()
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
@@ -197,7 +197,11 @@ app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
 
 app.post('/api/admin/episode/approve', adminController.approveScreencast)
 
-app.post('/api/admin/episode/remove', adminController.approveScreencast)
+app.post('/api/admin/episode/remove', adminController.removeScreencast)
+
+app.post('/api/admin/episode/tags/add', adminController.addTag)
+
+app.post('/api/admin/episode/tags/remove', adminController.removeTag)
 
 app.post('/api/admin/user/add', adminController.addUser)
 

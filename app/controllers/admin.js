@@ -150,26 +150,30 @@ module.exports.getEpisodeById = function(req, res) {
 			}
 		]
 	}
-	async.parallel([
-		function (callback) {
-			sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
-				data.title = returned[0].title
-				data.video = returned[0].ytURL
-				data.status.approval = returned[0].approved
-				data.id = returned[0].id
-				sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
-					data.author = user[0].name
-					sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
-						data.shownotes = shownotes[0].content
-						data.shownotesLang = shownotes[0].language
-						callback(returned)
+	sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
+		data.title = returned[0].title
+		data.video = returned[0].ytURL
+		data.status.approval = returned[0].approved
+		data.id = returned[0].id
+		sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
+			data.author = user[0].name
+			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
+				if (shownotes.length > 0) {
+					data.shownotes = shownotes[0].content.toString()
+					data.shownotesLang = shownotes[0].language
+				} else {
+					data.shownotes = null
+					data.shownotesLang = null
+				}
+				sequelize.query('SELECT text FROM Tags WHERE episodeid = :id', null, {raw: true}, {id: returned[0].id}).success(function(tags) {
+					tags.forEach(function(item) {
+						data.tags.push(item.text)
 					})
+					res.render('admin/admin-episodes-specific', data)
+					console.log(data)
 				})
 			})
-		}
-	], function callback(err, results) {
-		res.render('admin/admin-episodes-specific', data)
-		console.log(data)
+		})
 	})
 }
 
@@ -209,7 +213,21 @@ module.exports.approveScreencast = function(req, res) {
 
 module.exports.removeScreencast = function(req, res) {
 	if (req.xhr) {
-
+		sequelize.query('UPDATE Episodes SET approved = 0 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1
+			}
+			res.write(JSON.stringify(successJson))
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null
+			}
+			res.write(errorJson)
+			res.end()
+		})
 	}
 }
 
@@ -219,7 +237,7 @@ module.exports.addTag = function(req, res) {
 	}
 }
 
-module.exports.changeUserRole = function(req, res) {
+module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
 
 	}
@@ -243,12 +261,6 @@ module.exports.addUser = function(req, res) {
 			res.write(JSON.stringify(errorJson))
 			res.end()
 		})
-	}
-}
-
-module.exports.changeRole = function(req, res) {
-	if (req.xhr) {
-
 	}
 }
 
