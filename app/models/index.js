@@ -22,6 +22,9 @@ module.exports['user'].sync({force: forceDatabaseUpgrade}).success(function(resu
 module.exports['tag'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 	trackChanges('Tags')
 })
+module.exports['transcriptions'].sync({force: forceDatabaseUpgrade}).success(function(results) {
+	trackChanges('Transcriptions')
+})
 
 module.exports['episode'].hasMany(module.exports['shownotes'], {as: 'shownotes_translations'})
 module.exports['user'].hasMany(module.exports['episode'], {as: 'episodes'})
