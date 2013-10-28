@@ -152,17 +152,20 @@ module.exports.getEpisodeById = function(req, res) {
 				data.video = returned[0].ytURL
 				data.status.approval = returned[0].approved
 				data.id = returned[0].id
-				console.log(returned)
 				sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
 					data.author = user[0].name
-					callback(returned)
+					sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
+						data.shownotes = shownotes[0].content
+						data.shownotesLang = shownotes[0].language
+						callback(returned)
+					})
 				})
 			})
 		}
 	], function callback(err, results) {
 		res.render('admin/admin-episodes-specific', data)
+		console.log(data)
 	})
-	console.log(data)
 }
 
 module.exports.getUsers = function(req, res) {
