@@ -238,7 +238,7 @@ module.exports.addTag = function(req, res) {
 
 module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
-
+		
 	}
 }
 

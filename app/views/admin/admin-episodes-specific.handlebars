@@ -18,9 +18,27 @@
 			<li>{{this}}</li>
 		{{/tags}}
 		<li>
-			<a href="#" class=""><i class="fa fa-plus"></i>Add more</a>
+			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i>Add more</a>
 		</li>
 	</ul>
+</div>
+<div class="modal fade" id="addTag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Add tag</h4>
+			</div>
+			<div class="modal-body">
+				<label for="exampleInputEmail1">Tag</label>
+			    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter tag">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Add</button>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="status col-md-12 clearfix" style="margin-top:25px;">
 	<h3>Status</h3>
@@ -142,6 +160,9 @@ html[xmlns] .clearfix {
 			}
 		})
 	}
+	function showAddTagModal() {
+
+	}	
 	function addTag(tag, id) {
 
 	}
