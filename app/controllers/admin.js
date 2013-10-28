@@ -1,4 +1,5 @@
 module.exports.get = function(req, res) {
+	res.locals.page = 'dashboard'
 	var data = {
 			boxes: [
 				{
@@ -58,6 +59,7 @@ module.exports.get = function(req, res) {
 
 
 module.exports.getEpisodes = function(req, res) {
+	res.locals.page = 'episodes'
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 1').success(function(query) {
 			if (query.length > 0) {
 				var data = {
@@ -86,6 +88,7 @@ module.exports.getEpisodes = function(req, res) {
 }
 
 module.exports.getPendingEpisodes = function(req, res) {
+	res.locals.page = 'episodes'
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
 		if (query.length > 0) {
 			var data = {
@@ -115,6 +118,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 }
 
 module.exports.getEpisodeById = function(req, res) {
+	res.locals.page = 'episodes'
 	var data = {
 		title: null,
 		id: null,
@@ -152,20 +156,24 @@ module.exports.getEpisodeById = function(req, res) {
 				data.video = returned[0].ytURL
 				data.status.approval = returned[0].approved
 				data.id = returned[0].id
-				console.log(returned)
 				sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
 					data.author = user[0].name
-					callback(returned)
+					sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
+						data.shownotes = shownotes[0].content
+						data.shownotesLang = shownotes[0].language
+						callback(returned)
+					})
 				})
 			})
 		}
 	], function callback(err, results) {
 		res.render('admin/admin-episodes-specific', data)
+		console.log(data)
 	})
-	console.log(data)
 }
 
 module.exports.getUsers = function(req, res) {
+	res.locals.page = 'users'
 	sequelize.query('SELECT * FROM Users').success(function(query) {
 		res.render('admin/admin-users', {
 			users: query
@@ -174,6 +182,7 @@ module.exports.getUsers = function(req, res) {
 }
 
 module.exports.getUserById = function(req, res) {
+	res.locals.page = 'users'
 	res.render('admin/admin')
 }
 
