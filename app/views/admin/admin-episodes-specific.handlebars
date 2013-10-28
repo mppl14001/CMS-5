@@ -30,12 +30,12 @@
 				<h4 class="modal-title">Add tag</h4>
 			</div>
 			<div class="modal-body">
-				<label for="exampleInputEmail1">Tag</label>
-			    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter tag">
+				<label for="newTag">Tag</label>
+			    <input type="text" class="form-control" id="newTag" placeholder="Enter tag">
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Add</button>
+				<button type="button" class="btn btn-primary" onclick="addTag({{id}}, $('#addTag .modal-body input').val());">Add</button>
 			</div>
 		</div>
 	</div>
@@ -155,19 +155,31 @@ html[xmlns] .clearfix {
 					$('.status .approval button[name=\'approveVideo\']').remove();
 					$('.status .approval .button-cont').html('<p class="warning">Awaiting approval</p><button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo('+id+');">Approve</button>')
 				} else {
-					console.log("An error has occured")
+					console.log('An error has occured')
 				}
 			}
 		})
 	}
-	function showAddTagModal() {
-
-	}	
-	function addTag(tag, id) {
-
+	function addTag(id, tag) {
+		$.ajax({
+			url: '/api/admin/episode/tags/add',
+			data: {
+				id: id,
+				tag: tag
+			},
+			type: 'POST',
+			success:function(b) {
+				var json = $.parseJSON(b)
+				if (json.success === 'ok') {
+					console.log("Will add new tag")
+					$('#addTag').modal('hide')
+				} else {
+					console.log('An error has occured.')
+				}
+			}
+		})
 	}
-
-	function removeTag(tag, id) {
+	function removeTag(id, tag) {
 
 	}
 </script>

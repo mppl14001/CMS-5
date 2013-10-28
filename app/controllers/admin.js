@@ -233,7 +233,23 @@ module.exports.removeScreencast = function(req, res) {
 
 module.exports.addTag = function(req, res) {
 	if (req.xhr) {
-
+		sequelize.query('INSERT INTO Tags (text, episodeId) VALUES (:text, :id)', null, {raw: true}, {text: req.body.tag, id: req.body.id}).success(function(data) {
+			if (data) {
+				var json = {
+					status: 'ok',
+					tagAdded: req.body.tag
+				}
+				res.write(JSON.write(json))
+				res.end()
+			}
+		}).error(function() {
+			var json = {
+				status: 'error',
+				tagAdded: null
+			}
+			res.write(JSON.write(json))
+			res.end()
+		})
 	}
 }
 
