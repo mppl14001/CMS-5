@@ -159,8 +159,13 @@ module.exports.getEpisodeById = function(req, res) {
 				sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
 					data.author = user[0].name
 					sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
-						data.shownotes = shownotes[0].content
-						data.shownotesLang = shownotes[0].language
+						if (shownotes.length > 0) {
+							data.shownotes = shownotes[0].content.toString()
+							data.shownotesLang = shownotes[0].language
+						} else {
+							data.shownotes = null
+							data.shownotesLang = null
+						}
 						callback(returned)
 					})
 				})
