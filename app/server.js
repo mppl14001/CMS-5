@@ -67,7 +67,14 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
 app.engine('handlebars', exphbs({
 	partialsDir: path.join(__dirname, 'views', 'partials'),
-	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')
+	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars'),
+	helpers: {
+		activeHelper: function(that, page){
+			if(that.page == page){
+				return 'active'
+			}
+		}
+	}
 }))
 app.use(express.cookieParser())
 app.use(express.json())
