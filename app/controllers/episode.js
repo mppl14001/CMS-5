@@ -16,3 +16,23 @@ module.exports.getEpisodeById = function(req, res) {
 	}
 }
 
+module.exports.getTranscript = function(req, res) {
+	Transcription.find({ id: req.params.id }).success(function(result) {
+		res.render('admin/transcript', {
+			transcript: result
+		})
+	})
+}
+
+module.exports.getTranscription = function(req, res) {
+	res.render('admin/transcription', {
+		episode: req.params.id
+	})
+}
+
+module.exports.postTranscription = function(req, res) {
+	console.log(req.params.id, req.body.transcription)
+	Transcription.create({ text: req.body.transcription, EpisodeId: req.params.id }).success(function(result) {
+		res.redirect('/transcript/' + result.id)
+	})
+}

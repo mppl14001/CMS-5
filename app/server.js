@@ -19,10 +19,11 @@ var dbConfig = config.get('db')
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
 
 // Models
-var models = require('./models')
-var Episode = models.episode
-var Shownotes = models.shownotes
-var User = models.user
+GLOBAL.models = require('./models')
+GLOBAL.Episode = models.episode
+GLOBAL.Shownotes = models.shownotes
+GLOBAL.User = models.user
+GLOBAL.Transcription = models.transcriptions
 
 // Controllers
 var adminController = require('./controllers/admin.js')
@@ -96,6 +97,12 @@ app.get('/logout', function(req, res) {
 })
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
+
+app.get('/transcription/:id', episodeController.getTranscription)
+
+app.post('/transcription/:id', episodeController.postTranscription)
+
+app.get('/transcript/:id', episodeController.getTranscript)
 
 app.get('/admin',/*requireAdmin,*/ adminController.get)
 
