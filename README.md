@@ -18,11 +18,11 @@ Assuming everything is okay, you'll be able to access CodePilot at `http://local
 
 ### Common Errors and how to fix them
 
-#### `TypeError: Uncaught, unspecified "error" event.`
+`TypeError: Uncaught, unspecified "error" event.`
 
 This is most likely caused because your MySQL server is not running. Start the server and try again.
 
-#### `Error: OAuthStrategy requires session support. Did you forget app.use(express.session(...))?`
+`Error: OAuthStrategy requires session support. Did you forget app.use(express.session(...))?`
 
 This is caused by your Redis server not running. Start your Redis server and try again.
 
