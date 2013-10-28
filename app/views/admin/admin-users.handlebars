@@ -1,10 +1,13 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
+<script> moment().format(); </script>
+
 <section class="users" style="box-sizing:border-box;margin-top:25px;">
 	<table class="table table-striped">
 		<thead>
 			<tr>
 				<td>#</td>
 				<td>Twitter Handle</td>
-				<td>Created on</td>
+				<td>Created</td>
 				<td>Status</td>
 				<td style="width: auto;"></td>
 			</tr>
@@ -14,7 +17,7 @@
 			<tr data-id="{{this.id}}">
 				<td class="id">{{this.id}}</td>
 				<td class="twitter">@{{this.twitter_username}}</td>
-				<td>{{this.createdAt}}</td>
+				<td><script type="text/javascript">document.write(moment('{{this.createdAt}}').fromNow())</script></td>
 				{{#if this.active}}
 					<td class="status">Active</td>
 				{{else}}
