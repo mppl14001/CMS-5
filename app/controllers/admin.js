@@ -64,8 +64,8 @@ module.exports.getEpisodes = function(req, res) {
 			if (query.length > 0) {
 				var data = {
 					videos: []
-				};
-				data['videos'] = query;
+				}
+				data['videos'] = query
 				for (var i=0;i<data['videos'].length;i++) {
 					var element = data['videos'][i]
 					var eId = element.id
@@ -94,11 +94,11 @@ module.exports.getPendingEpisodes = function(req, res) {
 			var data = {
 				videos: []
 			}
-			data['videos'] = query;
+			data['videos'] = query
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
-				console.log(eId);
+				console.log(eId)
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
 					if (shownotes.length > 0) {
 						shownotes[0].content = shownotes[0].content.toString()
