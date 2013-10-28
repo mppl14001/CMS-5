@@ -1,0 +1,39 @@
+<div class="btn-group sub-view" style="display:inline-block;">
+	<h1> Episodes </h1>
+</div>
+<div class="btn-group sub-view" style="display:inline-block; margin-top:10px; margin-left:20px;">
+	<a class="btn btn-primary" href="/screencaster"><i class="icon-user icon-white"></i>Approved</a>
+	<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+	<ul class="dropdown-menu">
+		<li><a href="/screencaster/approved"><i class="icon-pencil"></i> Approved</a></li>
+		<li><a href="/screencaster"><i class="icon-trash"></i> Pending</a></li>
+	</ul>
+</div>
+
+<div class="btn-group sub-view" style="display:inline-block; margin-top:10px; margin-left:20px;">
+	<a class="btn btn-success" href="screencasters/submit">New</a>
+</div>
+
+<section class="stats" style="box-sizing:border-box;margin-top:25px;">
+	<div class="row">
+		<ul>
+			{{#if videos}}
+				{{#each videos}}
+			<li class="box text-left col-md-12" style="display:inline-block;list-style-type:none;border:1px solid #eee;padding:25px 15px;">
+				<div class="thumbnail col-md-2" style="margin-right:15px;">
+					<img src="http://cdn.panasonic.com/images/imageNotFound400.jpg" width="100" height="75" />
+				</div>
+				<a href="/admin/episodes/pending/{{this.id}}"><h3>{{this.title}}</h3></a>
+				<p style="font-size:13px;color:#aaa;">{{this.shownotes.0.shortened}}</p>
+			</li>
+				{{/each}}
+			{{else}}
+			<li class="box text-center col-md-12" style="display:inline-block;list-style-type:none;padding:25px 0px;">
+				<h3>Oh no :(, you don't have any videos approved yet, hold tight and wait, or <a href="screencasters/submit">submit a new video</a>.</h3>
+			</li>
+			{{/if}}
+		</ul>
+	</div>
+</section>
+<script src="/javascript/jquery.min.js"></script>
+<script src="/javascript/bootstrap.min.js"></script>
