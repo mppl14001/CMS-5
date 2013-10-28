@@ -192,6 +192,10 @@ app.get('/screencaster/approved', function(req, res) {
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
+app.get('/settings', userController.getSettings)
+
+app.post('/settings', userController.postSettings)
+
 app.get('/transcription/:id', episodeController.getTranscription)
 
 app.post('/transcription/:id', episodeController.postTranscription)
