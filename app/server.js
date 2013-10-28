@@ -199,6 +199,10 @@ app.post('/api/admin/episode/approve', adminController.approveScreencast)
 
 app.post('/api/admin/episode/remove', adminController.removeScreencast)
 
+app.post('/api/admin/episode/tags/add', adminController.addTag)
+
+app.post('/api/admin/episode/tags/remove', adminController.removeTag)
+
 app.post('/api/admin/user/add', adminController.addUser)
 
 app.post('/api/admin/user/deactivate', adminController.deactivateUser)

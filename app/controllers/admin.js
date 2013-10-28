@@ -236,7 +236,7 @@ module.exports.addTag = function(req, res) {
 	}
 }
 
-module.exports.changeUserRole = function(req, res) {
+module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
 
 	}
@@ -260,12 +260,6 @@ module.exports.addUser = function(req, res) {
 			res.write(JSON.stringify(errorJson))
 			res.end()
 		})
-	}
-}
-
-module.exports.changeRole = function(req, res) {
-	if (req.xhr) {
-
 	}
 }
 
