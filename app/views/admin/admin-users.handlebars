@@ -1,123 +1,52 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
 <script> moment().format(); </script>
 <script type="text/javascript">
-	function deactivateAccount(id) {
-		$.ajax({
-			url: '/api/admin/user/deactivate',
-			type: 'POST',
-			data: {
-				id: id,
-				role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
-			},
-			success:function(data) {
-				var json = $.parseJSON(data)
-				if (json.status == 'ok') {
-					$(".users table tbody tr[data-id="+id+"] .status").text("Inactive")
-					$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
-					$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-success" onclick="activateAccount('+id+');" style="margin-left:5px;">Reactivate</button>')
-				} else {
-					console.log("There was a fucking error")
+	$(document).ready(function() {
+		$('.dropdown-menu.user-role li a').on('click', function() {
+			var id = $(this).closest('tr').attr('data-id')
+			var newRole = $(this).attr('data-role')
+			var prettyRole = $(this).find('span').text()
+			$.ajax({
+				url: '/api/admin/user/role',
+				type: 'POST',
+				data: {
+					id: id,
+					role: newRole
+				},
+				success: function(data) {
+					var json = $.parseJSON(data)
+					if (json.status == 'ok') {
+						$('.users table tr[data-id='+id+'] .active-role').attr('data-role', newRole)
+						$('.users table tr[data-id='+id+'] .active-role span').text(prettyRole)
+					} else {
+						console.log('There was a fucking error')
+					}
 				}
-			}
+			})
 		})
-	}
-	function activateAccount(id) {
-		$.ajax({
-			url: '/api/admin/user/activate',
-			type: 'POST',
-			data: {
-				id: id,
-				role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
-			},
-			success:function(data) {
-				var json = $.parseJSON(data)
-				if (json.status == 'ok') {
-					$(".users table tbody tr[data-id="+id+"] .status").text("Active")
-					$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
-					$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-danger" onclick="deactivateAccount('+id+');" style="margin-left:5px;">Close Account</button>')						
-				} else {
-					console.log("There was a fucking error")
+		$('.btn.account-closed').on('click', function() {
+			var id = $(this).closest('tr').attr('data-id')
+			var action = $(this).attr('data-action');
+			var status = $(this).closest('tr').find('.status')
+			var button = $(this);
+			
+			$.ajax({
+				url: '/api/admin/user/'+action,
+				type: 'POST',
+				data: {id: id},
+				success:function(data) {
+					var json = $.parseJSON(data)
+					if (json.status == 'ok') {
+						var accountClosed = (action == 'deactivate')
+						status.text(accountClosed ? 'Inactive' : 'Active')
+						button.attr('data-action', accountClosed ? 'activate' : 'deactivate').text(accountClosed ? 'Reactivate' : 'Close Account')
+					} else {
+						console.log("There was a fucking error")
+					}
 				}
-			}
+			})
 		})
-	}
-	function changeRoleAdmin(id) {
-		$.ajax({
-			url: '/api/admin/user/role',
-			type: 'POST',
-			data: {
-				id: id,
-				role: 'admin'
-			},
-			success:function(data) {
-				var json = $.parseJSON(data)
-				if (json.status == 'ok') {
-					$(".users table tr[data-id="+id+"] .active-role").data("role", "admin")
-					$(".users table tr[data-id="+id+"] .active-role span").text('Admin').data("role", "admin")
-				} else {
-					console.log("There was a fucking error")
-				}
-			}
-		})
-	}
-	function changeRoleScreencaster(id) {
-		$.ajax({
-			url: '/api/admin/user/role',
-			type: 'POST',
-			data: {
-				id: id,
-				role: 'screencaster'
-			},
-			success:function(data) {
-				var json = $.parseJSON(data)
-				if (json.status == 'ok') {
-					$(".users table tr[data-id="+id+"] .active-role").data("role", "screencaster")
-					$(".users table tr[data-id="+id+"] .active-role span").text('Screencaster')
-					$(".users table tr[data-id="+id+"] .active-role i")
-				} else {
-					console.log("There was a fucking error")
-				}
-			}
-		})
-	}
-	function changeRoleModerator(id) {
-		$.ajax({
-			url: '/api/admin/user/role',
-			type: 'POST',
-			data: {
-				id: id,
-				role: 'moderator'
-			},
-			success:function(data) {
-				var json = $.parseJSON(data)
-				if (json.status == 'ok') {
-					$(".users table tr[data-id="+id+"] .active-role").data("role", "moderator")
-					$(".users table tr[data-id="+id+"] .active-role span").text('Moderator').data("role", "moderator")
-				} else {
-					console.log("There was a fucking error")
-				}
-			}
-		})
-	}
-	function changeRoleViewer(id) {
-		$.ajax({
-			url: '/api/admin/user/role',
-			type: 'POST',
-			data: {
-				id: id,
-				role: 'viewer'
-			},
-			success:function(data) {
-				var json = $.parseJSON(data)
-				if (json.status == 'ok') {
-					$(".users table tr[data-id="+id+"] .active-role").data("role", "viwer")
-					$(".users table tr[data-id="+id+"] .active-role span").text('Viewer').data("role", "viwer")
-				} else {
-					console.log("There was a fucking error")
-				}
-			}
-		})
-	}
+	})
 </script>
 <section class="users" style="box-sizing:border-box;margin-top:25px;">
 	<table class="table table-striped">
@@ -127,35 +56,35 @@
 				<td>Twitter Handle</td>
 				<td>Created</td>
 				<td>Status</td>
-				<td style="width: auto;"></td>
+				<td>Options</td>
 			</tr>
 		</thead>
 		<tbody>
 		{{#each users}}
 			<tr data-id="{{this.id}}">
 				<td class="id">{{this.id}}</td>
-				<td class="twitter">@{{this.twitter_username}}</td>
+				<td class="twitter"><a href="http://twitter.com/{{this.twitter_username}}">@{{this.twitter_username}}</a></td>
 				<td><script type="text/javascript">document.write(moment('{{this.createdAt}}').fromNow())</script></td>
 				{{#if this.active}}
 					<td class="status">Active</td>
 				{{else}}
-					<td class="status error">Inactive</td>
+					<td class="status">Inactive</td>
 				{{/if}}
 				<td class="buttons col-md-5">
 					<div class="btn-group level">
-						<a class="btn btn-primary active-role" href="#" data-role="admin"><i class="fa fa-user"></i> <span>Admin</span></a>
-						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="#" onclick="changeRoleViewer({{this.id}});"><i class="fa fa-pencil"></i> <span>Viewer</span></a></li>
-							<li><a href="#" onclick="changeRoleModerator({{this.id}});"><i class="fa fa-trash-o"></i> <span>Moderator</span></a></li>
-							<li><a href="#" onclick="changeRoleScreencaster({{this.id}});"><i class="fa fa-pencil"></i> <span>Screencaster</span></a></li>
-							<li><a href="#" onclick="changeRoleAdmin({{this.id}});"><i class="fa fa-ban"></i> <span>Admin</span></a></li>
-						  </ul>
+						<a class="btn btn-primary active-role" href="javascript:void(0)" data-role="{{this.role}}"><i class="fa fa-user"></i> <span>{{this.role}}</span></a>
+						<a class="btn btn-primary dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"><span class="caret"></span></a>
+						<ul class="dropdown-menu user-role">
+							<li><a href="javascript:void(0)" data-role="viewer"><i class="fa fa-pencil"></i> <span>Viewer</span></a></li>
+							<li><a href="javascript:void(0)" data-role="moderator"><i class="fa fa-trash-o"></i> <span>Moderator</span></a></li>
+							<li><a href="javascript:void(0)" data-role="screencaster"><i class="fa fa-pencil"></i> <span>Screencaster</span></a></li>
+							<li><a href="javascript:void(0)" data-role="admin"><i class="fa fa-ban"></i> <span>Admin</span></a></li>
+						</ul>
 					</div>
 					{{#if this.active}}
-						<button type="button" name="manage" class="btn btn-danger" onclick="deactivateAccount({{this.id}});">Close Account</button>
+						<button type="button" class="btn btn-danger account-closed" data-action="deactivate">Close Account</button>
 					{{else}}
-						<button type="button" name="manage" class="btn btn-success" onclick="activateAccount({{this.id}});">Reactivate</button>
+						<button type="button" class="btn btn-success account-closed" data-action="activate">Reactivate</button>
 					{{/if}}
 				</td>
 			</tr>
