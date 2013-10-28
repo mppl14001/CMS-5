@@ -164,8 +164,13 @@ module.exports.getEpisodeById = function(req, res) {
 					data.shownotes = null
 					data.shownotesLang = null
 				}
-				res.render('admin/admin-episodes-specific', data)
-				console.log(data)
+				sequelize.query('SELECT text FROM Tags WHERE episodeid = :id', null, {raw: true}, {id: returned[0].id}).success(function(tags) {
+					tags.forEach(function(item) {
+						data.tags.push(item.text)
+					})
+					res.render('admin/admin-episodes-specific', data)
+					console.log(data)
+				})
 			})
 		})
 	})

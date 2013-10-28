@@ -197,7 +197,7 @@ app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
 
 app.post('/api/admin/episode/approve', adminController.approveScreencast)
 
-app.post('/api/admin/episode/remove', adminController.approveScreencast)
+app.post('/api/admin/episode/remove', adminController.removeScreencast)
 
 app.post('/api/admin/user/add', adminController.addUser)
 
