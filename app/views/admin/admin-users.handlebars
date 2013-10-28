@@ -1,6 +1,124 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
 <script> moment().format(); </script>
-
+<script type="text/javascript">
+	function deactivateAccount(id) {
+		$.ajax({
+			url: '/api/admin/user/deactivate',
+			type: 'POST',
+			data: {
+				id: id,
+				role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
+			},
+			success:function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					$(".users table tbody tr[data-id="+id+"] .status").text("Inactive")
+					$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
+					$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-success" onclick="activateAccount('+id+');" style="margin-left:5px;">Reactivate</button>')
+				} else {
+					console.log("There was a fucking error")
+				}
+			}
+		})
+	}
+	function activateAccount(id) {
+		$.ajax({
+			url: '/api/admin/user/activate',
+			type: 'POST',
+			data: {
+				id: id,
+				role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
+			},
+			success:function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					$(".users table tbody tr[data-id="+id+"] .status").text("Active")
+					$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
+					$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-danger" onclick="deactivateAccount('+id+');" style="margin-left:5px;">Close Account</button>')						
+				} else {
+					console.log("There was a fucking error")
+				}
+			}
+		})
+	}
+	changeRoleAdmin = function(id) {
+		$.ajax({
+			url: '/api/admin/user/role',
+			type: 'POST',
+			data: {
+				id: id,
+				role: 'admin'
+			},
+			success:function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					$(".users table tr[data-id="+id+"] .active-role").data("role", "admin")
+					$(".users table tr[data-id="+id+"] .active-role span").text('Admin').data("role", "admin")
+				} else {
+					console.log("There was a fucking error")
+				}
+			}
+		})
+	}
+	changeRoleScreencaster = function(id) {
+		$.ajax({
+			url: '/api/admin/user/role',
+			type: 'POST',
+			data: {
+				id: id,
+				role: 'screencaster'
+			},
+			success:function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					$(".users table tr[data-id="+id+"] .active-role").data("role", "screencaster")
+					$(".users table tr[data-id="+id+"] .active-role span").text('Screencaster')
+					$(".users table tr[data-id="+id+"] .active-role i").
+				} else {
+					console.log("There was a fucking error")
+				}
+			}
+		})
+	}
+	changeRoleModerator = function(id) {
+		$.ajax({
+			url: '/api/admin/user/role',
+			type: 'POST',
+			data: {
+				id: id,
+				role: 'moderator'
+			},
+			success:function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					$(".users table tr[data-id="+id+"] .active-role").data("role", "moderator")
+					$(".users table tr[data-id="+id+"] .active-role span").text('Moderator').data("role", "moderator")
+				} else {
+					console.log("There was a fucking error")
+				}
+			}
+		})
+	}
+	changeRoleViewer = function(id) {
+		$.ajax({
+			url: '/api/admin/user/role',
+			type: 'POST',
+			data: {
+				id: id,
+				role: 'viewer'
+			},
+			success:function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					$(".users table tr[data-id="+id+"] .active-role").data("role", "viwer")
+					$(".users table tr[data-id="+id+"] .active-role span").text('Viewer').data("role", "viwer")
+				} else {
+					console.log("There was a fucking error")
+				}
+			}
+		})
+	}
+</script>
 <section class="users" style="box-sizing:border-box;margin-top:25px;">
 	<table class="table table-striped">
 		<thead>
@@ -44,123 +162,4 @@
 		{{/each}}
 		</tbody>
 	</table>
-	<script type="text/javascript">
-		function deactivateAccount(id) {
-			$.ajax({
-				url: '/api/admin/user/deactivate',
-				type: 'POST',
-				data: {
-					id: id,
-					role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
-				},
-				success:function(data) {
-					var json = $.parseJSON(data)
-					if (json.status == 'ok') {
-						$(".users table tbody tr[data-id="+id+"] .status").text("Inactive")
-						$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
-						$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-success" onclick="activateAccount('+id+');" style="margin-left:5px;">Reactivate</button>')
-					} else {
-						console.log("There was a fucking error")
-					}
-				}
-			})
-		}
-		function activateAccount(id) {
-			$.ajax({
-				url: '/api/admin/user/activate',
-				type: 'POST',
-				data: {
-					id: id,
-					role: $(".users table tbody tr[data-id="+id+"] .btn-group .active-role").data("role")
-				},
-				success:function(data) {
-					var json = $.parseJSON(data)
-					if (json.status == 'ok') {
-						$(".users table tbody tr[data-id="+id+"] .status").text("Active")
-						$(".users table tbody tr[data-id="+id+"] button[name='manage']").remove()
-						$(".users table tbody tr[data-id="+id+"] .buttons .btn-group").after('<button type="button" name="manage" class="btn btn-danger" onclick="deactivateAccount('+id+');" style="margin-left:5px;">Close Account</button>')						
-					} else {
-						console.log("There was a fucking error")
-					}
-				}
-			})
-		}
-		function changeRoleAdmin(id) {
-			$.ajax({
-				url: '/api/admin/user/role',
-				type: 'POST',
-				data: {
-					id: id,
-					role: 'admin'
-				},
-				success:function(data) {
-					var json = $.parseJSON(data)
-					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").data("role", "admin")
-						$(".users table tr[data-id="+id+"] .active-role span").text('Admin').data("role", "admin")
-					} else {
-						console.log("There was a fucking error")
-					}
-				}
-			})
-		}
-		function changeRoleScreencaster(id) {
-			$.ajax({
-				url: '/api/admin/user/role',
-				type: 'POST',
-				data: {
-					id: id,
-					role: 'screencaster'
-				},
-				success:function(data) {
-					var json = $.parseJSON(data)
-					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").data("role", "screencaster")
-						$(".users table tr[data-id="+id+"] .active-role span").text('Screencaster')
-						$(".users table tr[data-id="+id+"] .active-role i").
-					} else {
-						console.log("There was a fucking error")
-					}
-				}
-			})
-		}
-		function changeRoleModerator(id) {
-			$.ajax({
-				url: '/api/admin/user/role',
-				type: 'POST',
-				data: {
-					id: id,
-					role: 'moderator'
-				},
-				success:function(data) {
-					var json = $.parseJSON(data)
-					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").data("role", "moderator")
-						$(".users table tr[data-id="+id+"] .active-role span").text('Moderator').data("role", "moderator")
-					} else {
-						console.log("There was a fucking error")
-					}
-				}
-			})
-		}
-		function changeRoleViewer(id) {
-			$.ajax({
-				url: '/api/admin/user/role',
-				type: 'POST',
-				data: {
-					id: id,
-					role: 'viewer'
-				},
-				success:function(data) {
-					var json = $.parseJSON(data)
-					if (json.status == 'ok') {
-						$(".users table tr[data-id="+id+"] .active-role").data("role", "viwer")
-						$(".users table tr[data-id="+id+"] .active-role span").text('Viewer').data("role", "viwer")
-					} else {
-						console.log("There was a fucking error")
-					}
-				}
-			})
-		}
-	</script>
 </section>
