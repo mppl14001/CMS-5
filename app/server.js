@@ -17,7 +17,7 @@ var dbConfig = config.get('db')
 
 // DB
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
-	logging: false
+	logging: config.get('logging').sequelize
 })
 
 // Models
