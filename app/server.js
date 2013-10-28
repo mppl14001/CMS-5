@@ -75,6 +75,15 @@ app.engine('handlebars', exphbs({
 			if(that.page == page){
 				return 'active'
 			}
+		},
+		userRoleToString: function(role) {
+			switch (role) {
+				case 1:  return "Admin"
+				case 2:  return "Screencaster"
+				case 3:  return "Moderator"
+				// 4 should be viewer, so just let it hit default.
+				default: return "Viewer"
+			}
 		}
 	}
 }))
