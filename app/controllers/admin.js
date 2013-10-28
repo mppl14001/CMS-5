@@ -208,7 +208,21 @@ module.exports.approveScreencast = function(req, res) {
 
 module.exports.removeScreencast = function(req, res) {
 	if (req.xhr) {
-
+		sequelize.query('UPDATE Episodes SET approved = 0 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1
+			}
+			res.write(JSON.stringify(successJson))
+			res.end()
+		}).error(function(error) {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null
+			}
+			res.write(errorJson)
+			res.end()
+		})
 	}
 }
 
