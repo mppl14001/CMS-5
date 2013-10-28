@@ -41,7 +41,7 @@
 			}
 		})
 	}
-	changeRoleAdmin = function(id) {
+	function changeRoleAdmin(id) {
 		$.ajax({
 			url: '/api/admin/user/role',
 			type: 'POST',
@@ -60,7 +60,7 @@
 			}
 		})
 	}
-	changeRoleScreencaster = function(id) {
+	function changeRoleScreencaster(id) {
 		$.ajax({
 			url: '/api/admin/user/role',
 			type: 'POST',
@@ -73,14 +73,14 @@
 				if (json.status == 'ok') {
 					$(".users table tr[data-id="+id+"] .active-role").data("role", "screencaster")
 					$(".users table tr[data-id="+id+"] .active-role span").text('Screencaster')
-					$(".users table tr[data-id="+id+"] .active-role i").
+					$(".users table tr[data-id="+id+"] .active-role i")
 				} else {
 					console.log("There was a fucking error")
 				}
 			}
 		})
 	}
-	changeRoleModerator = function(id) {
+	function changeRoleModerator(id) {
 		$.ajax({
 			url: '/api/admin/user/role',
 			type: 'POST',
@@ -99,7 +99,7 @@
 			}
 		})
 	}
-	changeRoleViewer = function(id) {
+	function changeRoleViewer(id) {
 		$.ajax({
 			url: '/api/admin/user/role',
 			type: 'POST',
