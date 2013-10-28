@@ -81,7 +81,7 @@ app.engine('handlebars', exphbs({
 				case 1:  return "Admin"
 				case 2:  return "Screencaster"
 				case 3:  return "Moderator"
-				case 4:  return "Viewer"
+				// 4 should be viewer, so just let it hit default.
 				default: return "Viewer"
 			}
 		}

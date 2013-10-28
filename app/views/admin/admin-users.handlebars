@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
 <script> moment().format(); </script>
 <script type="text/javascript">
@@ -57,6 +58,8 @@
 		})
 	})
 </script>
+=======
+>>>>>>> be3bcdf44fff25a3aec9477a407ce1586ca195e7
 <section class="users" style="box-sizing:border-box;margin-top:25px;">
 	<table class="table table-striped">
 		<thead>
@@ -101,6 +104,7 @@
 		</tbody>
 	</table>
 </section>
+<<<<<<< HEAD
 <style type="text/css">
 .clearfix:after {
 	content: ".";
@@ -141,3 +145,53 @@ html[xmlns] .clearfix {
 	border-radius:4px;
 }
 </style>
+=======
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
+<script> moment().format(); </script>
+<script type="text/javascript">
+	$('.dropdown-menu.user-role li a').on('click', function() {
+		var id = $(this).closest('tr').attr('data-id')
+		var newRole = $(this).attr('data-role')
+		var prettyRole = $(this).find('span').text()
+		$.ajax({
+			url: '/api/admin/user/role',
+			type: 'POST',
+			data: {
+				id: id,
+				role: newRole
+			},
+			success: function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					$('.users table tr[data-id='+id+'] .active-role').attr('data-role', newRole)
+					$('.users table tr[data-id='+id+'] .active-role span').text(prettyRole)
+				} else {
+					console.log('There was a fucking error')
+				}
+			}
+		})
+	})
+	$('.btn.account-closed').on('click', function() {
+		var id = $(this).closest('tr').attr('data-id')
+		var action = $(this).attr('data-action');
+		var status = $(this).closest('tr').find('.status')
+		var button = $(this);
+		
+		$.ajax({
+			url: '/api/admin/user/'+action,
+			type: 'POST',
+			data: {id: id},
+			success:function(data) {
+				var json = $.parseJSON(data)
+				if (json.status == 'ok') {
+					var accountClosed = (action == 'deactivate')
+					status.text(accountClosed ? 'Inactive' : 'Active')
+					button.attr('data-action', accountClosed ? 'activate' : 'deactivate').text(accountClosed ? 'Reactivate' : 'Close Account')
+				} else {
+					console.log("There was a fucking error")
+				}
+			}
+		})
+	})
+</script>
+>>>>>>> be3bcdf44fff25a3aec9477a407ce1586ca195e7
