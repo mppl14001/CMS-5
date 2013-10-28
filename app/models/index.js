@@ -74,6 +74,7 @@ FROM ' + table + ' AS d WHERE d.id = OLD.id', callback)
 				console.log('Error occurred while attempting to set up change tracking: ' + error)
 			}
 		})
+		seedData();
 	}
 }
 
@@ -83,6 +84,102 @@ function executeQuery(query, callback) {
 	}).failure(function(error) {
 		callback(error, null)
 	})
+}
+
+function seedData() {
+	User.create({
+		name: 'Will Smidlein',
+		role: 1,
+		twitter_id: '18194756',
+		twitter_username: 'ws',
+		twitter_access_token: '<redacted>',
+		twitter_access_secret: '<redacted>',
+		active: 1
+	}).success(function(user) {
+		console.log('Seeded user: ' + user.name)
+	}).failure(function(error) {
+		console.log('Failed to seed user with error: ' + error)
+	})
+
+	User.create({
+		name: 'Lenny Khazan',
+		role: 2,
+		twitter_id: '114487028',
+		twitter_username: 'LennyKhazan',
+		twitter_access_token: '<redacted>',
+		twitter_access_secret: '<redacted>',
+		active: 1
+	}).success(function(user) {
+		console.log('Seeded user: ' + user.name)
+	}).failure(function(error) {
+		console.log('Failed to seed user with error: ' + error)
+	})
+
+	User.create({
+		name: 'Joe Torraca',
+		role: 3,
+		twitter_id: '333665491',
+		twitter_username: 'jtorraca',
+		twitter_access_token: '<redacted>',
+		twitter_access_secret: '<redacted>',
+		active: 0
+	}).success(function(user) {
+		console.log('Seeded user: ' + user.name)
+	}).failure(function(error) {
+		console.log('Failed to seed user with error: ' + error)
+	})
+
+	User.create({
+		name: 'Ross Penman',
+		role: 4,
+		twitter_id: '485076559',
+		twitter_username: 'PenmanRoss',
+		twitter_access_token: '<redacted>',
+		twitter_access_secret: '<redacted>',
+		active: 0
+	}).success(function(user) {
+		console.log('Seeded user: ' + user.name)
+	}).failure(function(error) {
+		console.log('Failed to seed user with error: ' + error)
+	})
+
+	var episodeIds = []
+	Episode.create({
+		title: 'Screencast #1: How to Setup Your Development Environment',
+		ytURL: 'http://www.youtube.com/watch?v=xRopHl9ouvY',
+		published: true,
+		approved: true
+	}).success(function(episode) {
+		console.log('Seeded episode: ' + episode.title)
+		episodeIds.push(episode.id)
+	}).failure(function(error) {
+		console.log('Failed to seed episode with error: ' + error)
+	})
+
+	Episode.create({
+		title: 'Screencast #2: Customizing Sublime Text',
+		ytURL: 'http://www.youtube.com/watch?v=ic8XU6VffeU',
+		published: false,
+		approved: true
+	}).success(function(episode) {
+		console.log('Seeded episode: ' + episode.title)
+		episodeIds.push(episode.id)
+	}).failure(function(error) {
+		console.log('Failed to seed episode with error: ' + error)
+	})
+
+	Episode.create({
+		title: 'Codepilot #3: Terminal Basics',
+		ytURL: 'http://www.youtube.com/watch?v=5cLww0geD2o',
+		published: false,
+		approved: false
+	}).success(function(episode) {
+		console.log('Seeded episode: ' + episode.title)
+		episodeIds.push(episode.id)
+	}).failure(function(error) {
+		console.log('Failed to seed episode with error: ' + error)
+	})
+
 }
 
 module.exports.sequelize = sequelize
