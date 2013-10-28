@@ -8,5 +8,13 @@
 	"twitter": {
 		"key": "",
 		"secret": ""
+	},
+	"s3": {
+		"key": "",
+		"secret": "",
+		"bucket": ""
+	},
+	"logging": {
+		"sequelize": true
 	}
 }
