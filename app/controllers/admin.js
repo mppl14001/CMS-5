@@ -1,4 +1,5 @@
 module.exports.get = function(req, res) {
+	res.locals.page = 'dashboard'
 	var data = {
 			boxes: [
 				{
@@ -58,6 +59,7 @@ module.exports.get = function(req, res) {
 
 
 module.exports.getEpisodes = function(req, res) {
+	res.locals.page = 'episodes'
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 1').success(function(query) {
 			if (query.length > 0) {
 				var data = {
@@ -86,6 +88,7 @@ module.exports.getEpisodes = function(req, res) {
 }
 
 module.exports.getPendingEpisodes = function(req, res) {
+	res.locals.page = 'episodes'
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0').success(function(query) {
 		if (query.length > 0) {
 			var data = {
@@ -115,6 +118,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 }
 
 module.exports.getEpisodeById = function(req, res) {
+	res.locals.page = 'episodes'
 	var data = {
 		title: null,
 		id: null,
@@ -166,6 +170,7 @@ module.exports.getEpisodeById = function(req, res) {
 }
 
 module.exports.getUsers = function(req, res) {
+	res.locals.page = 'users'
 	sequelize.query('SELECT * FROM Users').success(function(query) {
 		res.render('admin/admin-users', {
 			users: query
@@ -174,6 +179,7 @@ module.exports.getUsers = function(req, res) {
 }
 
 module.exports.getUserById = function(req, res) {
+	res.locals.page = 'users'
 	res.render('admin/admin')
 }
 
