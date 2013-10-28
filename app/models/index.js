@@ -45,10 +45,10 @@ async.parallel([
 
 module.exports['episode'].hasMany(module.exports['shownotes'], {as: 'shownotes_translations'})
 module.exports['user'].hasMany(module.exports['episode'], {as: 'episodes'})
-module.exports['episode'].hasOne(module.exports['user'], {as: 'author'})
+module.exports['episode'].belongsTo(module.exports['user'], {as: 'author'})
 module.exports['episode'].hasMany(module.exports['tag'], {as: 'tags'})
 module.exports['tag'].hasMany(module.exports['episode'], {as: 'episode'})
-module.exports['transcriptions'].hasOne(module.exports['episode'], {as: 'episode'})
+module.exports['transcriptions'].belongsTo(module.exports['episode'], {as: 'episode'})
 module.exports['episode'].hasMany(module.exports['transcriptions'], {as: "transcripts"})
 
 //prepare to enter into the depths of SQL hell...
