@@ -20,9 +20,9 @@ GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password
 
 // Models
 var models = require('./models')
-var Episode = models.episode
-var Shownotes = models.shownotes
-var User = models.user
+GLOBAL.Episode = models.episode
+GLOBAL.Shownotes = models.shownotes
+GLOBAL.User = models.user
 
 // Controllers
 var adminController = require('./controllers/admin.js')
