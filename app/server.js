@@ -82,7 +82,7 @@ app.engine('handlebars', exphbs({
 				case 2:  return "Screencaster"
 				case 3:  return "Moderator"
 				case 4:  return "Viewer"
-				default: return ""
+				default: return "Viewer"
 			}
 		}
 	}
