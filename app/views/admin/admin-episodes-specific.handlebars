@@ -73,7 +73,11 @@
 			{{#transcriptions}}
 			<tr>
 				<td>{{this.language}}</td>
+				{{#if this.isActive}}
 				<td><p class="active">{{this.status}}</p></td>
+				{{else}}
+				<td><p class="active error">{{this.status}}</p></td>				
+				{{/if}}
 				<td>
 					<button type="button" class="btn btn-default">Edit</button>
 					{{#if showApproval}}

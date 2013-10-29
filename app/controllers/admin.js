@@ -136,16 +136,19 @@ module.exports.getEpisodeById = function(req, res) {
 			{
 				language: "English",
 				status: "Active",
+				isActive: true,
 				showApproval: false
 			},
 			{
 				language: "Spanish",
 				status: "Active",
+				isActive: true,
 				showApproval: false
 			},
 			{
 				language: "German",
 				status: "Not active",
+				isActive: false,
 				showApproval: true
 			}
 		]
