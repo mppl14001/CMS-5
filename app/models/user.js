@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		twitter_access_token: {
 			allowNull: false,
-			type: DataTypes.STRING	
+			type: DataTypes.STRING
 		},
 		twitter_access_secret: {
 			allowNull: false,

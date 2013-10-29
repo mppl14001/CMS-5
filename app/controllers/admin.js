@@ -31,7 +31,7 @@ module.exports.get = function(req, res) {
 		async.parallel([
 			function(callback) { // Total views
 				callback(null, '12,428')
-			}, 
+			},
 			function(callback) { // Videos awaiting approval
 				Episode.findAll({ where: { approved: 0 } }).success(function(query) {
 					var grammar = query.length === 1 ?
@@ -51,7 +51,7 @@ module.exports.get = function(req, res) {
 					data['boxes'][i].data = callback[i][1]
 				} else {
 					data['boxes'][i].data = callback[i]
-					if (i == callback.length - 1) res.render('admin/admin', data)				
+					if (i == callback.length - 1) res.render('admin/admin', data)
 				}
 			}
 		})
@@ -261,13 +261,13 @@ module.exports.addTag = function(req, res) {
 
 module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
-		
+
 	}
 }
 
 module.exports.addUser = function(req, res) {
 	if (req.xhr) {
-    
+
 		User.create({ name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret }).success(function(user) {
 			var json = {
 				status:'ok',
