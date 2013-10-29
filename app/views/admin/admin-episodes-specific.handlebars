@@ -89,7 +89,7 @@
 			{{/transcriptions}}
 		</tbody>
 	</table>
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="editTranscription" tabindex="-1" role="dialog" aria-labelledby="Edit Transcription" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -97,7 +97,8 @@
 					<h4 class="modal-title">Edit Transcription</h4>
 				</div>
 				<div class="modal-body">
-					<h4>Language: <span>English</span></h4>
+					<label for="transcriptionLanguage">Language: </label>
+					<input type="text" value="English" class="form-control col-md-2" style="width:50%;float:none;display:inline-block;margin-bottom:5px;" name="transcriptionLanguage"/>
 					<textarea class="form-control"></textarea>
 				</div>
 				<div class="modal-footer">
@@ -166,11 +167,10 @@
 		$.ajax({
 			url: '',
 			data: {
-
 			},
 			type: 'POST',
 			success:function(c) {
-				
+
 			}
 		})
 	}
