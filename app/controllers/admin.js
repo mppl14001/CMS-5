@@ -31,7 +31,7 @@ module.exports.get = function(req, res) {
 		async.parallel([
 			function(callback) { // Total views
 				callback(null, '12,428')
-			}, 
+			},
 			function(callback) { // Videos awaiting approval
 				Episode.findAll({ where: { approved: 0 } }).success(function(query) {
 					var grammar = query.length === 1 ?
@@ -51,7 +51,7 @@ module.exports.get = function(req, res) {
 					data['boxes'][i].data = callback[i][1]
 				} else {
 					data['boxes'][i].data = callback[i]
-					if (i == callback.length - 1) res.render('admin/admin', data)				
+					if (i == callback.length - 1) res.render('admin/admin', data)
 				}
 			}
 		})
@@ -71,9 +71,9 @@ module.exports.getEpisodes = function(req, res) {
 				var eId = element.id
 
 				Shownotes.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
-					shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-					if (shownotes) {
+					if (shownotes.length > 0) {
+						shownotes[0].content = shownotes[0].content.toString()
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
@@ -136,16 +136,19 @@ module.exports.getEpisodeById = function(req, res) {
 			{
 				language: "English",
 				status: "Active",
+				isActive: true,
 				showApproval: false
 			},
 			{
 				language: "Spanish",
 				status: "Active",
+				isActive: true,
 				showApproval: false
 			},
 			{
 				language: "German",
 				status: "Not active",
+				isActive: false,
 				showApproval: true
 			}
 		]
@@ -156,7 +159,11 @@ module.exports.getEpisodeById = function(req, res) {
 		data.status.approval = returned[0].approved
 		data.id = returned[0].id
 		sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
-			data.author = user[0].name
+			if (user[0].name) {
+				data.author = user[0].name
+			} else {
+				data.author = "Unknown"
+			}
 			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
 				if (shownotes.length > 0) {
 					data.shownotes = shownotes[0].content.toString()
@@ -254,13 +261,14 @@ module.exports.addTag = function(req, res) {
 
 module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
-		
+
 	}
 }
 
 module.exports.addUser = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (:name, :role, :twitter_username, :twitter_access_token, :twitter_access_secret)', null, {raw: true}, {name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret}).success(function(user) {
+
+		User.create({ name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret }).success(function(user) {
 			var json = {
 				status:'ok',
 				rowsModified:1

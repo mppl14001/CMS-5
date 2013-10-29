@@ -7,7 +7,7 @@ It was built in a weekend.
 
 Screencast 1: Installing CodePilot CMS
 --------------------------------------
-This project is currently in heavy development and things might be horribly broken. 
+This project is currently in heavy development and things might be horribly broken.
 Make sure you have [Node.js](http://nodejs.org/) (& [NPM](http://npmjs.org/)), [MySQL](http://www.mysql.com/), and [Redis](http://redis.io/) installed and running.
 
 1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MySQL details, Twitter OAuth information, and S3 details. Don't worry about migrations, those are handled behind the scenes.
@@ -34,8 +34,8 @@ This is caused by your Redis server not running. Start your Redis server using t
 |:-----------------:|:-----------------------------------------------------:|:--------------------------------------------------:|
 |   Will Smidlein   |              [ws](https://github.com/ws)              |            [ws](https://twitter.com/ws)            |
 |    Joe Torraca    |        [jtorraca](https://github.com/jtorraca)        |      [jtorraca](https://twitter.com/jtorraca)      |
-|    Lenny Khazan   |     [LennyKhazan‎](https://github.com/LennyKhazan‎)     |   [LennyKhazan‎](https://twitter.com/LennyKhazan‎)   |
-|    Ross Penman    |      [rosspenman](https://github.com/rosspenman)      |    [PenmanRoss‎](https://twitter.com/PenmanRoss‎)    |
+|    Lenny Khazan   |     [LennyKhazan‎](https://github.com/LennyKhazan)     |   [LennyKhazan‎](https://twitter.com/LennyKhazan)   |
+|    Ross Penman    |      [rosspenman](https://github.com/rosspenman)      |    [PenmanRoss‎](https://twitter.com/PenmanRoss)    |
 | Charley Hutchison |      [glenwayguy](https://github.com/glenwayguy)      |    [glenwayguy](https://twitter.com/glenwayguy)    |
-|     Nick Frey     |        [NickFrey‎](https://github.com/NickFrey‎)        |      [NickFrey‎](https://twitter.com/NickFrey‎)      |
-| Daniel Tomlinson  | [DanielTomlinson](https://github.com/DanielTomlinson) |       [dantoml‎](https://twitter.com/dantoml‎)       |
+|     Nick Frey     |        [NickFrey‎](https://github.com/nickfrey)        |      [NickFrey‎](https://twitter.com/NickFrey)      |
+| Daniel Tomlinson  | [DanielTomlinson](https://github.com/DanielTomlinson) |       [dantoml‎](https://twitter.com/dantoml)       |
