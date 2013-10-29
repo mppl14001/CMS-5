@@ -1,6 +1,8 @@
 var Sequelize = require('sequelize')
 
-var fixtures = require('fixtures.js')
+var fixtures = require('./fixtures.js')
+
+var trackChanges = require('../misc/changes.js')
 
 var dbConfig = config.get('db')
 
