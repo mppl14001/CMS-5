@@ -27,6 +27,12 @@ This is most likely caused because your MySQL server is not running. Start the s
 
 This is caused by your Redis server not running. Start your Redis server using the `redis-server` command and try again.
 
+`TypeError: Cannot read property 'sequelize' of undefined`
+
+[b36b0b](https://github.com/CodePilotCo/CMS/commit/b36b0bfe37d9fcbc87d5b35159c61a412e525e21) introduced a new config option.
+
+Update your `config.json` file to match the latest `config.example.json` template.
+
 ---
 
 **Special thanks to:** (in no particular order)
