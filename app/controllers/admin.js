@@ -268,6 +268,24 @@ module.exports.removeTag = function(req, res) {
 	}
 }
 
+module.exports.editTranscription = function(req, res) {
+	if (req.xhr) {
+
+	}
+}
+
+module.exports.addTranscription = function(req, res) {
+	if (req.xhr) {
+
+	}
+}
+
+module.exports.removeTranscription = function(req, res) {
+	if (req.xhr) {
+		
+	}
+}
+
 module.exports.addUser = function(req, res) {
 	if (req.xhr) {
 

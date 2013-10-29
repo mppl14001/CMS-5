@@ -240,6 +240,12 @@ app.post('/api/admin/episode/tags/add', adminController.addTag)
 
 app.post('/api/admin/episode/tags/remove', adminController.removeTag)
 
+app.post('/api/admin/episode/transcript/edit', adminController.editTranscription)
+
+app.post('/api/admin/episode/transcript/add', adminController.addTranscription)
+
+app.post('/api/admin/episode/transcript/remove', adminController.removeTranscription)
+
 app.post('/api/admin/user/add', adminController.addUser)
 
 app.post('/api/admin/user/deactivate', adminController.deactivateUser)

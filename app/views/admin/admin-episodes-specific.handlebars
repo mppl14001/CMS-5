@@ -170,7 +170,12 @@
 			},
 			type: 'POST',
 			success:function(c) {
+				var json = $.parseJSON(c)
+				if (json.status === 'ok') {
 
+				} else {
+					
+				}
 			}
 		})
 	}
