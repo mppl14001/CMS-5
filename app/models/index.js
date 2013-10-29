@@ -20,7 +20,7 @@ async.parallel([
 		module.exports['shownotes'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 			callback(null, null)
 			trackChanges('Shownotes')
-		})	
+		})
 	}, function(callback) {
 		module.exports['user'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 			callback(null, null)
