@@ -13,3 +13,18 @@ module.exports.postPendingEpisodes = function(req, res) {
 		})
 	}
 }
+
+module.exports.getSettings = function(req, res) {
+	if(req.user) {
+		res.render('admin/settings', {
+			user: req.user
+		})
+	}
+	else {
+		res.redirect('/')
+	}
+}
+
+module.exports.postSettings = function (req, res) {
+
+}
