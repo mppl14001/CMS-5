@@ -135,18 +135,21 @@ module.exports.getEpisodeById = function(req, res) {
 		transcriptions: [
 			{
 				language: "English",
+				content: "TEST CONTENT 1",
 				status: "Active",
 				isActive: true,
 				showApproval: false
 			},
 			{
 				language: "Spanish",
+				content: "TEST CONTENT 2",
 				status: "Active",
 				isActive: true,
 				showApproval: false
 			},
 			{
 				language: "German",
+				content: "TEST CONTENT 3",
 				status: "Not active",
 				isActive: false,
 				showApproval: true
