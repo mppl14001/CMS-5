@@ -71,9 +71,9 @@ module.exports.getEpisodes = function(req, res) {
 				var eId = element.id
 
 				Shownotes.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
-					shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-					if (shownotes) {
+					if (shownotes.length > 0) {
+						shownotes[0].content = shownotes[0].content.toString()
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
