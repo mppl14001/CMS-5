@@ -76,6 +76,12 @@ html[xmlns] .clearfix {
 .warning {
 	color:#debb1a;
 }
+
+/* this selector is like this because fucking Bootstrap wanted a fucking specificity war. */
+table.table tbody > tr > td {
+	vertical-align: middle;
+}
+
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
 <script>
