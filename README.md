@@ -17,7 +17,8 @@ This'll take a while as it fetches CodePilot's dependencies.
 
 When you make a change, you will have to stop the server by pressing `^C`, and then start it up again.
 
-### Common Errors and how to fix them
+Common Errors and how to fix them
+---------------------------------
 
 `TypeError: Uncaught, unspecified "error" event.`
 
