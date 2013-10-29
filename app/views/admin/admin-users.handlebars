@@ -80,13 +80,11 @@ html[xmlns] .clearfix {
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min.js"></script>
 <script>
 	moment().format()
-
 	// do the moment stuff
 	$(".moment").each(function() {
 		var $this = $(this)
 		$this.html(moment($this.html()).fromNow())
 	})
-
 	$('.dropdown-menu.user-role li a').on('click', function() {
 		var id = $(this).closest('tr').attr('data-id')
 		var newRole = $(this).attr('data-role')
