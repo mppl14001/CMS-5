@@ -18,27 +18,27 @@ async.parallel([
 	function(callback) {
 		module.exports['episode'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 			callback(null, null)
-			trackChanges('Episodes')
+			if (forceDatabaseUpgrade) trackChanges('Episodes')
 		})
 	}, function(callback) {
 		module.exports['shownotes'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 			callback(null, null)
-			trackChanges('Shownotes')
+			if (forceDatabaseUpgrade) trackChanges('Shownotes')
 		})
 	}, function(callback) {
 		module.exports['user'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 			callback(null, null)
-			trackChanges('Users')
+			if (forceDatabaseUpgrade) trackChanges('Users')
 		})
 	}, function(callback) {
 		module.exports['tag'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 			callback(null, null)
-			trackChanges('Tags')
+			if (forceDatabaseUpgrade) trackChanges('Tags')
 		})
 	}, function(callback) {
 		module.exports['transcriptions'].sync({force: forceDatabaseUpgrade}).success(function(results) {
 			callback(null, null)
-			trackChanges('Transcriptions')
+			if (forceDatabaseUpgrade) trackChanges('Transcriptions')
 		})
 	}
 ], function() {
