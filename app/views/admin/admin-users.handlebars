@@ -18,24 +18,28 @@
 				{{#if this.active}}
 					<td class="status">Active</td>
 				{{else}}
-					<td class="status">Inactive</td>
+					<td class="status error">Inactive</td>
 				{{/if}}
-				<td class="buttons col-md-5">
-					<div class="btn-group level">
-						<a class="btn btn-primary active-role" href="javascript:void(0)" data-role="{{this.role}}"><i class="fa fa-user"></i> <span>{{userRoleToString this.role}}</span></a>
-						<a class="btn btn-primary dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"><span class="caret"></span></a>
-						<ul class="dropdown-menu user-role">
-							<li><a href="javascript:void(0)" data-role="viewer"><i class="fa fa-pencil"></i> <span>Viewer</span></a></li>
-							<li><a href="javascript:void(0)" data-role="moderator"><i class="fa fa-trash-o"></i> <span>Moderator</span></a></li>
-							<li><a href="javascript:void(0)" data-role="screencaster"><i class="fa fa-pencil"></i> <span>Screencaster</span></a></li>
-							<li><a href="javascript:void(0)" data-role="admin"><i class="fa fa-ban"></i> <span>Admin</span></a></li>
-						</ul>
+				<td class="buttons">
+					<div class="col-md-6" style="text-align:right;">
+						<div class="btn-group level">
+							<a class="btn btn-primary active-role" href="javascript:void(0)" data-role="{{this.role}}"><i class="fa fa-user"></i> <span>{{userRoleToString this.role}}</span></a>
+							<a class="btn btn-primary dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"><span class="caret"></span></a>
+							<ul class="dropdown-menu user-role" style="text-align:left;">
+								<li><a href="javascript:void(0)" data-role="viewer"><i class="fa fa-pencil"></i> <span>Viewer</span></a></li>
+								<li><a href="javascript:void(0)" data-role="moderator"><i class="fa fa-trash-o"></i> <span>Moderator</span></a></li>
+								<li><a href="javascript:void(0)" data-role="screencaster"><i class="fa fa-pencil"></i> <span>Screencaster</span></a></li>
+								<li><a href="javascript:void(0)" data-role="admin"><i class="fa fa-ban"></i> <span>Admin</span></a></li>
+							</ul>
+						</div>
 					</div>
+					<div class="col-md-1">
 					{{#if this.active}}
 						<button type="button" class="btn btn-danger account-closed" data-action="deactivate">Close Account</button>
 					{{else}}
 						<button type="button" class="btn btn-success account-closed" data-action="activate">Reactivate</button>
 					{{/if}}
+					</div>
 				</td>
 			</tr>
 		{{/each}}
