@@ -31,6 +31,7 @@ GLOBAL.Transcription = models.transcriptions
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
 var userController = require('./controllers/user.js')
+var screencasterController = require('./controllers/screencaster.js');
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
@@ -140,13 +141,9 @@ app.get('/logout', function(req, res) {
 	Screencast submission
 */
 
-app.get('/screencaster', function(req, res) {
-	
-})
+app.get('/screencaster', screencasterController.getPending)
 
-app.get('/screencaster/approved', function(req, res) {
-	
-})
+app.get('/screencaster/approved', screencasterController.getApproved)
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
