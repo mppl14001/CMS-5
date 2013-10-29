@@ -45,3 +45,7 @@ html[xmlns] .clearfix {
 table.table tbody > tr > td {
 	vertical-align: middle;
 }
+
+.dashboard {
+	padding: 0;
+}
