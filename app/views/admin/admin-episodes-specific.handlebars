@@ -163,7 +163,16 @@
 		})
 	}
 	function updateTranscription(language) {
+		$.ajax({
+			url: '',
+			data: {
 
+			},
+			type: 'POST',
+			success:function(c) {
+				
+			}
+		})
 	}
 	function displayTranscriptionData(id) {
 		var text = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_data"]').val()
