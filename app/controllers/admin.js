@@ -276,13 +276,28 @@ module.exports.editTranscription = function(req, res) {
 
 module.exports.addTranscription = function(req, res) {
 	if (req.xhr) {
-
+		sequelize.query('INSERT INTO Transcriptions (approved, text, language, EpisodeId) VALUES (0, :content, :language, :episode)', null, {raw: true}, {content: req.body.content, language: req.body.language, episode: req.body.episodeId}).success(function(success) {
+			var sJSON = {
+				status: 'ok',
+				rowsModified: 1
+			}
+			res.write(JSON.stringify(sJSON))
+			res.end()
+		}).error(function(error) {
+			var eJSON = {
+				status: 'error',
+				rowsModified: null,
+				error: 'sequelize'
+			}
+			res.write(JSON.stringify(eJSON))
+			res.end()
+		})
 	}
 }
 
 module.exports.removeTranscription = function(req, res) {
 	if (req.xhr) {
-		
+
 	}
 }
 
