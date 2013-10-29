@@ -7,7 +7,7 @@ It was built in a weekend.
 
 Screencast 1: Installing CodePilot CMS
 --------------------------------------
-This project is currently in heavy development and things might be horribly broken. 
+This project is currently in heavy development and things might be horribly broken.
 Make sure you have [Node.js](http://nodejs.org/) (& [NPM](http://npmjs.org/)), [MySQL](http://www.mysql.com/), and [Redis](http://redis.io/) installed and running.
 
 1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MySQL details, Twitter OAuth information, and S3 details. Don't worry about migrations, those are handled behind the scenes.

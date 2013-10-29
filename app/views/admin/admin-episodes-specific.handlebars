@@ -1,7 +1,7 @@
 <div class="header col-md-12 clearfix" style="box-sizing:border-box;margin-top:25px;">
 	<div class="thumbnail col-md-3">
 		<img src="http://cdn.panasonic.com/images/imageNotFound400.jpg" width="150" height="75" />
-	</div>	
+	</div>
 	<div class="header col-md-9">
 		<h2>{{title}}</h2>
 		<p style="color:#aaa">By: {{author}}</p>
@@ -77,12 +77,12 @@
 				{{#if this.isActive}}
 				<td><p class="active">{{this.status}}</p></td>
 				{{else}}
-				<td><p class="active error">{{this.status}}</p></td>				
+				<td><p class="active error">{{this.status}}</p></td>
 				{{/if}}
 				<td>
 					<button type="button" class="btn btn-default" onclick="displayTranscriptionData({{@index}});">Edit</button>
 					{{#if showApproval}}
-					<button type="button" class="btn btn-success">Approve</button>					
+					<button type="button" class="btn btn-success">Approve</button>
 					{{/if}}
 				</td>
 			</tr>
@@ -116,15 +116,15 @@
 	line-height: 0;
 	height: 0;
 }
- 
+
 .clearfix {
 	display: inline-block;
 }
- 
+
 html[xmlns] .clearfix {
 	display: block;
 }
- 
+
 * html .clearfix {
 	height: 1%;
 }
