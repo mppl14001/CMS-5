@@ -40,3 +40,12 @@ html[xmlns] .clearfix {
 	-o-border-radius:4px;
 	border-radius:4px;
 }
+
+/* this selector is like this because fucking Bootstrap wanted a fucking specificity war. */
+table.table tbody > tr > td {
+	vertical-align: middle;
+}
+
+.dashboard {
+	padding: 0;
+}
