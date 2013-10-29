@@ -58,8 +58,22 @@ passport.use(new TwitterStrategy({
 		twitter_username: profile.username,
 		twitter_access_token: token,
 		twitter_access_secret: tokenSecret
-	}).success(function(user) {
-		return done(null, user)
+	}).success(function(user, created) {
+		if (!created) {
+			user.updateAttributes({ 
+				name: profile.displayName,
+				role: 4,
+				twitter_id: profile.id,
+				twitter_username: profile.username,
+				twitter_access_token: token,
+				twitter_access_secret: tokenSecret
+			}).success(function(user) {
+				return done(null, user)
+			})
+		}
+		else {
+			return done(null, user)
+		}
 	}).failure(function(error) {
 		return done(error, null)
 	})
