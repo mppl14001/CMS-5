@@ -10,7 +10,7 @@ Screencast 1: Installing CodePilot CMS
 This project is currently in heavy development and things might be horribly broken.
 Make sure you have [Node.js](http://nodejs.org/) (& [NPM](http://npmjs.org/)), [MySQL](http://www.mysql.com/), and [Redis](http://redis.io/) installed and running.
 
-1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MySQL details, Twitter OAuth information, and S3 details. Don't worry about migrations, those are handled behind the scenes.
+1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MySQL details, Twitter OAuth information, and S3 details. If the database schema changes, open `app/models/index.js` and set the `forceDatabaseUpgrade` property to true. Restart the server, and the dabatase will be wiped and updated to the new schema.
 2. Run `npm install`
 This'll take a while as it fetches CodePilot's dependencies.
 3. Run `npm start`. Assuming everything is okay, you'll be able to access CodePilot at `http://localhost:3000/`.
