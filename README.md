@@ -13,8 +13,9 @@ Make sure you have [Node.js](http://nodejs.org/) (& [NPM](http://npmjs.org/)), [
 1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MySQL details, Twitter OAuth information, and S3 details. Don't worry about migrations, those are handled behind the scenes.
 2. Run `npm install`
 This'll take a while as it fetches CodePilot's dependencies.
-3. Run `npm start`
-Assuming everything is okay, you'll be able to access CodePilot at `http://localhost:3000/`
+3. Run `npm start`. Assuming everything is okay, you'll be able to access CodePilot at `http://localhost:3000/`.
+
+When you make a change, you will have to stop the server by pressing `^C`, and then start it up again.
 
 ### Common Errors and how to fix them
 
