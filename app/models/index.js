@@ -1,5 +1,7 @@
 var Sequelize = require('sequelize')
 
+var fixtures = require('../fixtures.js')
+
 var dbConfig = config.get('db')
 
 module.exports['episode'] = sequelize.import(__dirname + '/episode.js')
@@ -39,11 +41,11 @@ async.parallel([
 	}
 ], function() {
 	if (forceDatabaseUpgrade) {
-		seedData()
+		fixtures()
 	}
 })
 
-module.exports['episode'].hasMany(module.exports['shownotes'], {as: 'shownotes_translations'})
+module.exports['episode'].hasMany(module.exports['shownotes'], {as: 'shownotes'})
 module.exports['user'].hasMany(module.exports['episode'], {as: 'episodes'})
 module.exports['episode'].belongsTo(module.exports['user'], {as: 'author'})
 module.exports['episode'].hasMany(module.exports['tag'], {as: 'tags'})

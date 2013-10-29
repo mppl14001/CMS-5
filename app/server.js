@@ -26,6 +26,7 @@ GLOBAL.Episode = models.episode
 GLOBAL.Shownotes = models.shownotes
 GLOBAL.User = models.user
 GLOBAL.Transcription = models.transcriptions
+GLOBAL.Tag = models.tag
 
 // Controllers
 var adminController = require('./controllers/admin.js')
