@@ -267,7 +267,8 @@ module.exports.removeTag = function(req, res) {
 
 module.exports.addUser = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Users (name, role, twitter_username, twitter_access_token, twitter_access_secret) VALUES (:name, :role, :twitter_username, :twitter_access_token, :twitter_access_secret)', null, {raw: true}, {name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret}).success(function(user) {
+    
+		User.create({ name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret }).success(function(user) {
 			var json = {
 				status:'ok',
 				rowsModified:1
