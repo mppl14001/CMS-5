@@ -7,7 +7,7 @@ var Sequelize = require('sequelize')
 GLOBAL.async = require('async')
 var express = require('express')
 var exphbs = require('express3-handlebars')
-var RedisStore = require('connect-redis')(express);
+var RedisStore = require('connect-redis')(express)
 var sessionStore = new RedisStore
 
 // Config
@@ -16,13 +16,16 @@ var twitterConfig = config.get('twitter')
 var dbConfig = config.get('db')
 
 // DB
-GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password)
+GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
+	logging: config.get('logging').sequelize
+})
 
 // Models
-var models = require('./models')
-var Episode = models.episode
-var Shownotes = models.shownotes
-var User = models.user
+GLOBAL.models = require('./models')
+GLOBAL.Episode = models.episode
+GLOBAL.Shownotes = models.shownotes
+GLOBAL.User = models.user
+GLOBAL.Transcription = models.transcriptions
 
 // Controllers
 var adminController = require('./controllers/admin.js')
@@ -44,18 +47,33 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitterStrategy({
 	consumerKey: twitterConfig.key,
 	consumerSecret: twitterConfig.secret,
-	callbackURL: 'http://127.0.0.1:'+config.get('port')+'/auth/twitter/callback'
+	callbackURL: 'http://localhost:'+config.get('port')+'/auth/twitter/callback'
 }, function(token, tokenSecret, profile, done) {
 	User.findOrCreate({
-		twitter_access_token: token
+		twitter_id: profile.id
 	}, {
 		name: profile.displayName,
 		role: 4,
+		twitter_id: profile.id,
 		twitter_username: profile.username,
 		twitter_access_token: token,
 		twitter_access_secret: tokenSecret
-	}).success(function(user) {
-		return done(null, user) 
+	}).success(function(user, created) {
+		if (!created) {
+			user.updateAttributes({ 
+				name: profile.displayName,
+				role: 4,
+				twitter_id: profile.id,
+				twitter_username: profile.username,
+				twitter_access_token: token,
+				twitter_access_secret: tokenSecret
+			}).success(function(user) {
+				return done(null, user)
+			})
+		}
+		else {
+			return done(null, user)
+		}
 	}).failure(function(error) {
 		return done(error, null)
 	})
@@ -67,7 +85,23 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
 app.engine('handlebars', exphbs({
 	partialsDir: path.join(__dirname, 'views', 'partials'),
-	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars')
+	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars'),
+	helpers: {
+		activeHelper: function(that, page){
+			if(that.page == page){
+				return 'active'
+			}
+		},
+		userRoleToString: function(role) {
+			switch (role) {
+				case 1:  return "Admin"
+				case 2:  return "Screencaster"
+				case 3:  return "Moderator"
+				// 4 should be viewer, so just let it hit default.
+				default: return "Viewer"
+			}
+		}
+	}
 }))
 app.use(express.cookieParser())
 app.use(express.json())
@@ -112,18 +146,18 @@ app.get('/screencaster', function(req, res) {
 	}
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
+		if (query.length > 0) {
+			var data = {
+				videos: []
 			}
-			data['videos'] = query;
+			data['videos'] = query
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-					shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-					if (shownotes) {
+					if (shownotes.length > 0) {
+						shownotes[0].content = shownotes[0].content.toString()
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
@@ -144,18 +178,18 @@ app.get('/screencaster/approved', function(req, res) {
 	}
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 1 & userId =' + req.user.id).success(function(query) {
-			if (query.length > 0) {
-				var data = {
-					videos: []
+		if (query.length > 0) {
+			var data = {
+				videos: []
 			}
-			data['videos'] = query;
+			data['videos'] = query
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
-					shownotes[0].content = shownotes[0].content.toString()
-					shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-					if (shownotes) {
+					if (shownotes.length > 0) {
+						shownotes[0].content = shownotes[0].content.toString()
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
@@ -172,11 +206,23 @@ app.get('/screencaster/approved', function(req, res) {
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
+app.get('/settings', userController.getSettings)
+
+app.post('/settings', userController.postSettings)
+
+app.get('/transcription/:id', episodeController.getTranscription)
+
+app.post('/transcription/:id', episodeController.postTranscription)
+
+app.get('/transcript/:id', episodeController.getTranscript)
+
 app.get('/admin',/*requireAdmin,*/ adminController.get)
 
 app.get('/admin/episodes',/*requireAdmin,*/ adminController.getEpisodes)
 
 app.get('/admin/episodes/pending',/*requireAdmin,*/ adminController.getPendingEpisodes)
+
+app.get('/admin/episodes/pending/:id(\\d+)', /*requireAdmin,*/ adminController.getEpisodeById)
 
 app.get('/admin/episodes/:id(\\d+)',/*requireAdmin,*/ adminController.getEpisodeById)
 
@@ -188,13 +234,25 @@ app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
 
 app.post('/api/admin/episode/approve', adminController.approveScreencast)
 
-app.post('/api/admin/episode/remove', adminController.approveScreencast)
+app.post('/api/admin/episode/remove', adminController.removeScreencast)
+
+app.post('/api/admin/episode/tags/add', adminController.addTag)
+
+app.post('/api/admin/episode/tags/remove', adminController.removeTag)
+
+app.post('/api/admin/episode/transcript/edit', adminController.editTranscription)
+
+app.post('/api/admin/episode/transcript/add', adminController.addTranscription)
+
+app.post('/api/admin/episode/transcript/remove', adminController.removeTranscription)
 
 app.post('/api/admin/user/add', adminController.addUser)
 
 app.post('/api/admin/user/deactivate', adminController.deactivateUser)
 
 app.post('/api/admin/user/activate', adminController.activateUser)
+
+app.post('/api/admin/user/role', adminController.changeRole)
 
 // Screencaster APIs
 

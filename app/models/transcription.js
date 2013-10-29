@@ -1,10 +1,14 @@
 module.exports = function(sequelize, DataTypes) {
 
-	return sequelize.define('Shownotes', {
-
-		content: {
+	return sequelize.define('Transcriptions', {
+		approved: {
+			type: DataTypes.BOOLEAN,
 			allowNull: false,
-			type: DataTypes.BLOB
+			defaultValue: false
+		},
+		text: {
+			type: DataTypes.TEXT,
+			allowNull: false
 		},
 		language: { // ISO 639-1
 			type: DataTypes.STRING,
@@ -14,7 +18,5 @@ module.exports = function(sequelize, DataTypes) {
 				len: 2
 			}
 		}
-
 	})
-
 }

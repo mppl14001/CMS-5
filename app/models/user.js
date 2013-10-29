@@ -7,11 +7,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING
 		},
 		role: {
-			// 1: Admin
-			// 2: Screencaster
-			// 3: Moderator
-			// 4: Viewer
-			
+			// documented in userRoleToString (server.js)
 			allowNull: false,
 			type: DataTypes.INTEGER,
 			validate: {
@@ -19,13 +15,17 @@ module.exports = function(sequelize, DataTypes) {
 				max: 4
 			}
 		},
+		twitter_id: {
+			allowNull: false,
+			type: DataTypes.STRING
+		},
 		twitter_username: {
 			allowNull: false,
 			type: DataTypes.STRING
 		},
 		twitter_access_token: {
 			allowNull: false,
-			type: DataTypes.STRING	
+			type: DataTypes.STRING
 		},
 		twitter_access_secret: {
 			allowNull: false,
@@ -39,4 +39,4 @@ module.exports = function(sequelize, DataTypes) {
 
 	})
 
-};
+}

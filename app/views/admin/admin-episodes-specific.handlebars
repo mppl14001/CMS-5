@@ -1,7 +1,7 @@
 <div class="header col-md-12 clearfix" style="box-sizing:border-box;margin-top:25px;">
 	<div class="thumbnail col-md-3">
 		<img src="http://cdn.panasonic.com/images/imageNotFound400.jpg" width="150" height="75" />
-	</div>	
+	</div>
 	<div class="header col-md-9">
 		<h2>{{title}}</h2>
 		<p style="color:#aaa">By: {{author}}</p>
@@ -15,24 +15,44 @@
 	<h3>Tags</h3>
 	<ul style="list-style-type:none;">
 		{{#tags}}
-			<li>{{this}}</li>
+			<li style="margin-bottom:5px;">{{this}}</li>
 		{{/tags}}
 		<li>
-			<a href="#" class=""><i class="fa fa-plus"></i>Add more</a>
+			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i>Add more</a>
 		</li>
 	</ul>
+</div>
+<div class="modal fade" id="addTag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Add tag</h4>
+			</div>
+			<div class="modal-body">
+				<label for="newTag">Tag</label>
+			    <input type="text" class="form-control" id="newTag" placeholder="Enter tag">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onclick="addTag({{id}}, $('#addTag .modal-body input').val());">Add</button>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="status col-md-12 clearfix" style="margin-top:25px;">
 	<h3>Status</h3>
 	<div class="col-md-6 text-center approval">
 		<h4>Visibility</h4>
-		{{#if status.approval}}
-		<p class="active">Approval</p>
-		<button type="button" class="btn btn-error" name="removeVideo">Remove</button>
-		{{else}}
-		<p class="warning">Awaiting approval</p>
-		<button type="button" class="btn btn-success" name="approveVideo">Approve</button>
-		{{/if}}
+		<div class="button-cont">
+			{{#if status.approval}}
+			<p class="active">Approved</p>
+			<button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo({{id}});">Remove</button>
+			{{else}}
+			<p class="warning">Awaiting approval</p>
+			<button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo({{id}});">Approve</button>
+			{{/if}}
+		</div>
 	</div>
 	<div class="col-md-6 text-center">
 		<h4>Title</h4>
@@ -52,76 +72,118 @@
 		<tbody>
 			{{#transcriptions}}
 			<tr>
+				<input type="hidden" name="transcription_data" value="{{this.content}}" />
 				<td>{{this.language}}</td>
+				{{#if this.isActive}}
 				<td><p class="active">{{this.status}}</p></td>
+				{{else}}
+				<td><p class="active error">{{this.status}}</p></td>
+				{{/if}}
 				<td>
-					<button type="button" class="btn btn-default">Edit</button>
+					<button type="button" class="btn btn-default" onclick="displayTranscriptionData({{@index}});">Edit</button>
 					{{#if showApproval}}
-					<button type="button" class="btn btn-success">Approve</button>					
+					<button type="button" class="btn btn-success">Approve</button>
 					{{/if}}
 				</td>
 			</tr>
 			{{/transcriptions}}
 		</tbody>
 	</table>
+	<div class="modal fade" id="editTranscription" tabindex="0" role="dialog" aria-labelledby="Edit Transcription" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Edit Transcription</h4>
+				</div>
+				<div class="modal-body">
+					<label for="transcriptionLanguage">Language: </label>
+					<input type="text" value="English" class="form-control col-md-2" style="width:50%;float:none;display:inline-block;margin-bottom:5px;" name="transcriptionLanguage"/>
+					<textarea class="form-control"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<style type="text/css">
-.clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
- 
-.clearfix {
-	display: inline-block;
-}
- 
-html[xmlns] .clearfix {
-	display: block;
-}
- 
-* html .clearfix {
-	height: 1%;
-}
-.active {
-	color:#34b611;
-}
-.error {
-	color:#db0b0b;
-}
-.warning {
-	color:#debb1a;
-}
-.tags ul li {
-	display:inline-block;
-	background-color:#eee;
-	padding:5px 10px;
-	-webkit-border-radius:4px;
-	-moz-border-radius:4px;
-	-o-border-radius:4px;
-	border-radius:4px;
-}
-</style>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('.status .approval button[name=\'approveVideo\']').on('click', function() {
-			$.ajax({
-				url: '/api/admin/episode/approve/',
-				data: {id:'1'},
-				type: 'POST',
-				success:function(v) {
-					var json = $.parseJSON(v)
-					if (json.status === "ok") {
-						$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
-						$('.status .approval button[name=\'approveVideo\']').remove();
-					} else {
-						console.log("An error has occured")
-					}
+	function approveVideo(id) {
+		$.ajax({
+			url: '/api/admin/episode/approve/',
+			data: {id:id},
+			type: 'POST',
+			success:function(v) {
+				var json = $.parseJSON(v)
+				if (json.status === "ok") {
+					$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
+					$('.status .approval button[name=\'approveVideo\']').remove();
+					$('.status .approval .button-cont').html('<p class="active">Approved</p><button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo('+id+');">Remove</button>')
+				} else {
+					console.log("An error has occured")
 				}
-			})
+			}
 		})
-	})
+	}
+	function deleteVideo(id) {
+		$.ajax({
+			url: '/api/admin/episode/remove/',
+			data: {id:id},
+			type: 'POST',
+			success:function(v) {
+				var json = $.parseJSON(v)
+				if (json.status === "ok") {
+					$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
+					$('.status .approval button[name=\'approveVideo\']').remove();
+					$('.status .approval .button-cont').html('<p class="warning">Awaiting approval</p><button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo('+id+');">Approve</button>')
+				} else {
+					console.log('An error has occured')
+				}
+			}
+		})
+	}
+	function addTag(id, tag) {
+		$.ajax({
+			url: '/api/admin/episode/tags/add',
+			data: {
+				id: id,
+				tag: tag
+			},
+			type: 'POST',
+			success:function(b) {
+				var json = $.parseJSON(b)
+				if (json.status === 'ok') {
+					$("<li style='margin-bottom:5px;'>"+json.tagAdded+"</li>").insertBefore($(".tags ul li:last-child"))
+					$('#addTag').modal('hide')
+				} else {
+					console.log('An error has occured.')
+				}
+			}
+		})
+	}
+	function updateTranscription(language) {
+		$.ajax({
+			url: '',
+			data: {
+			},
+			type: 'POST',
+			success:function(c) {
+				var json = $.parseJSON(c)
+				if (json.status === 'ok') {
+
+				} else {
+					
+				}
+			}
+		})
+	}
+	function displayTranscriptionData(id) {
+		var text = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_data"]').val()
+		$(".transcriptions .modal textarea").val(text)
+		$(".transcriptions .modal").modal({
+			show: true
+		})
+	}
 </script>
