@@ -8,7 +8,6 @@ var rootDir = path.join(__dirname, '..')
 var app = require(rootDir + '/app/server.js').app
 describe('Basic Tests', function() {
 	it('Make sure app runs', function(done) {
-		console.log(request(app))
 		request(app).get('/').expect('Content-Type', /html/).expect(200, done)
 	})
 })
