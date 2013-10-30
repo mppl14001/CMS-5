@@ -22,4 +22,4 @@ app/public/.sass-cache/*
 
 dump.rdb
 
-app/models/fixtures.js
+app/models/fixtures.json
