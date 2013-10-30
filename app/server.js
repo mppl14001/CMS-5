@@ -102,6 +102,10 @@ app.engine('handlebars', exphbs({
 				// 4 should be viewer, so just let it hit default.
 				default: return "Viewer"
 			}
+		},
+		ifUserIsAdmin: function(user, block) {
+			if (user && user.role == 1 /* admin */) return block.fn(this)
+			return block.inverse(this)
 		}
 	}
 }))
