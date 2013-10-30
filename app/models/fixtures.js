@@ -111,26 +111,30 @@ function createEpisode(episode, episodeCallback) {
 }
 
 function generateFixtures() {
-	var fixtures = JSON.parse(fs.readFileSync('fixtures.json', 'utf8'))
-	async.each(fixtures.users, function(user, userCallback) {
-		var episodes = []
-		createUser(user, function(error, createdUser) {
-			async.each(user.episodes, function(episode, episodeCallback) {
-				createEpisode(episode, function(error, episode) {
-					if (!error) {
-						episodes.push(episode)
-					}
-					episodeCallback(error)
-				})
-			}, function(err) {
-				createdUser.setEpisodes(episodes).success(function() {
-					userCallback(null)
-				}).failure(function(error) {
-					userCallback(err)
+	try {
+		var fixtures = JSON.parse(fs.readFileSync(__dirname + '/fixtures.json', 'utf8'))
+		async.each(fixtures.users, function(user, userCallback) {
+			var episodes = []
+			createUser(user, function(error, createdUser) {
+				async.each(user.episodes, function(episode, episodeCallback) {
+					createEpisode(episode, function(error, episode) {
+						if (!error) {
+							episodes.push(episode)
+						}
+						episodeCallback(error)
+					})
+				}, function(err) {
+					createdUser.setEpisodes(episodes).success(function() {
+						userCallback(null)
+					}).failure(function(error) {
+						userCallback(err)
+					})
 				})
 			})
 		})
-	})
+	} catch (err) {
+		console.log('Did not seed data: ' + err)
+	}
 }
 
 module.exports = generateFixtures
