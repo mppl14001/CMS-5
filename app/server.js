@@ -19,7 +19,6 @@ var dbConfig = config.get('db')
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
 	logging: config.get('logging').sequelize
 })
-
 // Models
 GLOBAL.models = require('./models')
 GLOBAL.Episode = models.episode
@@ -32,7 +31,7 @@ GLOBAL.Tag = models.tag
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
 var userController = require('./controllers/user.js')
-var screencasterController = require('./controllers/screencaster.js');
+//var screencasterController = require('./controllers/screencaster.js');
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
@@ -102,6 +101,10 @@ app.engine('handlebars', exphbs({
 				// 4 should be viewer, so just let it hit default.
 				default: return "Viewer"
 			}
+		},
+		ifUserIsAdmin: function(user, block) {
+			if (user && user.role == 1 /* admin */) return block.fn(this)
+			return block.inverse(this)
 		}
 	}
 }))
@@ -142,9 +145,9 @@ app.get('/logout', function(req, res) {
 	Screencast submission
 */
 
-app.get('/screencaster', screencasterController.getPending)
+//app.get('/screencaster', screencasterController.getPending)
 
-app.get('/screencaster/approved', screencasterController.getApproved)
+//app.get('/screencaster/approved', screencasterController.getApproved)
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
@@ -203,3 +206,5 @@ app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
 app.listen(config.get('port') || 3000)
+
+module.exports.app = app
