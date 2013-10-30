@@ -38,10 +38,21 @@ module.exports.get = function(req, res) {
 								  'Video awaiting approval' :
 								  'Videos awaiting approval'
 					callback(null, [grammar, query.length])
-				})
+				})			
 			},
 			function(callback) {
-				callback(null, 15)
+				sequelize.query('SELECT * FROM Transcriptions WHERE approved = 0').success(function(query2) {
+					if (query2.length > 0) {
+						var grammar = query2.length === 1 ?
+									  'Transcription awaiting approval' :
+									  'Transcriptions awaiting approval'
+						callback(null, [grammar, query2.length])
+					} else {
+						callback(null, 0)
+					}
+				}).error(function(error) {
+					callback(null, 'Error')
+				})
 			}
 		],
 		function(err, callback) {
@@ -51,8 +62,8 @@ module.exports.get = function(req, res) {
 					data['boxes'][i].data = callback[i][1]
 				} else {
 					data['boxes'][i].data = callback[i]
-					if (i == callback.length - 1) res.render('admin/admin', data)
 				}
+				if (i == callback.length - 1) res.render('admin/admin', data)
 			}
 		})
 }
