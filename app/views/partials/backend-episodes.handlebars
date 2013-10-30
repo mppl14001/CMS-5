@@ -1,0 +1,55 @@
+<section style="box-sizing:border-box;margin-top:25px;">
+	<div class="row">
+		<ul>
+			{{#if videos}}
+				{{#each videos}}
+			<li class="box text-left col-md-12" data-id="{{this.id}}" style="display:inline-block;list-style-type:none;border:1px solid #eee;padding:25px 15px;">
+				<div class="thumbnail col-md-2" style="margin-right:15px;">
+					<img src="/img/borked.png" width="100" height="75" />
+				</div>
+				<a href="/admin/episodes/pending/{{this.id}}"><h3>{{this.title}}</h3></a>
+				<p style="font-size:13px;color:#aaa;">{{this.shownotes.0.shortened}}</p>
+				{{#if admin}} 
+					<button type="button" class="btn btn-success" style="float:right;" onclick="approveVideo({{this.id}})">Approve</button>
+				{{else}}
+				{{/if}}
+			</li>
+				{{/each}}
+			{{#if admin}}	
+				<script type="text/javascript">
+					function approveVideo(id) {
+						$.ajax({
+							url: '/api/admin/episode/approve/',
+							data: {id:id},
+							type: 'POST',
+							success:function(v) {
+								var json = $.parseJSON(v)
+								if (json.status === "ok") {
+									$(".stats ul li[data-id='"+id+"'] button[type='button']").remove()
+									$(".stats ul li[data-id='"+id+"']").append('<p class="active text-right">This video is now approved.</p>')
+								} else {
+									console.log("An error has occured")
+								}
+							}
+						})
+					}
+				</script>
+			{{else}}
+			{{/if}}
+
+			{{else}}
+			<li class="box text-center col-md-12" style="display:inline-block;list-style-type:none;padding:25px 0px;">
+				{{#if pending}}
+				<h3>There are no videos waiting to be approved.</h3>
+				{{#else}}
+				<h3>{{#if admin}}
+					There are no approved videos. 
+					{{#else}} 
+					:(, you don't have any videos approved yet, hold tight and wait, or submit a new video.
+					{{/if}}</h3>
+				{{/if}}
+			</li>
+			{{/if}}
+		</ul>
+	</div>
+</section>

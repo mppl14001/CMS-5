@@ -2,7 +2,7 @@ module.exports.getPending = function(req, res) {
 	if (!req.user || req.user.role == 4) {
 		res.redirect('../')
 	}
-	// Console.log("GIHDKGJHDFKGHSDKFHSDKJFHSKDJHFKSDHFKSDJHF" + req.user)
+	
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0 & userId = ?', req.user.id).success(function(query) {
 		if (query.length > 0) {
