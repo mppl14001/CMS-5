@@ -105,6 +105,14 @@ app.engine('handlebars', exphbs({
 			if (user && user.role == 1 /* admin */) return block.fn(this)
 			return block.inverse(this)
 		},
+		ifUserIsScreencaster: function(user, block) {
+			if (user && user.role == 2 /* screencaster */) return block.fn(this)
+			return block.inverse(this)
+		},
+		ifUserIsModerator: function(user, block) {
+			if (user && user.role == 3 /* moderator */) return block.fn(this)
+			return block.inverse(this)
+		}
 	}
 }))
 app.use(express.cookieParser())
