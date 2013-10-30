@@ -1,8 +1,14 @@
 module.exports.getPending = function(req, res) {
-	if (!req.user || req.user.role == 4) {
-		res.redirect('../')
+	var auth = false
+	if (req.user && req.user.role <= 3) {
+		auth = true
 	}
-	
+
+	if (auth == false) { 
+		res.redirect('../')
+		res.end()
+	}
+
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 0 & userId = ?', req.user.id).success(function(query) {
 		if (query.length > 0) {
@@ -33,9 +39,16 @@ module.exports.getPending = function(req, res) {
 }
 
 module.exports.getApproved = function(req, res) {
-	if (!req.user || req.user.role == 4) {
-		res.redirect('../')
+	var auth = false
+	if (req.user && req.user.role <= 3) {
+		auth = true
 	}
+
+	if (auth == false) { 
+		req.redirect('../')
+		res.end()
+	}
+
 	// Access Granted
 	sequelize.query('SELECT * FROM Episodes WHERE approved = 1 & userId = ?', req.user.id).success(function(query) {
 		if (query.length > 0) {
