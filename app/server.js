@@ -63,7 +63,6 @@ passport.use(new TwitterStrategy({
 		if (!created) {
 			user.updateAttributes({ 
 				name: profile.displayName,
-				role: 4,
 				twitter_id: profile.id,
 				twitter_username: profile.username,
 				twitter_access_token: token,
