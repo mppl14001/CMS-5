@@ -78,3 +78,18 @@ module.exports.getApproved = function(req, res) {
 		res.render("screencasters/screencasters-episodes-approved-list")
 	})
 }
+
+module.exports.getNew = function(req, res) {
+	var auth = false
+	if (req.user && req.user.role <= 3) {
+		auth = true
+	}
+
+	if (auth == false) { 
+		req.redirect('../')
+		res.end()
+	}
+
+	res.render("screencasters/screencasters-new-episode");
+
+}
