@@ -11,7 +11,9 @@ var RedisStore = require('connect-redis')(express)
 var sessionStore = new RedisStore
 
 // Config
-GLOBAL.config = nconf.file({ file: path.join(__dirname, 'config.json') })
+GLOBAL.config = nconf.argv()
+					 .env()
+					 .file({ file: path.join(__dirname, 'config.json') })
 var twitterConfig = config.get('twitter')
 var dbConfig = config.get('db')
 
