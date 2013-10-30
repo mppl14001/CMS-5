@@ -21,6 +21,11 @@
     "async": "~0.2.9",
     "connect-redis": "~1.4.5"
   },
+  "devDependencies": {
+    "mocha": "latest",
+    "chai": "latest",
+    "supertest": "latest"
+  },
   "scripts": {
     "start": "node app/server.js"
   }

@@ -32,7 +32,7 @@ GLOBAL.Tag = models.tag
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
 var userController = require('./controllers/user.js')
-var screencasterController = require('./controllers/screencaster.js');
+//var screencasterController = require('./controllers/screencaster.js');
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
@@ -142,9 +142,9 @@ app.get('/logout', function(req, res) {
 	Screencast submission
 */
 
-app.get('/screencaster', screencasterController.getPending)
+//app.get('/screencaster', screencasterController.getPending)
 
-app.get('/screencaster/approved', screencasterController.getApproved)
+//app.get('/screencaster/approved', screencasterController.getApproved)
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
 
@@ -203,3 +203,5 @@ app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 
 app.listen(config.get('port') || 3000)
+
+module.exports.app = app
