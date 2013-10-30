@@ -35,6 +35,20 @@ This is caused by your Redis server not running. Start your Redis server using t
 
 Update your `config.json` file to match the latest `config.example.json` template.
 
+Configuration
+-------------
+
+There are two ways to specify configuration options for the CodePilot CMS.
+
+1. `config.json`: Copy `app/config.example.json` to `app/config.json` and edit the settings appropriately. These will be the default settings if not specified elsewhere.
+2. Command Line Arguments: When starting the application, specify the configuration option as a command line argument like so: `--<key> <value>`. If the key is specified in
+the command line and `config.json`, then the command line argument value will be used.
+
+There are two configuration options that can be specified through the command line that are not listed in `config.json`:
+
+1. `--force-upgrade`: This option will force the database to upgrade it's schema. The default value is false. **Warning: This will remove ALL data from the database!**
+2. `--seed-data`: This option will specify if data should be seeded into the data based on the information in `app/models/fixtures.json`. By default, data will be not be seeded.
+
 ---
 
 **Special thanks to:** (in no particular order)
