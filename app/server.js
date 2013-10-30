@@ -19,7 +19,6 @@ var dbConfig = config.get('db')
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
 	logging: config.get('logging').sequelize
 })
-
 // Models
 GLOBAL.models = require('./models')
 GLOBAL.Episode = models.episode
