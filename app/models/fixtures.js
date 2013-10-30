@@ -112,7 +112,7 @@ function createEpisode(episode, episodeCallback) {
 
 function generateFixtures() {
 	try {
-		var fixtures = JSON.parse(fs.readFileSync(__dirname + '/models/fixtures.json', 'utf8'))
+		var fixtures = JSON.parse(fs.readFileSync(__dirname + '/fixtures.json', 'utf8'))
 		async.each(fixtures.users, function(user, userCallback) {
 			var episodes = []
 			createUser(user, function(error, createdUser) {
