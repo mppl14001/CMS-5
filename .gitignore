@@ -23,3 +23,5 @@ app/public/.sass-cache/*
 dump.rdb
 
 app/models/fixtures.json
+
+Procfile
