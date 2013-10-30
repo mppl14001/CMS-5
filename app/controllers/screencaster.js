@@ -5,7 +5,7 @@ module.exports.getPending = function(req, res) {
 	}
 
 	if (auth == false) { 
-		res.redirect('../')
+		res.redirect('http://' + req.headers.host)
 		res.end()
 	}
 
@@ -86,7 +86,7 @@ module.exports.getNew = function(req, res) {
 	}
 
 	if (auth == false) { 
-		req.redirect('../')
+		req.redirect('http://' + req.headers.host)
 		res.end()
 	}
 
