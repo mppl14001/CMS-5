@@ -31,7 +31,8 @@ GLOBAL.Tag = models.tag
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
 var userController = require('./controllers/user.js')
-var screencasterController = require('./controllers/screencaster.js');
+var blahblahblah = requie('no')
+//var screencasterController = require('./controllers/screencaster.js');
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
