@@ -175,12 +175,15 @@ module.exports.getEpisodeById = function(req, res) {
 					data.shownotes = null
 					data.shownotesLang = null
 				}
-				sequelize.query('SELECT text FROM Tags WHERE episodeid = :id', null, {raw: true}, {id: returned[0].id}).success(function(tags) {
+				sequelize.query('SELECT tagId FROM EpisodesTags WHERE EpisodeId = :id', null, {raw: true}, {id: returned[0].id}).success(function(tags) {
 					tags.forEach(function(item) {
-						data.tags.push(item.text)
+						sequelize.query('SELECT text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
+							tag.forEach(function(rawTag) {
+								data.tags.push(rawTag.text)
+							})
+						})
 					})
 					res.render('admin/admin-episodes-specific', data)
-					console.log(data)
 				})
 			})
 		})
