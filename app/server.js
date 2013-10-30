@@ -17,9 +17,14 @@ GLOBAL.config = nconf.argv()
 var twitterConfig = config.get('twitter')
 var dbConfig = config.get('db')
 
+if (!dbConfig || !dbConfig.name || !dbConfig.user || !dbConfig.password) {
+	console.log('FATAL ERROR: You must specify database information in the configuration to run the server.')
+	process.exit(1)
+}
+
 // DB
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
-	logging: config.get('logging').sequelize
+	logging: config.get('logging:sequelize') || false
 })
 // Models
 GLOBAL.models = require('./models')
@@ -47,10 +52,16 @@ passport.deserializeUser(function(obj, done) {
 		done(error, null)
 	})
 })
+
+if (!twitterConfig || !twitterConfig.key || !twitterConfig.secret) {
+	console.log('FATAL ERROR: You must specify a twitter consumer key and consumer secret in the configuration to run the server.')
+	process.exit(1)
+}
+
 passport.use(new TwitterStrategy({
 	consumerKey: twitterConfig.key,
 	consumerSecret: twitterConfig.secret,
-	callbackURL: 'http://localhost:'+config.get('port')+'/auth/twitter/callback'
+	callbackURL: 'http://localhost:'+ (config.get('port') || 3000) +'/auth/twitter/callback'
 }, function(token, tokenSecret, profile, done) {
 	User.findOrCreate({
 		twitter_id: profile.id
