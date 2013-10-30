@@ -68,8 +68,14 @@ module.exports.get = function(req, res) {
 		})
 }
 
-
 module.exports.getEpisodes = function(req, res) {
+	res.locals.page = 'episodes'
+
+	
+}
+
+
+/*module.exports.getEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 	Episode.findAll({ where: { approved: 1 } }).success(function(query) {
 		if (query.length > 0) {
@@ -80,24 +86,14 @@ module.exports.getEpisodes = function(req, res) {
 			for (var i=0;i<data['videos'].length;i++) {
 				var element = data['videos'][i]
 				var eId = element.id
-
-				Shownotes.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
-					if (shownotes.length > 0) {
-						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-						element.shownotes = shownotes
-					} else {
-						element.shownotes = null
-					}
-					console.log(element)
-					res.render('admin/admin-episodes', data)
-				})
 			}
+
+			res.render('admin/admin-episodes', data)
 		} else {
 			res.render('admin/admin-episodes')
 		}
 	})
-}
+}*/
 
 module.exports.getPendingEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
