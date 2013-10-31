@@ -106,27 +106,6 @@ module.exports.getEpisodes = function(req, res) {
 	})
 }
 
-
-/*module.exports.getEpisodes = function(req, res) {
-	res.locals.page = 'episodes'
-	Episode.findAll({ where: { approved: 1 } }).success(function(query) {
-		if (query.length > 0) {
-			var data = {
-				videos: []
-			}
-			data['videos'] = query
-			for (var i=0;i<data['videos'].length;i++) {
-				var element = data['videos'][i]
-				var eId = element.id
-			}
-
-			res.render('admin/admin-episodes', data)
-		} else {
-			res.render('admin/admin-episodes')
-		}
-	})
-}*/
-
 module.exports.getPendingEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 	Episode.findAll({ where: { approved: 0 } }).success(function(query) {
