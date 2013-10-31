@@ -216,45 +216,17 @@ module.exports.getEpisodeById = function(req, res) {
 		function(callback) { // Load transcriptions
 			sequelize.query('SELECT * FROM Transcriptions WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(trans) {
 				trans.forEach(function(item) {
-					data.transcriptions.push(item)
+					var elem = item
+					if (elem.approved == 1) {
+						elem.isActive = true
+					}
+					data.transcriptions.push(elem)
 				})
 				callback(null, "transcriptions")
 			})
 		}
 	], function(err, results) {
 		res.render('admin/admin-episodes-specific', data)
-	})
-	sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
-		data.title = returned[0].title
-		data.video = returned[0].ytURL
-		data.status.approval = returned[0].approved
-		data.id = returned[0].id
-		sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
-			if (user[0].name) {
-				data.author = user[0].name
-			} else {
-				data.author = "Unknown"
-			}
-			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
-				if (shownotes.length > 0) {
-					data.shownotes = shownotes[0].content.toString()
-					data.shownotesLang = shownotes[0].language
-				} else {
-					data.shownotes = null
-					data.shownotesLang = null
-				}
-				sequelize.query('SELECT tagId FROM EpisodesTags WHERE EpisodeId = :id', null, {raw: true}, {id: returned[0].id}).success(function(tags) {
-					tags.forEach(function(item) {
-						sequelize.query('SELECT text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
-							tag.forEach(function(rawTag) {
-								data.tags.push(rawTag.text)
-							})
-						})
-					})
-					res.render('admin/admin-episodes-specific', data)
-				})
-			})
-		})
 	})
 }
 
