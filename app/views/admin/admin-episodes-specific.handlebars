@@ -83,9 +83,9 @@
 				<td>
 					<button type="button" class="btn btn-default" onclick="displayTranscriptionData({{@index}});">Edit</button>
 					{{#if showApproval}}
-					<button type="button" class="btn btn-success">Approve</button>
+					<button type="button" class="btn btn-success activate" onclick="activateTranscription({{this.id}}, {{../../id}});">Approve</button>
 					{{else}}
-					<button type="button" class="btn btn-danger">Remove</button>
+					<button type="button" class="btn btn-danger deactivate" onclick="deactivateTranscription({{this.id}}, {{../../id}});">Remove</button>
 					{{/if}}
 				</td>
 			</tr>
@@ -190,5 +190,41 @@
 		$(".transcriptions .modal").modal({
 			show: true
 		})
+	}
+	function activateTranscription(id, episode) {
+		$.ajax({
+			url: '/api/admin/episode/transcript/activate',
+			data: {
+				id: id,
+				eId: episode
+			},
+			type: 'POST',
+			success:function(c) {
+				var json = $.parseJSON(c)
+				if (json.status === 'ok') {
+					
+				} else {
+					
+				}
+			}
+		})	
+	}
+	function deactivateTranscription(id, episode) {
+		$.ajax({
+			url: '/api/admin/episode/transcript/deactivate',
+			data: {
+				id: id,
+				eId: episode
+			},
+			type: 'POST',
+			success:function(c) {
+				var json = $.parseJSON(c)
+				if (json.status === 'ok') {
+					
+				} else {
+					
+				}
+			}
+		})	
 	}
 </script>

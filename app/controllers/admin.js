@@ -351,7 +351,7 @@ module.exports.removeTranscription = function(req, res) {
 
 module.exports.activateTranscription = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET approved = 1 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.episode}).success(function(query) {
+		sequelize.query('UPDATE Transcriptions SET approved = 1 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
 			var json = {
 				status: "ok",
 				rowsModified: 1
@@ -372,7 +372,7 @@ module.exports.activateTranscription = function(req, res) {
 
 module.exports.deactivateTranscription = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET approved = 0 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.episode}).success(function(query) {
+		sequelize.query('UPDATE Transcriptions SET approved = 0 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
 			var json = {
 				status: "ok",
 				rowsModified: 1
