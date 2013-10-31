@@ -42,3 +42,9 @@ describe('Models', function() {
 		done()
 	})
 })
+describe('Sequelize', function() {
+	it('should be initialized', function(done) {
+		sequelize.should.be.an('object')
+		done()
+	})
+})
