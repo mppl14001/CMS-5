@@ -76,9 +76,9 @@
 				<input type="hidden" name="transcription_data" value="{{this.text}}" />
 				<td>{{this.language}}</td>
 				{{#if this.isActive}}
-				<td><p class="active">{{this.status}}</p></td>
+				<td><p class="active">Active</p></td>
 				{{else}}
-				<td><p class="active error">{{this.status}}</p></td>
+				<td><p class="active error">Inactive</p></td>
 				{{/if}}
 				<td>
 					<button type="button" class="btn btn-default" onclick="displayTranscriptionData({{@index}});">Edit</button>
