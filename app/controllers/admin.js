@@ -68,10 +68,44 @@ module.exports.get = function(req, res) {
 		})
 }
 
+/* SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = {{ID}} ORDER BY approved DESC */
+
 module.exports.getEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 
-	
+	var viewData = {
+		videos: []
+	}
+
+	async.series([
+		function (callback) { // Load episodes
+			Episode.findAll({ where: { approved: 1} }).success(function(query) {
+				if (query.length > 0) {
+					var l = 0;
+					async.eachSeries(query, function (item, callback2) {
+						viewData['videos'].push(query[l]['dataValues'])
+						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData['videos'][l].id})
+						.success(function(q2) {
+							for (var o = 0;o < q2.length;o++) {
+								q2[o].content = q2[o].content.toString()
+							}
+							viewData['videos'][l].shownotes = q2
+							console.log(viewData['videos'][l])
+							l++;
+							callback2(null, 'potato')
+						})
+					}, function (err, results) {
+						//console.log(viewData['videos'])
+					})
+					callback(null, 'Episodes')
+				} else {
+					res.render('admin/admin-episodes')
+				}
+			})
+		}
+	], function(err, results) {
+		res.render('admin/admin-episodes', viewData)
+	})
 }
 
 
