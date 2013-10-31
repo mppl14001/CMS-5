@@ -219,8 +219,10 @@ module.exports.getEpisodeById = function(req, res) {
 					var elem = item
 					if (elem.approved == 1) {
 						elem.isActive = true
+						elem.showApproval = false
 					} else {
 						elem.isActive = false
+						elem.showApproval = true
 					}
 					data.transcriptions.push(elem)
 				}, function() {
