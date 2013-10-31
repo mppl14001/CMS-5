@@ -86,6 +86,7 @@ module.exports.getEpisodes = function(req, res) {
 						.success(function(q2) {
 							for (var o = 0;o < q2.length;o++) {
 								q2[o].content = q2[o].content.toString()
+								q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
 							}
 							viewData['videos'][l].shownotes = q2
 							console.log(viewData['videos'][l])
