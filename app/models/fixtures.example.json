@@ -17,23 +17,23 @@
 					"shownotes": [
 						{
 							"content": "I coded stuff.",
-							"language": "en"
+							"language": "English"
 						},
 						{
 							"content": "I coded stuff in Spanish.",
-							"language": "es"
+							"language": "Spanish"
 						}
 					],
 					"transcriptions": [
 						{
 							"approved": true,
 							"text": "So you click this and type this and you're done!",
-							"language": "en"
+							"language": "English"
 						},
 						{
 							"approved": false,
 							"text": "So you click this and type this and you're done (IN SPANISH!)!",
-							"language": "es"
+							"language": "Spanish"
 						}
 					],
 					"tags": [
@@ -53,23 +53,23 @@
 					"shownotes": [
 						{
 							"content": "I coded a lot of stuff.",
-							"language": "en"
+							"language": "English"
 						},
 						{
 							"content": "I coded a lot of stuff in Spanish.",
-							"language": "es"
+							"language": "Spanish"
 						}
 					],
 					"transcriptions": [
 						{
 							"approved": true,
 							"text": "Click click click",
-							"language": "en"
+							"language": "English"
 						},
 						{
 							"approved": false,
 							"text": "Click click click (IN SPANISH!)!",
-							"language": "es"
+							"language": "Spanish"
 						}
 					],
 					"tags": [
