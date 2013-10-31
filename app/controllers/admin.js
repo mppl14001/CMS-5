@@ -223,9 +223,9 @@ module.exports.getEpisodeById = function(req, res) {
 						elem.isActive = false
 					}
 					data.transcriptions.push(elem)
+				}, function() {
+					callback(null, "transcriptions")					
 				})
-				console.log(data.transcriptions)
-				callback(null, "transcriptions")
 			})
 		}
 	], function(err, results) {
