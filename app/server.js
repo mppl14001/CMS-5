@@ -17,7 +17,7 @@ GLOBAL.config = nconf.argv()
 var twitterConfig = config.get('twitter')
 var dbConfig = config.get('db')
 
-if (!dbConfig || !dbConfig.name || !dbConfig.user || !dbConfig.password) {
+if (!dbConfig || !dbConfig.name || !dbConfig.user) {
 	console.log('FATAL ERROR: You must specify database information in the configuration to run the server.')
 	process.exit(1)
 }
