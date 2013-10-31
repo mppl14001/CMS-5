@@ -68,8 +68,6 @@ module.exports.get = function(req, res) {
 		})
 }
 
-/* SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = {{ID}} ORDER BY approved DESC */
-
 module.exports.getEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 
@@ -78,7 +76,7 @@ module.exports.getEpisodes = function(req, res) {
 	}
 
 	async.series([
-		function (callback) { // Load episodes
+		function (callback) {
 			Episode.findAll({ where: { approved: 1} }).success(function(query) {
 				if (query.length > 0) {
 					var l = 0;
@@ -92,10 +90,9 @@ module.exports.getEpisodes = function(req, res) {
 							viewData['videos'][l].shownotes = q2
 							console.log(viewData['videos'][l])
 							l++;
-							callback2(null, 'potato')
+							callback2(null, 'ShownotesAreABitch')
 						})
 					}, function (err, results) {
-						//console.log(viewData['videos'])
 					})
 					callback(null, 'Episodes')
 				} else {
@@ -104,6 +101,7 @@ module.exports.getEpisodes = function(req, res) {
 			})
 		}
 	], function(err, results) {
+		console.log(viewData)
 		res.render('admin/admin-episodes', viewData)
 	})
 }
