@@ -84,18 +84,21 @@ module.exports.getEpisodes = function(req, res) {
 						viewData['videos'].push(query[l]['dataValues'])
 						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData['videos'][l].id})
 						.success(function(q2) {
-							for (var o = 0;o < q2.length;o++) {
-								q2[o].content = q2[o].content.toString()
-								q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+							if (q2.length > 0) {
+								for (var o = 0;o < q2.length;o++) {
+									q2[o].content = q2[o].content.toString()
+									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+								}
+								viewData['videos'][l].shownotes = q2
+								l++;
+								callback2(null, 'ShownotesAreABitch')
+							} else {
+								callback2(null, 'ShownotesAreABitchButDontExist')
 							}
-							viewData['videos'][l].shownotes = q2
-							console.log(viewData['videos'][l])
-							l++;
-							callback2(null, 'ShownotesAreABitch')
 						})
 					}, function (err, results) {
+						callback(null, 'Episodes')
 					})
-					callback(null, 'Episodes')
 				} else {
 					res.render('admin/admin-episodes')
 				}
