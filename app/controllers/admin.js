@@ -345,7 +345,34 @@ module.exports.addTranscription = function(req, res) {
 
 module.exports.removeTranscription = function(req, res) {
 	if (req.xhr) {
+		//sequelize.query('')
+	}
+}
 
+module.exports.activateTranscription = function(req, res) {
+	if (req.xhr) {
+
+	}
+}
+
+module.exports.deactivateTranscription = function(req, res) {
+	if (req.xhr) {
+		sequelize.query('UPDATE Transcriptions SET approved = 0 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.episode}).success(function(query) {
+			var json = {
+				status: "ok",
+				rowsModified: 1
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		}).error(function(error) {
+			var json = {
+				status: "error",
+				rowsModified: null,
+				error: "sequelize"
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		})
 	}
 }
 

@@ -211,6 +211,10 @@ app.post('/api/admin/episode/transcript/add', adminController.addTranscription)
 
 app.post('/api/admin/episode/transcript/remove', adminController.removeTranscription)
 
+app.post('/api/admin/episode/transcript/activate', adminController.activateTranscription)
+
+app.post('/api/admin/episode/transcript/deactivate', adminController.deactivateTranscription)
+
 app.post('/api/admin/user/add', adminController.addUser)
 
 app.post('/api/admin/user/deactivate', adminController.deactivateUser)
