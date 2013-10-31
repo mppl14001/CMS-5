@@ -112,31 +112,43 @@ module.exports.getEpisodes = function(req, res) {
 
 module.exports.getPendingEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
-	Episode.findAll({ where: { approved: 0 } }).success(function(query) {
-		if (query.length > 0) {
-			var data = {
-				videos: []
-			}
-			data['videos'] = query
-			for (var i=0;i<data['videos'].length;i++) {
-				var element = data['videos'][i]
-				var eId = element.id
 
-				Shownotes.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
-					if (shownotes.length > 0) {
-						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-						element.shownotes = shownotes
-					} else {
-						element.shownotes = null
-					}
-					console.log(element)
-				})
-			}
-			res.render('admin/admin-episodes-pending', data)
-		} else {
-			res.render('admin/admin-episodes-pending')
+	var viewData = {
+		videos: []
+	}
+
+	async.series([
+		function (callback) {
+			Episode.findAll({ where: { approved: 0} }).success(function(query) {
+				if (query.length > 0) {
+					var l = 0;
+					async.eachSeries(query, function (item, callback2) {
+						viewData['videos'].push(query[l]['dataValues'])
+						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData['videos'][l].id})
+						.success(function(q2) {
+							if (q2.length > 0) {
+								for (var o = 0;o < q2.length;o++) {
+									q2[o].content = q2[o].content.toString()
+									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+								}
+								viewData['videos'][l].shownotes = q2
+								l++;
+								callback2(null, 'ShownotesAreABitch')
+							} else {
+								callback2(null, 'ShownotesAreABitchButDontExist')
+							}
+						})
+					}, function (err, results) {
+						callback(null, 'Episodes')
+					})
+				} else {
+					res.render('admin/admin-episodes')
+				}
+			})
 		}
+	], function(err, results) {
+		console.log(viewData)
+		res.render('admin/admin-episodes', viewData)
 	})
 }
 
