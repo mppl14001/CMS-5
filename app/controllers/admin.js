@@ -166,29 +166,7 @@ module.exports.getEpisodeById = function(req, res) {
 		status: {
 			approval: "unapproved"
 		},
-		transcriptions: [
-			{
-				language: "English",
-				content: "TEST CONTENT 1",
-				status: "Active",
-				isActive: true,
-				showApproval: false
-			},
-			{
-				language: "Spanish",
-				content: "TEST CONTENT 2",
-				status: "Active",
-				isActive: true,
-				showApproval: false
-			},
-			{
-				language: "German",
-				content: "TEST CONTENT 3",
-				status: "Not active",
-				isActive: false,
-				showApproval: true
-			}
-		]
+		transcriptions: []
 	}
 	async.series([
 		function(callback) {
@@ -233,6 +211,14 @@ module.exports.getEpisodeById = function(req, res) {
 						callback(null, "tags")
 					})
 				})
+			})
+		},
+		function(callback) {
+			sequelize.query('SELECT * FROM Transcriptions WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(trans) {
+				trans.forEach(function(item) {
+					data.transcriptions.push(item)
+				})
+				callback(null, "transcriptions")
 			})
 		}
 	], function(err, results) {
