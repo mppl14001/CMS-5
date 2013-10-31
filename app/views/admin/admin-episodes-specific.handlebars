@@ -72,7 +72,8 @@
 		<tbody>
 			{{#transcriptions}}
 			<tr>
-				<input type="hidden" name="transcription_data" value="{{this.content}}" />
+				<input type="hidden" name="transcription_lang" value="{{this.language}}" />
+				<input type="hidden" name="transcription_data" value="{{this.text}}" />
 				<td>{{this.language}}</td>
 				{{#if this.isActive}}
 				<td><p class="active">{{this.status}}</p></td>
@@ -181,7 +182,9 @@
 	}
 	function displayTranscriptionData(id) {
 		var text = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_data"]').val()
+		var language = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_lang"]').val()
 		$(".transcriptions .modal textarea").val(text)
+		$(".transcriptions .modal input[name='transcriptionLanguage']").val(language)
 		$(".transcriptions .modal").modal({
 			show: true
 		})

@@ -84,18 +84,21 @@ module.exports.getEpisodes = function(req, res) {
 						viewData['videos'].push(query[l]['dataValues'])
 						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData['videos'][l].id})
 						.success(function(q2) {
-							for (var o = 0;o < q2.length;o++) {
-								q2[o].content = q2[o].content.toString()
-								q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+							if (q2.length > 0) {
+								for (var o = 0;o < q2.length;o++) {
+									q2[o].content = q2[o].content.toString()
+									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+								}
+								viewData['videos'][l].shownotes = q2
+								l++;
+								callback2(null, 'ShownotesAreABitch')
+							} else {
+								callback2(null, 'ShownotesAreABitchButDontExist')
 							}
-							viewData['videos'][l].shownotes = q2
-							console.log(viewData['videos'][l])
-							l++;
-							callback2(null, 'ShownotesAreABitch')
 						})
 					}, function (err, results) {
+						callback(null, 'Episodes')
 					})
-					callback(null, 'Episodes')
 				} else {
 					res.render('admin/admin-episodes')
 				}
@@ -109,31 +112,43 @@ module.exports.getEpisodes = function(req, res) {
 
 module.exports.getPendingEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
-	Episode.findAll({ where: { approved: 0 } }).success(function(query) {
-		if (query.length > 0) {
-			var data = {
-				videos: []
-			}
-			data['videos'] = query
-			for (var i=0;i<data['videos'].length;i++) {
-				var element = data['videos'][i]
-				var eId = element.id
 
-				Shownotes.findAll({ where: { EpisodeId: eId }, limit: 1 }).success(function(shownotes) {
-					if (shownotes.length > 0) {
-						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
-						element.shownotes = shownotes
-					} else {
-						element.shownotes = null
-					}
-					console.log(element)
-				})
-			}
-			res.render('admin/admin-episodes-pending', data)
-		} else {
-			res.render('admin/admin-episodes-pending')
+	var viewData = {
+		videos: []
+	}
+
+	async.series([
+		function (callback) {
+			Episode.findAll({ where: { approved: 0} }).success(function(query) {
+				if (query.length > 0) {
+					var l = 0;
+					async.eachSeries(query, function (item, callback2) {
+						viewData['videos'].push(query[l]['dataValues'])
+						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData['videos'][l].id})
+						.success(function(q2) {
+							if (q2.length > 0) {
+								for (var o = 0;o < q2.length;o++) {
+									q2[o].content = q2[o].content.toString()
+									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+								}
+								viewData['videos'][l].shownotes = q2
+								l++;
+								callback2(null, 'ShownotesAreABitch')
+							} else {
+								callback2(null, 'ShownotesAreABitchButDontExist')
+							}
+						})
+					}, function (err, results) {
+						callback(null, 'Episodes')
+					})
+				} else {
+					res.render('admin/admin-episodes')
+				}
+			})
 		}
+	], function(err, results) {
+		console.log(viewData)
+		res.render('admin/admin-episodes', viewData)
 	})
 }
 
@@ -151,42 +166,31 @@ module.exports.getEpisodeById = function(req, res) {
 		status: {
 			approval: "unapproved"
 		},
-		transcriptions: [
-			{
-				language: "English",
-				content: "TEST CONTENT 1",
-				status: "Active",
-				isActive: true,
-				showApproval: false
-			},
-			{
-				language: "Spanish",
-				content: "TEST CONTENT 2",
-				status: "Active",
-				isActive: true,
-				showApproval: false
-			},
-			{
-				language: "German",
-				content: "TEST CONTENT 3",
-				status: "Not active",
-				isActive: false,
-				showApproval: true
-			}
-		]
+		transcriptions: []
 	}
-	sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
-		data.title = returned[0].title
-		data.video = returned[0].ytURL
-		data.status.approval = returned[0].approved
-		data.id = returned[0].id
-		sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: returned[0].UserId}).success(function(user) {
-			if (user[0].name) {
-				data.author = user[0].name
-			} else {
-				data.author = "Unknown"
-			}
-			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: returned[0].id}).success(function(shownotes) {
+	async.series([
+		function(callback) { // Load episode
+			sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
+				data.title = returned[0].title
+				data.video = returned[0].ytURL
+				data.status.approval = returned[0].approved
+				data.id = returned[0].id
+				data.UserId = returned[0].UserId
+				callback(null, "data")
+			})
+		},
+		function(callback) { // Load core data
+			sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: data.UserId}).success(function(user) {
+				if (user[0].name) {
+					data.author = user[0].name
+				} else {
+					data.author = "Unknown"
+				}
+				callback(null, "author")
+			})
+		},
+		function(callback) { // Load shownotes
+			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: data.id}).success(function(shownotes) {
 				if (shownotes.length > 0) {
 					data.shownotes = shownotes[0].content.toString()
 					data.shownotesLang = shownotes[0].language
@@ -194,18 +198,38 @@ module.exports.getEpisodeById = function(req, res) {
 					data.shownotes = null
 					data.shownotesLang = null
 				}
-				sequelize.query('SELECT tagId FROM EpisodesTags WHERE EpisodeId = :id', null, {raw: true}, {id: returned[0].id}).success(function(tags) {
-					tags.forEach(function(item) {
-						sequelize.query('SELECT text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
-							tag.forEach(function(rawTag) {
-								data.tags.push(rawTag.text)
-							})
+				callback(null, "shownotes")
+			})
+		},
+		function(callback) { // Load tags
+			sequelize.query('SELECT tagId FROM EpisodesTags WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(tags) {
+				tags.forEach(function(item) {
+					sequelize.query('SELECT text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
+						tag.forEach(function(rawTag) {
+							data.tags.push(rawTag.text)
 						})
+						callback(null, "tags")
 					})
-					res.render('admin/admin-episodes-specific', data)
 				})
 			})
-		})
+		},
+		function(callback) { // Load transcriptions
+			sequelize.query('SELECT * FROM Transcriptions WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(trans) {
+				trans.forEach(function(item) {
+					var elem = item
+					if (elem.approved == 1) {
+						elem.isActive = true
+					} else {
+						elem.isActive = false
+					}
+					data.transcriptions.push(elem)
+				})
+				console.log(data.transcriptions)
+				callback(null, "transcriptions")
+			})
+		}
+	], function(err, results) {
+		res.render('admin/admin-episodes-specific', data)
 	})
 }
 
