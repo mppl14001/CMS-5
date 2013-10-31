@@ -169,7 +169,7 @@ module.exports.getEpisodeById = function(req, res) {
 		transcriptions: []
 	}
 	async.series([
-		function(callback) {
+		function(callback) { // Load episode
 			sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
 				data.title = returned[0].title
 				data.video = returned[0].ytURL
@@ -179,7 +179,7 @@ module.exports.getEpisodeById = function(req, res) {
 				callback(null, "data")
 			})
 		},
-		function(callback) {
+		function(callback) { // Load core data
 			sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: data.UserId}).success(function(user) {
 				if (user[0].name) {
 					data.author = user[0].name
@@ -189,7 +189,7 @@ module.exports.getEpisodeById = function(req, res) {
 				callback(null, "author")
 			})
 		},
-		function(callback) {
+		function(callback) { // Load shownotes
 			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: data.id}).success(function(shownotes) {
 				if (shownotes.length > 0) {
 					data.shownotes = shownotes[0].content.toString()
@@ -201,7 +201,7 @@ module.exports.getEpisodeById = function(req, res) {
 				callback(null, "shownotes")
 			})
 		},
-		function(callback) {
+		function(callback) { // Load tags
 			sequelize.query('SELECT tagId FROM EpisodesTags WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(tags) {
 				tags.forEach(function(item) {
 					sequelize.query('SELECT text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
@@ -213,7 +213,7 @@ module.exports.getEpisodeById = function(req, res) {
 				})
 			})
 		},
-		function(callback) {
+		function(callback) { // Load transcriptions
 			sequelize.query('SELECT * FROM Transcriptions WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(trans) {
 				trans.forEach(function(item) {
 					data.transcriptions.push(item)
@@ -222,7 +222,6 @@ module.exports.getEpisodeById = function(req, res) {
 			})
 		}
 	], function(err, results) {
-		//if (results.length == )
 		res.render('admin/admin-episodes-specific', data)
 	})
 	sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
