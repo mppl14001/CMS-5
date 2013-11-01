@@ -8,14 +8,14 @@
     </tr>
     <tr>
       <th>Language</th>
-      <td><input type="text" name="language" id="language" value="{{user.language}}"></td>
+      <td><input type="text" name="language" id="language" value="{{user.language}}" class="form-control"></td>
     </tr>
   </table>
 
   <!-- todo: fix this terrible insecurity -->
   <input type="hidden" name="id" value="{{user.id}}">
 
-  <input type="submit">
+  <input type="submit" class="btn btn-primary">
 </form>
 
 <a href="/logout"><h3>Log out</h3></a>
