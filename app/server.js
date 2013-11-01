@@ -9,6 +9,7 @@ var express = require('express')
 var exphbs = require('express3-handlebars')
 var RedisStore = require('connect-redis')(express)
 var sessionStore = new RedisStore
+GLOBAL.languages = require('languages')
 
 // Config
 GLOBAL.config = nconf.argv()

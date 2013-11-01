@@ -16,8 +16,10 @@ module.exports.postPendingEpisodes = function(req, res) {
 
 module.exports.getSettings = function(req, res) {
 	if(req.user) {
+    console.log(languages.getAllLanguageCode().map(languages.getLanguageInfo))
 		res.render('admin/settings', {
-			user: req.user
+			user: req.user,
+      languages: languages.getAllLanguageCode().map(languages.getLanguageInfo)
 		})
 	}
 	else {

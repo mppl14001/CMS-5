@@ -1,5 +1,3 @@
-var languages = require('languages')
-
 module.exports.get = function(req, res) {
 	res.locals.page = 'dashboard'
 	var data = {
