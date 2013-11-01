@@ -19,11 +19,11 @@ module.exports.getSettings = function(req, res) {
 		res.render('admin/settings', {
 			user: req.user,
 			languages: languages.getAllLanguageCode().map(function(languageCode) {
-  			return {
-  			  nativeName: languages.getLanguageInfo(languageCode).nativeName,
-  			  code: languageCode,
-  			  selected: languageCode == req.user.language
-        }
+				return {
+					 nativeName: languages.getLanguageInfo(languageCode).nativeName,
+					 code: languageCode,
+					 selected: languageCode == req.user.language
+				}
 			})
 		})
 	}
@@ -35,8 +35,8 @@ module.exports.getSettings = function(req, res) {
 module.exports.postSettings = function (req, res) {
 	if (req.xhr) {
 		sequelize.query('UPDATE Users SET language = :language WHERE id = :id', null, { raw: true }, {
-		  language: req.body.language,
-		  id: req.body.id
+			language: req.body.language,
+			id: req.body.id
 		}).success(function() {
 			res.write(JSON.stringify({
 				status: 'ok',
