@@ -503,35 +503,3 @@ module.exports.changeRole = function(req, res) {
 		})
 	}
 }
-
-function requireViewer(req, res, next) {
-	if (req.user && req.user.role === 4) {
-		next()
-	} else {
-		res.redirect('/')
-	}
-}
-
-function requireModerator(req, res, next) {
-	if (req.user && (req.user.role === 3 || req.user.role === 1)) {
-		next()
-	} else {
-		res.redirect('/')
-	}
-}
-
-function requireScreencaster(req, res, next) {
-	if (req.user && (req.user.role === 2 || req.user.role === 1)) {
-		next()
-	} else {
-		res.redirect('/')
-	}
-}
-
-function requireAdmin(req, res, next) {
-	if (req.user && req.user.role === 1) {
-		next()
-	} else {
-		res.redirect('/')
-	}
-}
