@@ -26,5 +26,10 @@ module.exports.getSettings = function(req, res) {
 }
 
 module.exports.postSettings = function (req, res) {
-
+	sequelize.query("UPDATE Users SET language = :language WHERE id = :id", null, { raw: true }, { language: req.body.language, id: req.body.id }).success(function() {
+		// forward to user controll
+		res.end("success")
+	}).error(function() {
+		res.end("error")
+	})
 }
