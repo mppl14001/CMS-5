@@ -1,6 +1,6 @@
 module.exports.postApprovedEpisodes = function(req, res) {
 	if(req.xhr) {
-		sequelize.query("SELECT * FROM Episodes WHERE `UserId` = " + req.body.id + " AND `approved` = 1").success(function(results) {
+		sequelize.query('SELECT * FROM Episodes WHERE `UserId` = ' + req.body.id + ' AND `approved` = 1').success(function(results) {
 			res.send(results)
 		})
 	}
@@ -8,7 +8,7 @@ module.exports.postApprovedEpisodes = function(req, res) {
 
 module.exports.postPendingEpisodes = function(req, res) {
 	if (req.xhr) {
-		sequelize.query("SELECT * FROM Episodes WHERE `UserId` = " + req.body.id + " AND `approved` = 0").success(function(results) {
+		sequelize.query('SELECT * FROM Episodes WHERE `UserId` = ' + req.body.id + ' AND `approved` = 0').success(function(results) {
 			res.send(results)
 		})
 	}
@@ -34,7 +34,10 @@ module.exports.getSettings = function(req, res) {
 
 module.exports.postSettings = function (req, res) {
 	if (req.xhr) {
-		sequelize.query("UPDATE Users SET language = :language WHERE id = :id", null, { raw: true }, { language: req.body.language, id: req.body.id }).success(function() {
+		sequelize.query('UPDATE Users SET language = :language WHERE id = :id', null, { raw: true }, {
+		  language: req.body.language,
+		  id: req.body.id
+		}).success(function() {
 			res.write(JSON.stringify({
 				status: 'ok',
 				rowsModified: 1

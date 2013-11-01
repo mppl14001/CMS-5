@@ -32,7 +32,10 @@ module.exports.getTranscription = function(req, res) {
 
 module.exports.postTranscription = function(req, res) {
 	console.log(req.params.id, req.body.transcription)
-	Transcription.create({ text: req.body.transcription, EpisodeId: req.params.id }).success(function(result) {
+	Transcription.create({
+	  text: req.body.transcription,
+	  EpisodeId: req.params.id
+  }).success(function(result) {
 		res.redirect('/transcript/' + result.id)
 	})
 }

@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
 		ytURL: {
 			type: DataTypes.STRING,
 			isURL: true,
-			is: ["^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))(?:\S+)?$"]
+			is: ['^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))(?:\S+)?$']
 		},
 		published: {
 			type: DataTypes.BOOLEAN,

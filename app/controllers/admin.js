@@ -3,28 +3,28 @@ module.exports.get = function(req, res) {
 	var data = {
 			boxes: [
 				{
-					title: "Video views today",
+					title: 'Video views today',
 					data: 0
 				},
 				{
-					title: "Videos awaiting approval",
+					title: 'Videos awaiting approval',
 					data: 0
 				},
 				{
-					title: "Transcriptions awaiting approval",
+					title: 'Transcriptions awaiting approval',
 					data: 0
 				},
 				{
-					title: "Some title here",
-					data: "Data"
+					title: 'Some title here',
+					data: 'Data'
 				},
 				{
-					title: "Some title here",
-					data: "Data"
+					title: 'Some title here',
+					data: 'Data'
 				},
 				{
-					title: "Some title here",
-					data: "Data"
+					title: 'Some title here',
+					data: 'Data'
 				}
 			]
 		}
@@ -58,10 +58,10 @@ module.exports.get = function(req, res) {
 		function(err, callback) {
 			for (var i in callback) {
 				if (typeof(callback[i]) === 'object') { // Grammar easter egg
-					data['boxes'][i].title = callback[i][0]
-					data['boxes'][i].data = callback[i][1]
+					data.boxes[i].title = callback[i][0]
+					data.boxes[i].data = callback[i][1]
 				} else {
-					data['boxes'][i].data = callback[i]
+					data.boxes[i].data = callback[i]
 				}
 				if (i == callback.length - 1) res.render('admin/admin', data)
 			}
@@ -87,7 +87,7 @@ module.exports.getEpisodes = function(req, res) {
 							if (q2.length > 0) {
 								for (var o = 0;o < q2.length;o++) {
 									q2[o].content = q2[o].content.toString()
-									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,'$1…')
 								}
 								viewData['videos'][l].shownotes = q2
 								l++;
@@ -129,7 +129,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 							if (q2.length > 0) {
 								for (var o = 0;o < q2.length;o++) {
 									q2[o].content = q2[o].content.toString()
-									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,'$1…')
 								}
 								viewData['videos'][l].shownotes = q2
 								l++;
@@ -164,7 +164,7 @@ module.exports.getEpisodeById = function(req, res) {
 		shownotesLang: null,
 		tags: [],
 		status: {
-			approval: "unapproved"
+			approval: 'unapproved'
 		},
 		transcriptions: []
 	}
@@ -176,7 +176,7 @@ module.exports.getEpisodeById = function(req, res) {
 				data.status.approval = returned[0].approved
 				data.id = returned[0].id
 				data.UserId = returned[0].UserId
-				callback(null, "data")
+				callback(null, 'data')
 			})
 		},
 		function(callback) { // Load core data
@@ -184,9 +184,9 @@ module.exports.getEpisodeById = function(req, res) {
 				if (user[0].name) {
 					data.author = user[0].name
 				} else {
-					data.author = "Unknown"
+					data.author = 'Unknown'
 				}
-				callback(null, "author")
+				callback(null, 'author')
 			})
 		},
 		function(callback) { // Load shownotes
@@ -198,7 +198,7 @@ module.exports.getEpisodeById = function(req, res) {
 					data.shownotes = null
 					data.shownotesLang = null
 				}
-				callback(null, "shownotes")
+				callback(null, 'shownotes')
 			})
 		},
 		function(callback) { // Load tags
@@ -208,7 +208,7 @@ module.exports.getEpisodeById = function(req, res) {
 						tag.forEach(function(rawTag) {
 							data.tags.push(rawTag.text)
 						})
-						callback(null, "tags")
+						callback(null, 'tags')
 					})
 				})
 			})
@@ -221,7 +221,7 @@ module.exports.getEpisodeById = function(req, res) {
 					if (language.name) {
 						elem.language = language.name
 					} else {
-						elem.language = "Unsupported language"
+						elem.language = 'Unsupported language'
 					}
 					if (elem.approved == 1) {
 						elem.isActive = true
@@ -232,7 +232,7 @@ module.exports.getEpisodeById = function(req, res) {
 					}
 					data.transcriptions.push(elem)
 				}, function() {
-					callback(null, "transcriptions")					
+					callback(null, 'transcriptions')					
 				})
 			})
 		}
@@ -297,7 +297,10 @@ module.exports.removeScreencast = function(req, res) {
 
 module.exports.addTag = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Tags (text, episodeId) VALUES (:text, :id)', null, {raw: true}, {text: req.body.tag, id: req.body.id}).success(function(data) {
+		sequelize.query('INSERT INTO Tags (text, episodeId) VALUES (:text, :id)', null, {raw: true}, {
+		  text: req.body.tag,
+		  id: req.body.id
+		}).success(function(data) {
 			var json = {
 				status: 'ok',
 				tagAdded: req.body.tag
@@ -330,7 +333,11 @@ module.exports.editTranscription = function(req, res) {
 
 module.exports.addTranscription = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Transcriptions (approved, text, language, EpisodeId) VALUES (0, :content, :language, :episode)', null, {raw: true}, {content: req.body.content, language: req.body.language, episode: req.body.episodeId}).success(function(success) {
+		sequelize.query('INSERT INTO Transcriptions (approved, text, language, EpisodeId) VALUES (0, :content, :language, :episode)', null, {raw: true}, {
+		  content: req.body.content,
+		  language: req.body.language,
+		  episode: req.body.episodeId
+		}).success(function(success) {
 			var sJSON = {
 				status: 'ok',
 				rowsModified: 1
@@ -359,16 +366,16 @@ module.exports.activateTranscription = function(req, res) {
 	if (req.xhr) {
 		sequelize.query('UPDATE Transcriptions SET approved = 1 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
 			var json = {
-				status: "ok",
+				status: 'ok',
 				rowsModified: 1
 			}
 			res.write(JSON.stringify(json))
 			res.end()
 		}).error(function(error) {
 			var json = {
-				status: "error",
+				status: 'error',
 				rowsModified: null,
-				error: "sequelize"
+				error: 'sequelize'
 			}
 			res.write(JSON.stringify(json))
 			res.end()
@@ -380,16 +387,16 @@ module.exports.deactivateTranscription = function(req, res) {
 	if (req.xhr) {
 		sequelize.query('UPDATE Transcriptions SET approved = 0 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
 			var json = {
-				status: "ok",
+				status: 'ok',
 				rowsModified: 1
 			}
 			res.write(JSON.stringify(json))
 			res.end()
 		}).error(function(error) {
 			var json = {
-				status: "error",
+				status: 'error',
 				rowsModified: null,
-				error: "sequelize"
+				error: 'sequelize'
 			}
 			res.write(JSON.stringify(json))
 			res.end()
@@ -400,17 +407,23 @@ module.exports.deactivateTranscription = function(req, res) {
 module.exports.addUser = function(req, res) {
 	if (req.xhr) {
 
-		User.create({ name: res.body.name, role: res.body.role, twitter_username: res.body.twHandle, twitter_access_token: res.body.twAccessToken, twitter_access_secret: res.body.twAccessSecret }).success(function(user) {
+		User.create({
+		  name: res.body.name,
+		  role: res.body.role,
+		  twitter_username: res.body.twHandle,
+		  twitter_access_token: res.body.twAccessToken,
+		  twitter_access_secret: res.body.twAccessSecret
+		}).success(function(user) {
 			var json = {
-				status:'ok',
-				rowsModified:1
+				status: 'ok',
+				rowsModified: 1
 			}
 			res.write(JSON.stringify(json))
 			res.end()
 		}).error(function(error) {
 			var errorJson = {
-				status:'error',
-				rowsModified:null,
+				status: 'error',
+				rowsModified: null,
 				error: error
 			}
 			res.write(JSON.stringify(errorJson))
@@ -422,12 +435,15 @@ module.exports.addUser = function(req, res) {
 module.exports.deactivateUser = function(req, res) {
 	if (req.xhr) {
 		var roles = {
-			"admin": 1,
-			"screencaster": 2,
-			"moderator": 3,
-			"viewer":4
+			admin: 1,
+			screencaster: 2,
+      moderator: 3,
+			viewer: 4
 		}
-		sequelize.query('UPDATE Users SET active = 0 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
+		sequelize.query('UPDATE Users SET active = 0 WHERE id = :id AND role = :role', null, {raw: true}, {
+		  id: req.body.id,
+		  role: roles[req.body.role]
+		}).success(function(deleted) {
 			var successJson = {
 				status: 'ok',
 				rowsModified: 1,
@@ -450,10 +466,10 @@ module.exports.deactivateUser = function(req, res) {
 module.exports.activateUser = function(req, res) {
 	if (req.xhr) {
 		var roles = {
-			"admin": 1,
-			"screencaster": 2,
-			"moderator": 3,
-			"viewer":4
+			admin: 1,
+			screencaster: 2,
+			moderator: 3,
+			viewer:4
 		}
 		sequelize.query('UPDATE Users SET active = 1 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
 			var successJson = {
@@ -478,12 +494,15 @@ module.exports.activateUser = function(req, res) {
 module.exports.changeRole = function(req, res) {
 	if (req.xhr) {
 		var roles = {
-			"admin": 1,
-			"screencaster": 2,
-			"moderator": 3,
-			"viewer":4
+			admin: 1,
+			screencaster: 2,
+			moderator: 3,
+			viewer:4
 		}
-		sequelize.query('Update Users SET role = :role WHERE id = :id', null, {raw: true}, {role: roles[req.body.role], id:req.body.id}).success(function(data) {
+		sequelize.query('Update Users SET role = :role WHERE id = :id', null, {raw: true}, {
+		  role: roles[req.body.role],
+		  id: req.body.id
+		}).success(function(data) {
 			var successJson = {
 				status: 'ok',
 				rowsModified: 1
