@@ -76,17 +76,19 @@
 				<input type="hidden" name="transcription_data" value="{{this.text}}" />
 				<td>{{this.language}}</td>
 				{{#if this.isActive}}
-				<td><p class="active">Active</p></td>
+				<td class="status-text"><p class="active">Active</p></td>
 				{{else}}
-				<td><p class="active warning">Awaiting Approval</p></td>
+				<td class="status-text"><p class="active warning">Awaiting Approval</p></td>
 				{{/if}}
-				<td>
+				<td class="buttons">
 					<button type="button" class="btn btn-default" onclick="displayTranscriptionData({{@index}});">Edit</button>
-					{{#if showApproval}}
-					<button type="button" class="btn btn-success activate" onclick="activateTranscription({{this.id}}, {{../../id}});">Approve</button>
-					{{else}}
-					<button type="button" class="btn btn-danger deactivate" onclick="deactivateTranscription({{this.id}}, {{../../id}});">Remove</button>
-					{{/if}}
+					<div class="approval" style="display:inline-block;">
+						{{#if showApproval}}
+						<button type="button" class="btn btn-success activate" onclick="activateTranscription({{@index}}, {{this.id}}, {{../../id}});">Approve</button>
+						{{else}}
+						<button type="button" class="btn btn-danger deactivate" onclick="deactivateTranscription({{@index}}, {{this.id}}, {{../../id}});">Remove</button>
+						{{/if}}
+					</div>
 				</td>
 			</tr>
 			{{/transcriptions}}
@@ -191,7 +193,7 @@
 			show: true
 		})
 	}
-	function activateTranscription(id, episode) {
+	function activateTranscription(index, id, episode) {
 		$.ajax({
 			url: '/api/admin/episode/transcript/activate',
 			data: {
@@ -202,14 +204,15 @@
 			success:function(c) {
 				var json = $.parseJSON(c)
 				if (json.status === 'ok') {
-					
+					$(".transcriptions table tbody tr:eq("+index+") .buttons .approval").html('<button type="button" class="btn btn-danger deactivate" onclick="deactivateTranscription('+index+', '+id+', '+episode+');">Remove</button>')
+					$(".transcriptions table tbody tr:eq("+index+") .status-text p").text('Active').removeClass('warning').addClass('active')					
 				} else {
 					
 				}
 			}
 		})	
 	}
-	function deactivateTranscription(id, episode) {
+	function deactivateTranscription(index, id, episode) {
 		$.ajax({
 			url: '/api/admin/episode/transcript/deactivate',
 			data: {
@@ -220,7 +223,8 @@
 			success:function(c) {
 				var json = $.parseJSON(c)
 				if (json.status === 'ok') {
-					
+					$(".transcriptions table tbody tr:eq("+index+") .buttons .approval").html('<button type="button" class="btn btn-success activate" onclick="activateTranscription('+index+', '+id+', '+episode+');">Approve</button>')
+					$(".transcriptions table tbody tr:eq("+index+") .status-text p").text('Awaiting Approval').removeClass('active').addClass('warning')
 				} else {
 					
 				}
