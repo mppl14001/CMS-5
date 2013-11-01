@@ -11,13 +11,14 @@
 	    <td><input type="text" name="language" id="language" value="{{user.language}}" class="form-control"></td>
 	  </tr>
 	</table>
+
+  <!-- todo: fix this terrible insecurity -->
+  <input type="hidden" name="id" value="{{user.id}}">
+
+  <input type="submit" class="btn btn-primary" value="Update">
 </form>
 
-<!-- todo: fix this terrible insecurity -->
-<input type="hidden" name="id" value="{{user.id}}">
-
-<button type="button" class="btn btn-primary" name="submitSettings">Submit</button>
-
-<script>	
-	//$("#user-form").submit()
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script>
+	$("#user-form").ajaxForm()
 </script>
