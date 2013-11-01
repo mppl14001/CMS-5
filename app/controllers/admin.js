@@ -1,3 +1,5 @@
+var languages = require('languages')
+
 module.exports.get = function(req, res) {
 	res.locals.page = 'dashboard'
 	var data = {
@@ -217,6 +219,12 @@ module.exports.getEpisodeById = function(req, res) {
 			sequelize.query('SELECT * FROM Transcriptions WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(trans) {
 				trans.forEach(function(item) {
 					var elem = item
+					var language = languages.getLanguageInfo(elem.language)
+					if (language.name || language.nativeName) {
+						elem.language = language.nativeName
+					} else {
+						elem.language = "Unsupported language"
+					}
 					if (elem.approved == 1) {
 						elem.isActive = true
 						elem.showApproval = false
