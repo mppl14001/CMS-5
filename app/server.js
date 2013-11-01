@@ -160,7 +160,6 @@ app.get('/logout', function(req, res) {
 	res.redirect('/')
 })
 
-
 /*
 	Screencast submission
 */
@@ -197,29 +196,29 @@ app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
 
 // Admin APIs
 
-app.post('/api/admin/episode/approve', adminController.approveScreencast)
+app.post('/api/admin/episode/approve', requireAdmin, adminController.approveScreencast)
 
-app.post('/api/admin/episode/remove', adminController.removeScreencast)
+app.post('/api/admin/episode/remove', requireAdmin, adminController.removeScreencast)
 
-app.post('/api/admin/episode/tags/add', adminController.addTag)
+app.post('/api/admin/episode/tags/add', requireAdmin, adminController.addTag)
 
-app.post('/api/admin/episode/tags/remove', adminController.removeTag)
+app.post('/api/admin/episode/tags/remove', requireAdmin, adminController.removeTag)
 
-app.post('/api/admin/episode/transcript/edit', adminController.editTranscription)
+app.post('/api/admin/episode/transcript/edit', requireAdmin, adminController.editTranscription)
 
-app.post('/api/admin/episode/transcript/add', adminController.addTranscription)
+app.post('/api/admin/episode/transcript/add', requireAdmin, adminController.addTranscription)
 
-app.post('/api/admin/episode/transcript/remove', adminController.removeTranscription)
+app.post('/api/admin/episode/transcript/remove', requireAdmin, adminController.removeTranscription)
 
-app.post('/api/admin/episode/transcript/activate', adminController.activateTranscription)
+app.post('/api/admin/episode/transcript/activate', requireAdmin, adminController.activateTranscription)
 
-app.post('/api/admin/episode/transcript/deactivate', adminController.deactivateTranscription)
+app.post('/api/admin/episode/transcript/deactivate', requireAdmin, adminController.deactivateTranscription)
 
-app.post('/api/admin/user/add', adminController.addUser)
+app.post('/api/admin/user/add', requireAdmin, adminController.addUser)
 
-app.post('/api/admin/user/deactivate', adminController.deactivateUser)
+app.post('/api/admin/user/deactivate', requireAdmin, adminController.deactivateUser)
 
-app.post('/api/admin/user/activate', adminController.activateUser)
+app.post('/api/admin/user/activate', requireAdmin, adminController.activateUser)
 
 app.post('/api/admin/user/role', adminController.changeRole)
 
@@ -232,3 +231,35 @@ app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 app.listen(config.get('port') || 3000)
 
 module.exports.app = app
+
+function requireViewer(req, res, next) {
+	if (req.user && req.user.role === 4) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}
+
+function requireModerator(req, res, next) {
+	if (req.user && (req.user.role === 3 || req.user.role === 1)) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}
+
+function requireScreencaster(req, res, next) {
+	if (req.user && (req.user.role === 2 || req.user.role === 1)) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}
+
+function requireAdmin(req, res, next) {
+	if (req.user && req.user.role === 1) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}
