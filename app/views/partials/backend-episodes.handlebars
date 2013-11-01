@@ -9,13 +9,13 @@
 				</div>
 				<a href="/admin/episodes/pending/{{this.id}}"><h3>{{this.title}}</h3></a>
 				<p style="font-size:13px;color:#aaa;">{{this.shownotes.0.shortened}}</p>
-				{{#if admin}} 
+				{{#if admin}}
 					<button type="button" class="btn btn-success" style="float:right;" onclick="approveVideo({{this.id}})">Approve</button>
 				{{else}}
 				{{/if}}
 			</li>
 				{{/each}}
-			{{#if admin}}	
+			{{#if admin}}
 				<script type="text/javascript">
 					function approveVideo(id) {
 						$.ajax({
@@ -43,8 +43,8 @@
 				<h3>There are no videos waiting to be approved.</h3>
 				{{#else}}
 				<h3>{{#if admin}}
-					There are no approved videos. 
-					{{#else}} 
+					There are no approved videos.
+					{{#else}}
 					:(, you don't have any videos approved yet, hold tight and wait, or submit a new video.
 					{{/if}}</h3>
 				{{/if}}

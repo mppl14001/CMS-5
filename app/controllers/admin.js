@@ -38,7 +38,7 @@ module.exports.get = function(req, res) {
 								  'Video awaiting approval' :
 								  'Videos awaiting approval'
 					callback(null, [grammar, query.length])
-				})			
+				})
 			},
 			function(callback) {
 				sequelize.query('SELECT * FROM Transcriptions WHERE approved = 0').success(function(query2) {
@@ -232,7 +232,7 @@ module.exports.getEpisodeById = function(req, res) {
 					}
 					data.transcriptions.push(elem)
 				}, function() {
-					callback(null, 'transcriptions')					
+					callback(null, 'transcriptions')
 				})
 			})
 		}

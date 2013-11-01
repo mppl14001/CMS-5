@@ -75,7 +75,7 @@ passport.use(new TwitterStrategy({
 		twitter_access_secret: tokenSecret
 	}).success(function(user, created) {
 		if (!created) {
-			user.updateAttributes({ 
+			user.updateAttributes({
 				name: profile.displayName,
 				twitter_id: profile.id,
 				twitter_username: profile.username,
@@ -116,8 +116,8 @@ app.engine('handlebars', exphbs({
 			}
 		},
 		ifUserLanguage: function(user, code, block) {
-      return block[code == user.language ? 'fn' : 'inverse'](this)      
-		},		
+      return block[code == user.language ? 'fn' : 'inverse'](this)
+		},
 		ifUserIsAdmin: function(user, block) {
 			if (user && user.role == 1 /* admin */) return block.fn(this)
 			return block.inverse(this)

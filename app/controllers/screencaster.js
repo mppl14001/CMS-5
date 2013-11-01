@@ -4,7 +4,7 @@ module.exports.getPending = function(req, res) {
 		auth = true
 	}
 
-	if (auth == false) { 
+	if (auth == false) {
 		res.redirect('http://' + req.headers.host)
 		res.end()
 	}
@@ -44,7 +44,7 @@ module.exports.getApproved = function(req, res) {
 		auth = true
 	}
 
-	if (auth == false) { 
+	if (auth == false) {
 		req.redirect('../')
 		res.end()
 	}
@@ -85,7 +85,7 @@ module.exports.getNew = function(req, res) {
 		auth = true
 	}
 
-	if (auth == false) { 
+	if (auth == false) {
 		req.redirect('http://' + req.headers.host)
 		res.end()
 	}
