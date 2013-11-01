@@ -1,5 +1,6 @@
 <h1>{{user.name}}</h1>
 
+<<<<<<< HEAD
 <table class="table">
   <tr>
     <th>Role</th>
@@ -10,8 +11,28 @@
     <td><input type="text" name="language" id="language" value="{{user.language}}"></td>
   </tr>
 </table>
+=======
+<form method="post">
+  <table class="table">
+    <tr>
+      <th>Role</th>
+      <td>{{userRoleToString user.role}}</td>
+    </tr>
+    <tr>
+      <th>Language</th>
+      <td><input type="text" name="language" id="language" value="{{user.language}}" class="form-control"></td>
+    </tr>
+  </table>
+>>>>>>> 9b89f89206c17b6dbe36e504a7b9935d63bdf0eb
 
 <!-- todo: fix this terrible insecurity -->
 <input type="hidden" name="id" value="{{user.id}}">
 
+<<<<<<< HEAD
 <button type="button" class="btn btn-primary" name="submitSettings">Submit</button>
+=======
+  <input type="submit" class="btn btn-primary">
+</form>
+
+<a href="/logout"><h3>Log out</h3></a>
+>>>>>>> 9b89f89206c17b6dbe36e504a7b9935d63bdf0eb
