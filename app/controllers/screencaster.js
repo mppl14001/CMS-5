@@ -90,6 +90,6 @@ module.exports.getNew = function(req, res) {
 		res.end()
 	}
 
-	res.render('screencasters/screencasters-new-episode');
+	res.render('screencasters/screencasters-new-episode')
 
 }

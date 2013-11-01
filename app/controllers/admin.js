@@ -79,7 +79,7 @@ module.exports.getEpisodes = function(req, res) {
 		function (callback) {
 			Episode.findAll({ where: { approved: 1} }).success(function(query) {
 				if (query.length > 0) {
-					var l = 0;
+					var l = 0
 					async.eachSeries(query, function (item, callback2) {
 						viewData['videos'].push(query[l]['dataValues'])
 						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData['videos'][l].id})
@@ -90,7 +90,7 @@ module.exports.getEpisodes = function(req, res) {
 									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,'$1…')
 								}
 								viewData['videos'][l].shownotes = q2
-								l++;
+								l++
 								callback2(null, 'ShownotesAreABitch')
 							} else {
 								callback2(null, 'ShownotesAreABitchButDontExist')
@@ -121,7 +121,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 		function (callback) {
 			Episode.findAll({ where: { approved: 0} }).success(function(query) {
 				if (query.length > 0) {
-					var l = 0;
+					var l = 0
 					async.eachSeries(query, function (item, callback2) {
 						viewData['videos'].push(query[l]['dataValues'])
 						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData['videos'][l].id})
@@ -132,7 +132,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 									q2[o].shortened = q2[o].content.replace(/(([^\s]+\s\s*){30})(.*)/,'$1…')
 								}
 								viewData['videos'][l].shownotes = q2
-								l++;
+								l++
 								callback2(null, 'ShownotesAreABitch')
 							} else {
 								callback2(null, 'ShownotesAreABitchButDontExist')

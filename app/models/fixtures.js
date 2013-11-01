@@ -21,7 +21,7 @@ function createEpisode(episode, episodeCallback) {
 	var allTranscriptions = []
 	var allTags = []
 
-	var episode;
+	var episode
 
 	async.parallel([
 		function(shownotesCallback) {
