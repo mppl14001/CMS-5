@@ -2,10 +2,13 @@
 
 <form method="post" id="user-form">
 	<table class="table">
+    {{#ifUserIsViewer user}}
+    {{else}}
 	  <tr>
 	    <th>Role</th>
 	    <td>{{userRoleToString user.role}}</td>
 	  </tr>
+    {{/ifUserIsViewer}}
 	  <tr>
 	    <th>Language</th>
 

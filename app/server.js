@@ -129,7 +129,11 @@ app.engine('handlebars', exphbs({
 		ifUserIsModerator: function(user, block) {
 			if (user && user.role == 3 /* moderator */) return block.fn(this)
 			return block.inverse(this)
-		}
+		},
+    ifUserIsViewer: function(user, block) {
+      if (user && user.role == 4 /* viewer */) return block.fn(this)
+      return block.inverse(this)
+    }
 	}
 }))
 app.use(express.cookieParser())
