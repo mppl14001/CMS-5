@@ -220,8 +220,8 @@ module.exports.getEpisodeById = function(req, res) {
 				trans.forEach(function(item) {
 					var elem = item
 					var language = languages.getLanguageInfo(elem.language)
-					if (language.name || language.nativeName) {
-						elem.language = language.nativeName
+					if (language.name) {
+						elem.language = language.name
 					} else {
 						elem.language = "Unsupported language"
 					}
