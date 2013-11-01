@@ -108,15 +108,15 @@ app.engine('handlebars', exphbs({
 		},
 		userRoleToString: function(role) {
 			switch (role) {
-				case 1:  return "Admin"
-				case 2:  return "Screencaster"
-				case 3:  return "Moderator"
+				case 1:  return 'Admin'
+				case 2:  return 'Screencaster'
+				case 3:  return 'Moderator'
 				// 4 should be viewer, so just let it hit default.
-				default: return "Viewer"
+				default: return 'Viewer'
 			}
 		},
 		ifUserLanguage: function(user, code, block) {
-      return block[code == user.language ? "fn" : "inverse"](this)      
+      return block[code == user.language ? 'fn' : 'inverse'](this)      
 		},		
 		ifUserIsAdmin: function(user, block) {
 			if (user && user.role == 1 /* admin */) return block.fn(this)
