@@ -9,8 +9,8 @@
         <td>{{userRoleToString user.role}}</td>
       </tr>
 		{{/ifUserIsViewer}}
-		 <tr>
-			 <th>Language</th>
+		<tr>
+		 	<th>Language</th>
 
 			<td>
 				<select name="language" id="language" class="form-control">
@@ -28,7 +28,9 @@
 	<input type="submit" class="btn btn-primary" value="Update">
 </form>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <script>
 	$("#user-form").ajaxForm()
+	$("#language").chosen()
 </script>
