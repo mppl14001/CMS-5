@@ -1,7 +1,7 @@
 var passport = require("passport")
 var passportTwitter = require("passport-twitter")
 
-module.exports = function(key, secret) {
+module.exports = function(app, key, secret) {
   var twitterConfig = { key: key, secret: secret }
 
   var TwitterStrategy = passportTwitter.Strategy
@@ -54,6 +54,9 @@ module.exports = function(key, secret) {
       return done(error, null)
     })
   }))
+
+  app.use(passport.initialize())
+  app.use(passport.session())
 
   return passport
 }

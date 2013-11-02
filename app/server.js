@@ -1,14 +1,10 @@
 // Node Module Requirements
-var path = require('path')
 var nconf = require('nconf')
+var path = require('path')
 var passport = require('passport')
 var passportTwitter = require('passport-twitter')
 var Sequelize = require('sequelize')
 GLOBAL.async = require('async')
-var express = require('express')
-var exphbs = require('express3-handlebars')
-var RedisStore = require('connect-redis')(express)
-var sessionStore = new RedisStore
 GLOBAL.languages = require('languages')
 GLOBAL._ = require('lodash')
 
@@ -43,26 +39,10 @@ var userController = require('./controllers/user.js')
 var screencasterController = require('./controllers/screencaster.js')
 var searchController = require('./controllers/search.js')
 
-// Passport
-var passport = require("./passport.js")(twitterConfig.key, twitterConfig.secret)
-
 // Express
-var app = express()
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'handlebars')
-app.engine('handlebars', exphbs({
-	partialsDir: path.join(__dirname, 'views', 'partials'),
-	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars'),
-	helpers: require("./views/helpers.js")
-}))
-app.use(express.cookieParser())
-app.use(express.json())
-app.use(express.urlencoded())
-app.use(express.methodOverride())
-app.use(express.session({ secret: 'CodePilot', store: sessionStore }))
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(passport.initialize())
-app.use(passport.session())
+var app = require("./app")
+
+var passport = require('./passport')(app, twitterConfig.key, twitterConfig.secret)
 
 app.use(function(req, res, next) {
 	res.locals.user = req.user
