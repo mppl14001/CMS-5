@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize')
 
-var fixtures = require(__dirname + '/fixtures.js')
+var fixtures = require(__dirname + '/../misc/fixtures.js')
 
 var trackChanges = require(__dirname + '/../misc/changes.js')
 
