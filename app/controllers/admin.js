@@ -299,21 +299,47 @@ module.exports.removeScreencast = function(req, res) {
 
 module.exports.addTag = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Tags (text, episodeId) VALUES (:text, :id)', null, {raw: true}, {text: req.body.tag, id: req.body.id}).success(function(data) {
-			var json = {
-				status: 'ok',
-				tagAdded: req.body.tag
+		var tag, episode
+		async.parallel([
+			function(callback) {
+				Episode.find({where: {id: req.body.id}, limit: 1}).success(function(retrievedEpisode) {
+					episode = retrievedEpisode
+					callback(null, retrievedEpisode)
+				}).failure(function(error) {
+					callback(error, null)
+				})
+			}, function(callback) {
+				Tag.findOrCreate({text: req.body.tag}, {}).success(function(retrievedTag) {
+					tag = retrievedTag
+					callback(null, retrievedTag)
+				}).failure(function(error) {
+					callback(error, null)
+				})
 			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function() {
-			var json = {
-				status: 'error',
-				tagAdded: null,
-				error: ''
+		], function(error, results) {
+			if (error) {
+				var json = {
+					status: 'error',
+					tagAdded: null,
+					error: error
+				}
+				res.send(JSON.stringify(json))
+				return
 			}
-			res.write(JSON.write(json))
-			res.end()
+			episode.addTag(tag).success(function() {
+				var json = {
+					status: 'ok',
+					tagAdded: req.body.tag
+				}
+				res.send(JSON.stringify(json))
+			}).failure(function(error) {
+				var json = {
+					status: 'error',
+					tagAdded: null,
+					error: error
+				}
+				res.send(JSON.stringify(json))
+			})
 		})
 	}
 }
