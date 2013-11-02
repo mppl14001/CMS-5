@@ -8,3 +8,5 @@ module.exports = function(next) {
     next()
   })
 }
+
+mongoose.connect('mongodb://localhost/codepilot-dev')
