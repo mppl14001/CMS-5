@@ -1,0 +1,87 @@
+{
+	"users": [
+		{
+			"name": "Lester Tester",
+			"role": 2,
+			"twitter_id": "876432",
+			"twitter_username": "LesterTheTester00",
+			"twitter_access_token": "<redacted>",
+			"twitter_access_secret": "<redacted>",
+			"active": 1,
+			"episodes": [
+				{
+					"title": "Screencast #1",
+					"ytURL": "http://youtube.com/1",
+					"published": true,
+					"approved": true,
+					"shownotes": [
+						{
+							"content": "I coded stuff.",
+							"language": "en"
+						},
+						{
+							"content": "I coded stuff in Spanish.",
+							"language": "es"
+						}
+					],
+					"transcriptions": [
+						{
+							"approved": true,
+							"text": "So you click this and type this and you're done!",
+							"language": "en"
+						},
+						{
+							"approved": false,
+							"text": "So you click this and type this and you're done (IN SPANISH!)!",
+							"language": "es"
+						}
+					],
+					"tags": [
+						{
+							"text": "Introduction"
+						},
+						{
+							"text": "Programming"
+						}
+					]
+				},
+				{
+					"title": "Screencast #2",
+					"ytURL": "http://youtube.com/2",
+					"published": false,
+					"approved": true,
+					"shownotes": [
+						{
+							"content": "I coded a lot of stuff.",
+							"language": "en"
+						},
+						{
+							"content": "I coded a lot of stuff in Spanish.",
+							"language": "es"
+						}
+					],
+					"transcriptions": [
+						{
+							"approved": true,
+							"text": "Click click click",
+							"language": "en"
+						},
+						{
+							"approved": false,
+							"text": "Click click click (IN SPANISH!)!",
+							"language": "es"
+						}
+					],
+					"tags": [
+						{
+							"text": "Node.js"
+						},
+						{
+							"text": "Objective-C"
+						}
+					]
+				}
+			]
+		}
+	]
+}

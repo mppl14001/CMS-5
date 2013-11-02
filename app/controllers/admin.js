@@ -190,26 +190,34 @@ module.exports.getEpisodeById = function(req, res) {
 		},
 		function(callback) { // Load shownotes
 			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(shownotes) {
-				data.shownotes = shownotes
-				console.log("shownotes", shownotes)
+				if (shownotes.lenght > 0) {
+					data.shownotes = shownotes
+				}
 				callback(null, 'shownotes')
 			})
 		},
 		function(callback) { // Load tags
 			sequelize.query('SELECT tagId FROM EpisodesTags WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(tags) {
-				tags.forEach(function(item) {
-					sequelize.query('SELECT text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
-						tag.forEach(function(rawTag) {
-							data.tags.push(rawTag.text)
+				if (tags.length > 0) {
+					tags.forEach(function(item) {
+						sequelize.query('SELECT id, text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
+							tag.forEach(function(rawTag) {
+								var tags = {}
+								tags.id   = rawTag.id
+								tags.text = rawTag.text
+								data.tags.push(tags)
+							})
+							callback(null, 'tags')
 						})
-						callback(null, 'tags')
 					})
-				})
+				} else {
+					callback(null, 'tags')
+				}
 			})
 		},
 		function(callback) { // Load transcriptions
 			sequelize.query('SELECT * FROM Transcriptions WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(trans) {
-				trans.forEach(function(item) {
+				_.each(trans, function(item) {
 					var elem = item
 					var language = languages.getLanguageInfo(elem.language)
 					if (language.name) {
@@ -225,9 +233,8 @@ module.exports.getEpisodeById = function(req, res) {
 						elem.showApproval = true
 					}
 					data.transcriptions.push(elem)
-				}, function() {
-					callback(null, 'transcriptions')
-				})
+				})	
+				callback(null, 'transcriptions')
 			})
 		}
 	], function(err, results) {
@@ -338,7 +345,22 @@ module.exports.addTag = function(req, res) {
 
 module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
-
+		sequelize.query('DELETE FROM EpisodesTags WHERE TagId = :id LIMIT 1', null, {raw: true}, {id: req.body.tag}).success(function() {
+			var json = {
+				status: 'ok',
+				rowsModified: 1
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		}).error(function(error) {
+			var json = {
+				status: 'error',
+				rowsModified: null,
+				error: error
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		})
 	}
 }
 

@@ -8,32 +8,38 @@
 	</div>
 </div>
 <div class="description col-md-12" style="margin-top:25px;">
-  <h3>Shownotes</h3>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Language</th>
-        <th>Status</th>
-        <th>Controls</th>
-      </tr>
-    </thead>
-    {{#each shownotes}}
-    <tr>
-      <td>{{languageName language}}</td>
-      <td><!-- this needs added --></td>
-      <td><!-- this too. --></td>
-    </tr>
-    {{/each}}
-  </table>
+	<h3>Shownotes</h3>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Language</th>
+				<th>Status</th>
+				<th>Controls</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<input type="hidden" name="transcription_lang" value="null" />
+				<input type="hidden" name="transcription_data" value="null" />
+				<button type="button" class="btn btn-primary" onclick="addShownote();">Add Shownote</button>
+			</tr>
+			{{#each shownotes}}
+			<tr>
+				<td>{{languageName language}}</td>
+				<td><!-- this needs added --></td>
+				<td><!-- this too. --></td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
 </div>
 <div class="tags col-md-12" style="margin-top:25px;">
 	<h3>Tags</h3>
 	<ul class="list-unstyled">
 		{{#tags}}
-			<li style="margin-bottom:5px;">{{this}}</li>
+			<li style="margin-bottom:5px;" data-id="{{this.id}}">{{this.text}}</li>
 		{{/tags}}
-		<li>
+		<li class="button">
 			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i> Add more</a>
 		</li>
 	</ul>
@@ -62,7 +68,7 @@
 		<h4>Visibility</h4>
 		<div class="button-cont">
 			{{#if status.approval}}
-			<p class="active">Approved</p>
+			<p class="text-success">Approved</p>
 			<button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo({{id}});">Remove</button>
 			{{else}}
 			<p class="text-warning">Awaiting approval</p>
@@ -81,11 +87,16 @@
 		<thead>
 			<tr>
 				<th>Language</th>
-				<th>Status</th>
+				<th class="col-md-5">Status</th>
 				<th>Controls</th>
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<input type="hidden" name="transcription_lang" value="null" />
+				<input type="hidden" name="transcription_data" value="null" />
+				<button type="button" class="btn btn-primary" onclick="addTranscription();">Add Transcription</button>
+			</tr>
 			{{#transcriptions}}
 			<tr>
 				<input type="hidden" name="transcription_lang" value="{{this.language}}" />
@@ -184,6 +195,23 @@
 			}
 		})
 	}
+	function removeTag(id) {
+		$.ajax({
+			url: '/api/admin/episode/tags/remove',
+			data: {
+				tag: id
+			},
+			type: 'POST',
+			success: function(j) {
+				var json = $.parseJSON(j)
+				if (json.status === 'ok') {
+					$(".tags ul li[data-id="+id+"]").remove()
+				} else {
+					console.log('An error has occured')
+				}
+			}
+		})
+	}
 	function updateTranscription(language) {
 		$.ajax({
 			url: '',
@@ -201,8 +229,13 @@
 		})
 	}
 	function displayTranscriptionData(id) {
-		var text = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_data"]').val()
-		var language = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_lang"]').val()
+		var text, language
+		if (id) {
+			text = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_data"]').val()
+			language = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_lang"]').val()			
+		} else {
+			langauge = "English"
+		}
 		$(".transcriptions .modal textarea").val(text)
 		$(".transcriptions .modal input[name='transcriptionLanguage']").val(language)
 		$(".transcriptions .modal").modal({
@@ -247,4 +280,26 @@
 			}
 		})
 	}
+	function addTranscription() {
+		displayTranscriptionData()
+
+	}
+	function addShownote() {
+
+	}
+	$(".tags .list-unstyled li").hover(function() {
+		if (!$(this).hasClass("button")) {
+			$(this).data('text', $(this).text()).addClass('btn-remove').html('<i class="fa fa-times"></i> Close').addClass('text-danger')
+		}
+	}, function() {
+		if (!$(this).hasClass("button")) {
+			$(this).text($(this).data('text')).removeClass('text-danger').removeClass('btn-remove')
+		}		
+	})
+	$(".tags .list-unstyled li").click(function(li) {
+		if ($(this).hasClass('btn-remove')) {
+			var id = $(this).data('id')
+			removeTag(id)
+		}
+	})
 </script>

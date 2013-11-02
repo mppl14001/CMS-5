@@ -90,9 +90,9 @@
 					var accountClosed = (action == 'deactivate')
 					status.text(accountClosed ? 'Inactive' : 'Active')
 					if (accountClosed) {
-						status.addClass("text-error")
+						status.addClass("text-danger")
 					} else {
-						status.removeClass("text-error")
+						status.removeClass("text-danger")
 					}
 					if (accountClosed) {
 						button.removeClass('btn-danger').addClass('btn-success')

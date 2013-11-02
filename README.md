@@ -27,7 +27,7 @@ This is most likely caused because your MySQL server is not running. Start the s
 
 `Error: OAuthStrategy requires session support. Did you forget app.use(express.session(...))?`
 
-This is caused by your Redis server not running. Start your Redis server using the `redis-server` command and try again.
+This is caused by your Redis server not running. Start your Redis server using the `redis-server` command and try again. Make sure to restart the app after you've done this.
 
 `TypeError: Cannot read property 'sequelize' of undefined`
 
