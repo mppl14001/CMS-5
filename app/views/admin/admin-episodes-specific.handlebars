@@ -195,6 +195,9 @@
 			}
 		})
 	}
+	function removeTage(id) {
+		
+	}
 	function updateTranscription(language) {
 		$.ajax({
 			url: '',
@@ -212,8 +215,13 @@
 		})
 	}
 	function displayTranscriptionData(id) {
-		var text = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_data"]').val()
-		var language = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_lang"]').val()
+		var text, language
+		if (id) {
+			text = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_data"]').val()
+			language = $('.transcriptions tr:eq('+(id+1)+') input[name="transcription_lang"]').val()			
+		} else {
+			langauge = "English"
+		}
 		$(".transcriptions .modal textarea").val(text)
 		$(".transcriptions .modal input[name='transcriptionLanguage']").val(language)
 		$(".transcriptions .modal").modal({
@@ -257,5 +265,11 @@
 				}
 			}
 		})
+	}
+	function addTranscription() {
+		displayTranscriptionData()
+	}
+	function addShownote() {
+
 	}
 </script>
