@@ -1,3 +1,5 @@
+var mongoose = require('mongoose')
+
 var EpisodeSchema = new mongoose.Schema({
 	title: {type: String},
 	ytURL: {type: String},
