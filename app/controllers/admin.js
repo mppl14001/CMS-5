@@ -296,16 +296,6 @@ module.exports.removeScreencast = function(req, res) {
 }
 
 module.exports.addTag = function(req, res) {
-<<<<<<< HEAD
-	if (req.xhr) {	
-		sequelize.query('INSERT INTO Tags (text, episodeId) VALUES (:text, :id)', null, {raw: true}, {
-		  text: req.body.tag,
-		  id: req.body.id
-		}).success(function(data) {
-			var json = {
-				status: 'ok',
-				tagAdded: req.body.tag
-=======
 	if (req.xhr) {
 		var tag, episode
 		async.parallel([
@@ -323,7 +313,6 @@ module.exports.addTag = function(req, res) {
 				}).failure(function(error) {
 					callback(error, null)
 				})
->>>>>>> 1099da98e0a2cb38e88fa19dc9b04037a2b75413
 			}
 		], function(error, results) {
 			if (error) {
@@ -335,10 +324,6 @@ module.exports.addTag = function(req, res) {
 				res.send(JSON.stringify(json))
 				return
 			}
-<<<<<<< HEAD
-			res.write(JSON.stringify(json))
-			res.end()
-=======
 			episode.addTag(tag).success(function() {
 				var json = {
 					status: 'ok',
@@ -353,7 +338,6 @@ module.exports.addTag = function(req, res) {
 				}
 				res.send(JSON.stringify(json))
 			})
->>>>>>> 1099da98e0a2cb38e88fa19dc9b04037a2b75413
 		})
 	}
 }
