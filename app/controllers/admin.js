@@ -296,7 +296,7 @@ module.exports.removeScreencast = function(req, res) {
 }
 
 module.exports.addTag = function(req, res) {
-	if (req.xhr) {
+	if (req.xhr) {	
 		sequelize.query('INSERT INTO Tags (text, episodeId) VALUES (:text, :id)', null, {raw: true}, {
 		  text: req.body.tag,
 		  id: req.body.id
@@ -313,7 +313,7 @@ module.exports.addTag = function(req, res) {
 				tagAdded: null,
 				error: ''
 			}
-			res.write(JSON.write(json))
+			res.write(JSON.stringify(json))
 			res.end()
 		})
 	}
@@ -327,7 +327,21 @@ module.exports.removeTag = function(req, res) {
 
 module.exports.editTranscription = function(req, res) {
 	if (req.xhr) {
-
+		sequelize.query('UPDATE Transcriptions SET text = :text AND language = :language WHERE id = :id', null, {raw: true}, {text: req.body.text, language: req.body.language, id: req.body.id}).success(function(data) {
+			var json = {
+				status: 'ok',
+				rowsModified: 1
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		}).error(function(error) {
+			var json = {
+				status: 'error',
+				rowsModified: 0
+			}
+			res.write(JSON.stringify(json))
+			res.end()
+		})
 	}
 }
 
