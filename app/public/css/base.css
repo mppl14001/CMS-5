@@ -19,18 +19,6 @@ html[xmlns] .clearfix {
 	height: 1%;
 }
 
-.active {
-	color:#34b611;
-}
-
-.error {
-	color:#db0b0b;
-}
-
-.warning {
-	color:#debb1a;
-}
-
 .tags ul li {
 	display:inline-block;
 	background-color:#eee;

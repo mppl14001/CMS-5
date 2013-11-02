@@ -20,7 +20,6 @@ module.exports.getSettings = function(req, res) {
 			user: req.user,
 			languages: languages.getAllLanguageCode().map(function(languageCode) {
 				return {
-					 nativeName: languages.getLanguageInfo(languageCode).nativeName,
 					 code: languageCode,
 					 selected: languageCode == req.user.language
 				}

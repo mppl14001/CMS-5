@@ -8,8 +8,24 @@
 	</div>
 </div>
 <div class="description col-md-12" style="margin-top:25px;">
-	<h3>Description</h3>
-	<p>{{shownotes}}</p>
+  <h3>Shownotes</h3>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Language</th>
+        <th>Status</th>
+        <th>Controls</th>
+      </tr>
+    </thead>
+    {{#each shownotes}}
+    <tr>
+      <td>{{languageName language}}</td>
+      <td><!-- this needs added --></td>
+      <td><!-- this too. --></td>
+    </tr>
+    {{/each}}
+  </table>
 </div>
 <div class="tags col-md-12" style="margin-top:25px;">
 	<h3>Tags</h3>
@@ -18,7 +34,7 @@
 			<li style="margin-bottom:5px;">{{this}}</li>
 		{{/tags}}
 		<li>
-			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i>Add more</a>
+			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i> Add more</a>
 		</li>
 	</ul>
 </div>
@@ -49,7 +65,7 @@
 			<p class="active">Approved</p>
 			<button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo({{id}});">Remove</button>
 			{{else}}
-			<p class="warning">Awaiting approval</p>
+			<p class="text-warning">Awaiting approval</p>
 			<button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo({{id}});">Approve</button>
 			{{/if}}
 		</div>
@@ -64,9 +80,9 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<td>Language</td>
-				<td class="col-md-5">Status</td>
-				<td class="col-md-3">Controls</td>
+				<th>Language</th>
+				<th>Status</th>
+				<th>Controls</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -76,9 +92,9 @@
 				<input type="hidden" name="transcription_data" value="{{this.text}}" />
 				<td>{{this.language}}</td>
 				{{#if this.isActive}}
-				<td class="status-text"><p class="active">Active</p></td>
+				<td class="status-text"><p class="text-success">Active</p></td>
 				{{else}}
-				<td class="status-text"><p class="active warning">Awaiting Approval</p></td>
+				<td class="status-text"><p class="text-warning">Awaiting Approval</p></td>
 				{{/if}}
 				<td class="buttons">
 					<button type="button" class="btn btn-default" onclick="displayTranscriptionData({{@index}});">Edit</button>
@@ -123,7 +139,7 @@
 			success:function(v) {
 				var json = $.parseJSON(v)
 				if (json.status === "ok") {
-					$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
+					$('.status .approval p.text-warning').text('Approved').addClass('text-success').removeClass('text-warning')
 					$('.status .approval button[name=\'approveVideo\']').remove();
 					$('.status .approval .button-cont').html('<p class="active">Approved</p><button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo('+id+');">Remove</button>')
 				} else {
@@ -140,9 +156,9 @@
 			success:function(v) {
 				var json = $.parseJSON(v)
 				if (json.status === "ok") {
-					$('.status .approval p.warning').text('Approved').addClass('active').removeClass('warning')
+					$('.status .approval p.text-warning').text('Approved').addClass('text-success').removeClass('text-warning')
 					$('.status .approval button[name=\'approveVideo\']').remove();
-					$('.status .approval .button-cont').html('<p class="warning">Awaiting approval</p><button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo('+id+');">Approve</button>')
+					$('.status .approval .button-cont').html('<p class="text-warning">Awaiting approval</p><button type="button" class="btn btn-success" name="approveVideo" onclick="approveVideo('+id+');">Approve</button>')
 				} else {
 					console.log('An error has occured')
 				}
@@ -160,7 +176,7 @@
 			success:function(b) {
 				var json = $.parseJSON(b)
 				if (json.status === 'ok') {
-					$("<li style='margin-bottom:5px;'>"+json.tagAdded+"</li>").insertBefore($(".tags ul li:last-child"))
+					$("<li style='margin-bottom:5px;margin-right:4px;'>"+json.tagAdded+"</li>").insertBefore($(".tags ul li:last-child"))
 					$('#addTag').modal('hide')
 				} else {
 					console.log('An error has occured.')
@@ -205,7 +221,7 @@
 				var json = $.parseJSON(c)
 				if (json.status === 'ok') {
 					$(".transcriptions table tbody tr:eq("+index+") .buttons .approval").html('<button type="button" class="btn btn-danger deactivate" onclick="deactivateTranscription('+index+', '+id+', '+episode+');">Remove</button>')
-					$(".transcriptions table tbody tr:eq("+index+") .status-text p").text('Active').removeClass('warning').addClass('active')
+					$(".transcriptions table tbody tr:eq("+index+") .status-text p").text('Active').removeClass('text-warning').addClass('text-success')
 				} else {
 
 				}
@@ -224,7 +240,7 @@
 				var json = $.parseJSON(c)
 				if (json.status === 'ok') {
 					$(".transcriptions table tbody tr:eq("+index+") .buttons .approval").html('<button type="button" class="btn btn-success activate" onclick="activateTranscription('+index+', '+id+', '+episode+');">Approve</button>')
-					$(".transcriptions table tbody tr:eq("+index+") .status-text p").text('Awaiting Approval').removeClass('active').addClass('warning')
+					$(".transcriptions table tbody tr:eq("+index+") .status-text p").text('Awaiting Approval').removeClass('text-success').addClass('text-warning')
 				} else {
 
 				}
