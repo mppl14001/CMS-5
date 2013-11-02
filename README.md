@@ -49,6 +49,11 @@ There are two configuration options that can be specified through the command li
 1. `--force-upgrade`: This option will force the database to upgrade it's schema. The default value is false. **Warning: This will remove ALL data from the database!**
 2. `--seed-data`: This option will specify if data should be seeded into the data based on the information in `app/models/fixtures.json`. By default, data will be not be seeded.
 
+Unit Tests
+----------
+
+To test the app, run `make test`.
+
 ---
 
 **Special thanks to:** (in no particular order)
