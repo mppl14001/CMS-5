@@ -119,133 +119,15 @@ app.use(function(req, res, next) {
 	next()
 })
 
-app.get('/', function(req, res){
-	res.render('home', {
-		user: req.user
-	})
+require("./routes.js")(app, {
+	adminController: adminController,
+	episodeController: episodeController,
+	userController: userController,
+	screencasterController: screencasterController,
+	searchController: searchController,
+	passport: passport
 })
-
-app.get('/auth/twitter', passport.authenticate('twitter'))
-
-app.get('/auth/twitter/callback', passport.authenticate('twitter', {failureRedirect: '/fail'}), function(req, res) {
-	res.redirect('/')
-})
-
-app.get('/logout', function(req, res) {
-	req.logout()
-	res.redirect('/')
-})
-
-/*
-	Screencast submission
-*/
-
-app.get('/screencaster', screencasterController.getPending)
-
-app.get('/heyDanielYouShouldImplementThis', screencasterController.heyDanielYouShouldImplementThis)
-
-app.get('/screencaster/approved', screencasterController.getApproved)
-
-app.get('/:id(\\d+)', episodeController.getEpisodeById)
-
-app.get('/settings', userController.getSettings)
-
-app.post('/settings', userController.postSettings)
-
-app.get('/transcription/:id', episodeController.getTranscription)
-
-app.post('/transcription/:id', episodeController.postTranscription)
-
-app.get('/transcript/:id', episodeController.getTranscript)
-
-/*
-	Admin routing
-*/
-
-app.get('/admin', requireAdmin, adminController.get)
-
-app.get('/admin/episodes', requireAdmin, adminController.getEpisodes)
-
-app.get('/admin/episodes/pending', requireAdmin, adminController.getPendingEpisodes)
-
-app.get('/admin/episodes/pending/:id(\\d+)', requireAdmin, adminController.getEpisodeById)
-
-app.get('/admin/episodes/:id(\\d+)', requireAdmin, adminController.getEpisodeById)
-
-app.get('/admin/users', requireAdmin, adminController.getUsers)
-
-app.get('/admin/users/:id(\\d+)', requireAdmin, adminController.getUserById)
-
-// Admin APIs
-
-app.post('/api/admin/episode/approve', requireAdmin, adminController.approveScreencast)
-
-app.post('/api/admin/episode/remove', requireAdmin, adminController.removeScreencast)
-
-app.post('/api/admin/episode/tags/add', requireAdmin, adminController.addTag)
-
-app.post('/api/admin/episode/tags/remove', requireAdmin, adminController.removeTag)
-
-app.post('/api/admin/episode/transcript/edit', requireAdmin, adminController.editTranscription)
-
-app.post('/api/admin/episode/transcript/add', requireAdmin, adminController.addTranscription)
-
-app.post('/api/admin/episode/transcript/remove', requireAdmin, adminController.removeTranscription)
-
-app.post('/api/admin/episode/transcript/activate', requireAdmin, adminController.activateTranscription)
-
-app.post('/api/admin/episode/transcript/deactivate', requireAdmin, adminController.deactivateTranscription)
-
-app.post('/api/admin/user/add', requireAdmin, adminController.addUser)
-
-app.post('/api/admin/user/deactivate', requireAdmin, adminController.deactivateUser)
-
-app.post('/api/admin/user/activate', requireAdmin, adminController.activateUser)
-
-app.post('/api/admin/user/role', adminController.changeRole)
-
-// Screencaster APIs
-
-app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
-
-app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
-
-// Search
-
-app.get('/search', searchController.getSearch)
 
 app.listen(config.get('port') || 3000)
 
 module.exports.app = app
-
-function requireViewer(req, res, next) {
-	if (req.user && req.user.role === 4) {
-		next()
-	} else {
-		res.render('status/403')
-	}
-}
-
-function requireModerator(req, res, next) {
-	if (req.user && (req.user.role === 3 || req.user.role === 1)) {
-		next()
-	} else {
-		res.render('status/403')
-	}
-}
-
-function requireScreencaster(req, res, next) {
-	if (req.user && (req.user.role === 2 || req.user.role === 1)) {
-		next()
-	} else {
-		res.render('status/403')
-	}
-}
-
-function requireAdmin(req, res, next) {
-	if (req.user && req.user.role === 1) {
-		next()
-	} else {
-		res.render('status/403')
-	}
-}
