@@ -116,7 +116,7 @@ app.engine('handlebars', exphbs({
 			}
 		},
 		ifUserLanguage: function(user, code, block) {
-      return block[code == user.language ? 'fn' : 'inverse'](this)
+			return block[code == user.language ? 'fn' : 'inverse'](this)
 		},
 		ifUserIsAdmin: function(user, block) {
 			if (user && user.role == 1 /* admin */) return block.fn(this)
