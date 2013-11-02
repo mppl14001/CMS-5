@@ -23,6 +23,6 @@ app/public/components/*
 
 dump.rdb
 
-app/models/fixtures.json
+app/misc/fixtures.json
 
 Procfile
