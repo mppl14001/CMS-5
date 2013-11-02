@@ -101,6 +101,6 @@ describe('Sequelize', function() {
 					}
 				})
 			}
-		]);
+		])
 	})
 })

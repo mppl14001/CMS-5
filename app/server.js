@@ -40,6 +40,7 @@ var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
 var userController = require('./controllers/user.js')
 var screencasterController = require('./controllers/screencaster.js')
+var searchController = require('./controllers/search.js')
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
@@ -241,6 +242,10 @@ app.post('/api/admin/user/role', adminController.changeRole)
 app.post('/api/approvedEpisodes', userController.postApprovedEpisodes)
 
 app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
+
+// Search
+
+app.get('/search', searchController.getSearch)
 
 app.listen(config.get('port') || 3000)
 
