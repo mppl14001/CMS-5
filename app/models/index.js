@@ -1,6 +1,3 @@
-var mongoose = require('mongoose')
-
-// connect
 require("./connect")
 
 module.exports.User = require(__dirname + '/user.js')
