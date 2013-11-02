@@ -21,7 +21,10 @@
     "async": "~0.2.9",
     "connect-redis": "~1.4.5",
     "languages": "~0.1.3",
-    "lodash": "~2.2.1"
+    "lodash": "~2.2.1",
+    "mongoose": "~3.8.0",
+    "mongoose-models": "~0.3.1",
+    "validator": "~2.0.0"
   },
   "devDependencies": {
     "mocha": "latest",
@@ -30,6 +33,6 @@
   },
   "scripts": {
     "start": "node app/server.js",
-    "postinstall" : "bower install"
+    "postinstall": "bower install"
   }
 }
