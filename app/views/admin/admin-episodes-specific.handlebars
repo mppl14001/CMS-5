@@ -8,24 +8,30 @@
 	</div>
 </div>
 <div class="description col-md-12" style="margin-top:25px;">
-  <h3>Shownotes</h3>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Language</th>
-        <th>Status</th>
-        <th>Controls</th>
-      </tr>
-    </thead>
-    {{#each shownotes}}
-    <tr>
-      <td>{{languageName language}}</td>
-      <td><!-- this needs added --></td>
-      <td><!-- this too. --></td>
-    </tr>
-    {{/each}}
-  </table>
+	<h3>Shownotes</h3>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Language</th>
+				<th>Status</th>
+				<th>Controls</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<input type="hidden" name="transcription_lang" value="null" />
+				<input type="hidden" name="transcription_data" value="null" />
+				<button type="button" class="btn btn-primary" onclick="addShownote();">Add Shownote</button>
+			</tr>
+			{{#each shownotes}}
+			<tr>
+				<td>{{languageName language}}</td>
+				<td><!-- this needs added --></td>
+				<td><!-- this too. --></td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
 </div>
 <div class="tags col-md-12" style="margin-top:25px;">
 	<h3>Tags</h3>
@@ -81,11 +87,16 @@
 		<thead>
 			<tr>
 				<th>Language</th>
-				<th>Status</th>
+				<th class="col-md-5">Status</th>
 				<th>Controls</th>
 			</tr>
 		</thead>
 		<tbody>
+			<tr>
+				<input type="hidden" name="transcription_lang" value="null" />
+				<input type="hidden" name="transcription_data" value="null" />
+				<button type="button" class="btn btn-primary" onclick="addTranscription();">Add Transcription</button>
+			</tr>
 			{{#transcriptions}}
 			<tr>
 				<input type="hidden" name="transcription_lang" value="{{this.language}}" />
