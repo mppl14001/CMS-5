@@ -1,7 +1,5 @@
 var mongoose = require('mongoose')
 
-var db = mongoose.connection
-
 var EpisodeSchema = new mongoose.Schema({
 	title: {type: String},
 	ytURL: {type: String},
@@ -23,9 +21,4 @@ var EpisodeSchema = new mongoose.Schema({
 
 var EpisodeModel = mongoose.model('Episode', EpisodeSchema)
 
-db.on('error', console.error)
-db.once('open', function() {
-
-})
-
-mongoose.connect('mongodb://localhost/codepilot-dev')
+module.exports.Episode = EpisodeModel
