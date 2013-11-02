@@ -1,0 +1,24 @@
+{
+  "name": "CMS",
+  "version": "0.0.1",
+  "homepage": "https://github.com/CodePilotCo/CMS",
+  "authors": [
+    "Will Smidlein <Will@WillSmidlein.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "bootstrap": "~3.0.1",
+    "chosen-chi": "~0.9.14",
+    "font-awesome": "~4.0.1",
+    "moment": "~2.4.0",
+    "jquery-form": "~3.45.0"
+  }
+}

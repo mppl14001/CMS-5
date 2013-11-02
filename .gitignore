@@ -19,6 +19,7 @@ node_modules
 config.json
 
 app/public/.sass-cache/*
+app/public/components/*
 
 dump.rdb
 
