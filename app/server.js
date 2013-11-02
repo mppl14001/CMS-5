@@ -23,6 +23,9 @@ if (!dbConfig || !dbConfig.name || !dbConfig.user) {
 	process.exit(1)
 }
 
+// Lodash
+GLOBAL._ = require('lodash')
+
 // DB
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
 	logging: config.get('logging:sequelize') || false
