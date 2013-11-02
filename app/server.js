@@ -115,6 +115,9 @@ app.engine('handlebars', exphbs({
 				default: return 'Viewer'
 			}
 		},
+		languageString: function(languageCode) {
+  		return languages.getLanguageInfo(languageCode).name
+		},
 		ifUserLanguage: function(user, code, block) {
 			return block[code == user.language ? 'fn' : 'inverse'](this)
 		},
