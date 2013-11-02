@@ -9,11 +9,9 @@ module.exports = function(app, key, secret) {
     	done(null, user._id)
 	})
 	passport.deserializeUser(function(obj, done) {
-    	User.findById(obj).success(function(user) {
-      		done(null, user)
-		}).failure(function(error) {
-			done(error, null)
-		})
+    	models.User.findById(obj, function(err, user) {
+    		done(err, user)
+    	})
   	})
 
 	if (!twitterConfig || !twitterConfig.key || !twitterConfig.secret) {
@@ -26,7 +24,7 @@ module.exports = function(app, key, secret) {
 		consumerSecret: twitterConfig.secret,
 		callbackURL: 'http://localhost:'+ (config.get('port') || 3000) +'/auth/twitter/callback'
 	}, function(token, tokenSecret, profile, done) {
-		User.findOneAndUpdate({twitter_id: profile.id}, {
+		models.User.findOneAndUpdate({twitter_id: profile.id}, {
 			name: profile.displayName,
 			twitter_id: profile.id,
 			twitter_username: profile.username,
@@ -38,7 +36,7 @@ module.exports = function(app, key, secret) {
 				return
 			}
 			if (!user) {
-				User.create({
+				models.User.create({
 					name: profile.displayName,
 					twitter_id: profile.id,
 					role: 4,
