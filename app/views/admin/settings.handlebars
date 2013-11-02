@@ -15,15 +15,12 @@
 			<td>
 				<select name="language" id="language" class="form-control">
 					{{#each languages}}
-						<option value="{{code}}" {{#if selected}}selected{{/if}}>{{nativeName}}</option>
+						<option value="{{code}}" {{#if selected}}selected{{/if}}>{{languageNativeName code}}</option>
 					{{/each}}
 				</select>
 			</td>
 		 </tr>
 	</table>
-
-	<!-- todo: fix this terrible insecurity -->
-	<input type="hidden" name="id" value="{{user.id}}">
 
 	<input type="submit" class="btn btn-primary" value="Update">
 </form>

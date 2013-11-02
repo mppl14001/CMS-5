@@ -160,8 +160,7 @@ module.exports.getEpisodeById = function(req, res) {
 		thumbnail: null,
 		video: null,
 		author: null,
-		shownotes: null,
-		shownotesLang: null,
+		shownotes: [],
 		tags: [],
 		status: {
 			approval: 'unapproved'
@@ -190,14 +189,9 @@ module.exports.getEpisodeById = function(req, res) {
 			})
 		},
 		function(callback) { // Load shownotes
-			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id LIMIT 1', null, {raw: true}, {id: data.id}).success(function(shownotes) {
-				if (shownotes.length > 0) {
-					data.shownotes = shownotes[0].content.toString()
-					data.shownotesLang = shownotes[0].language
-				} else {
-					data.shownotes = null
-					data.shownotesLang = null
-				}
+			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(shownotes) {
+				data.shownotes = shownotes
+				console.log("shownotes", shownotes)
 				callback(null, 'shownotes')
 			})
 		},

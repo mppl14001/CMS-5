@@ -1,26 +1,30 @@
-function uniqueArray(array) {
-	var unique = []
-	var ids = []
-	for (var i = 0; i < array.length; i++) {
-		if (ids.indexOf(array[i].id) === -1) {
-			unique.push(array[i])
-			ids.push(array[i].id)
-		}
+function filterByTags(episodes, tags, callback) {
+	if (tags.length === 0) {
+		callback(null, episodes)
+		return
 	}
-	return unique
-}
-
-function retrieveTags(tagStrings, callback) {
-	var tags = []
-	async.each(tagStrings, function(tagString, done) {
-		Tag.find({text: tagString}).success(function(tag) {
-			tags.push(tag)
+	var filtered = []
+	async.each(episodes, function(episode, done) {
+		episode.getTags().success(function(episodeTags) {
+			for (var i = 0; i < episodeTags.length; i++) {
+				console.log(tags.indexOf(episodeTags[i].text))
+				if (tags.indexOf(episodeTags[i].text) !== -1) {
+					filtered.push(episode)
+					done(null)
+					return
+				}
+			}
 			done(null)
+			return
 		}).failure(function(error) {
-			done(null)
+			done(error)
 		})
 	}, function(error) {
-		callback(tags)
+		if (error) {
+			callback(error, null)
+		} else {
+			callback(null, filtered)
+		}
 	})
 }
 
@@ -68,7 +72,6 @@ module.exports.getSearch = function(req, res) {
 			sequelize.query('SELECT * FROM Transcriptions WHERE MATCH (text) AGAINST ( :queryString );',  null, {raw: true}, {queryString: queryString}).success(function(results) {
 				async.each(results, function(item, done) {
 					var transcription = Transcription.build(item)
-
 					transcription.getEpisode().success(function(episode) {
 						matches.push(episode)
 						done(null)
@@ -88,8 +91,15 @@ module.exports.getSearch = function(req, res) {
 			return
 		} else {
 			//make it unique
-			var unique = uniqueArray(matches)
-			res.send(unique)
+			var unique = _.uniq(matches, function(match) {return match.id})
+			filterByTags(unique, filters, function(error, filtered) {
+				if (error) {
+					res.send(JSON.stringify(error))
+				} else {
+					res.send(JSON.stringify(filtered))
+				}
+
+			})
 		}
 	})
 }

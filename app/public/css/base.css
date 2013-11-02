@@ -19,18 +19,6 @@ html[xmlns] .clearfix {
 	height: 1%;
 }
 
-.active {
-	color:#34b611;
-}
-
-.error {
-	color:#db0b0b;
-}
-
-.warning {
-	color:#debb1a;
-}
-
 .tags ul li {
 	display:inline-block;
 	background-color:#eee;
@@ -44,8 +32,4 @@ html[xmlns] .clearfix {
 /* this selector is like this because fucking Bootstrap wanted a fucking specificity war. */
 table.table tbody > tr > td {
 	vertical-align: middle;
-}
-
-.unstyled {
-	padding: 0;
 }
