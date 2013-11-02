@@ -16,9 +16,9 @@
 				<td class="twitter"><a href="http://twitter.com/{{this.twitter_username}}">@{{this.twitter_username}}</a></td>
 				<td class="moment">{{this.createdAt}}</td>
 				{{#if this.active}}
-					<td class="status"><p class="active">Active</p></td>
+					<td class="status text-success">Active</td>
 				{{else}}
-					<td class="status error">Inactive</td>
+					<td class="status text-danger">Inactive</td>
 				{{/if}}
 				<td class="buttons">
 					<div class="col-md-6" style="text-align:right;">
