@@ -176,7 +176,7 @@
 			success:function(b) {
 				var json = $.parseJSON(b)
 				if (json.status === 'ok') {
-					$("<li style='margin-bottom:5px;'>"+json.tagAdded+"</li>").insertBefore($(".tags ul li:last-child"))
+					$("<li style='margin-bottom:5px;margin-right:4px;'>"+json.tagAdded+"</li>").insertBefore($(".tags ul li:last-child"))
 					$('#addTag').modal('hide')
 				} else {
 					console.log('An error has occured.')
