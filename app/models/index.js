@@ -72,6 +72,7 @@ async.parallel([
 })
 
 module.exports.episode.hasMany(module.exports.shownotes, {as: 'shownotes'})
+module.exports.shownotes.belongsTo(module.exports.episode, {as: 'episode'})
 module.exports.user.hasMany(module.exports.episode, {as: 'episodes'})
 module.exports.episode.belongsTo(module.exports.user, {as: 'author'})
 module.exports.episode.hasMany(module.exports.tag, {as: 'tags'})

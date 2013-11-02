@@ -1,3 +1,17 @@
+function retrieveTags(tagStrings, callback) {
+	var tags = []
+	async.each(tagStrings, function(tagString, done) {
+		Tag.find({text: tagString}).success(function(tag) {
+			tags.push(tag)
+			done(null)
+		}).failure(function(error) {
+			done(null)
+		})
+	}, function(error) {
+		callback(tags)
+	})
+}
+
 module.exports.getSearch = function(req, res) {
 	var queries = req.query.queryString.split(' ')
 	var queryString = ''
@@ -5,8 +19,9 @@ module.exports.getSearch = function(req, res) {
 		queryString += '\'' + queries[i] + '\''
 		if (i !== queries.length - 1) queryString += ','
 	}
-	var filters = req.query.tags.split(',')
-	
+	var filters
+	if (req.query.tags) filters = req.query.tags.split(',')
+	else filters = []
 	var matches = []
 	async.parallel([
 		function(callback) {
@@ -56,21 +71,8 @@ module.exports.getSearch = function(req, res) {
 		if (error) {
 			res.send(JSON.stringify(error))
 			return
+		} else {
+			res.send(matches)
 		}
-		var filteredMatches = []
-		var tags = []
-		async.each(filters, function(filter, done) {
-			Tag.find({text: filter}).success(function(tag) {
-				filteredMatches.push(tag)
-				done(null)
-			}).failure(function(error) {
-				done(error)
-			})
-		}, function(error) {
-			if (error) {
-
-			}
-			res.send(JSON.stringify(matches))
-		})
 	})
 }
