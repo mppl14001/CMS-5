@@ -8,8 +8,24 @@
 	</div>
 </div>
 <div class="description col-md-12" style="margin-top:25px;">
-	<h3>Description</h3>
-	<p>{{shownotes}}</p>
+  <h3>Shownotes</h3>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Language</th>
+        <th>Status</th>
+        <th>Controls</th>
+      </tr>
+    </thead>
+    {{#each shownotes}}
+    <tr>
+      <td>{{languageString language}}</td>
+      <td><!-- this needs added --></td>
+      <td><!-- this too. --></td>
+    </tr>
+    {{/each}}
+  </table>
 </div>
 <div class="tags col-md-12" style="margin-top:25px;">
 	<h3>Tags</h3>
