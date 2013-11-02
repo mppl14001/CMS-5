@@ -1,5 +1,8 @@
 var mongoose = require('mongoose')
 
+// connect
+require("./connect")
+
 module.exports.User = require(__dirname + '/user.js')
 module.exports.Episode = require(__dirname + '/episode.js')
 module.exports.Shownotes = require(__dirname + '/shownotes.js')
