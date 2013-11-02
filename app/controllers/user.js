@@ -32,10 +32,10 @@ module.exports.getSettings = function(req, res) {
 }
 
 module.exports.postSettings = function (req, res) {
-	if (req.xhr) {
+	if (req.xhr) {	
 		sequelize.query('UPDATE Users SET language = :language WHERE id = :id', null, { raw: true }, {
 			language: req.body.language,
-			id: req.body.id
+			id: req.user.id
 		}).success(function() {
 			res.write(JSON.stringify({
 				status: 'ok',
