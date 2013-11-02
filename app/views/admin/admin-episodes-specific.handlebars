@@ -68,7 +68,7 @@
 		<h4>Visibility</h4>
 		<div class="button-cont">
 			{{#if status.approval}}
-			<p class="active">Approved</p>
+			<p class="text-success">Approved</p>
 			<button type="button" class="btn btn-danger" name="removeVideo" onclick="deleteVideo({{id}});">Remove</button>
 			{{else}}
 			<p class="text-warning">Awaiting approval</p>
@@ -196,7 +196,7 @@
 		})
 	}
 	function removeTage(id) {
-		
+
 	}
 	function updateTranscription(language) {
 		$.ajax({
@@ -268,6 +268,7 @@
 	}
 	function addTranscription() {
 		displayTranscriptionData()
+
 	}
 	function addShownote() {
 
