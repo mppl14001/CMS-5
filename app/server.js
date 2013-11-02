@@ -174,6 +174,8 @@ app.get('/logout', function(req, res) {
 
 app.get('/screencaster', screencasterController.getPending)
 
+app.get('/heyDanielYouShouldImplementThis', screencasterController.heyDanielYouShouldImplementThis)
+
 app.get('/screencaster/approved', screencasterController.getApproved)
 
 app.get('/:id(\\d+)', episodeController.getEpisodeById)
