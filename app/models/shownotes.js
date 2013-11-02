@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
 
 		content: {
 			allowNull: false,
-			type: DataTypes.BLOB
+			type: DataTypes.TEXT
 		},
 		language: { // ISO 639-1
 			type: DataTypes.STRING,

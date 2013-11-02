@@ -93,3 +93,8 @@ module.exports.getNew = function(req, res) {
 	res.render('screencasters/screencasters-new-episode')
 
 }
+
+module.exports.heyDanielYouShouldImplementThis = function(req, res) {
+
+	res.render('screencasters/screencasters-new-episode')
+}
