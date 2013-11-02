@@ -1,3 +1,36 @@
 <h1>{{user.name}}</h1>
-<h3>Role: {{userRoleToString user.role}}</h3>
-<a href="/logout"><h3>Log out</h3></a>
+
+<form method="post" id="user-form">
+	<table class="table">
+		{{#ifUserIsViewer user}}
+		{{else}}
+      <tr>
+        <th>Role</th>
+        <td>{{userRoleToString user.role}}</td>
+      </tr>
+		{{/ifUserIsViewer}}
+		<tr>
+		 	<th>Language</th>
+
+			<td>
+				<select name="language" id="language" class="form-control">
+					{{#each languages}}
+						<option value="{{code}}" {{#if selected}}selected{{/if}}>{{nativeName}}</option>
+					{{/each}}
+				</select>
+			</td>
+		 </tr>
+	</table>
+
+	<!-- todo: fix this terrible insecurity -->
+	<input type="hidden" name="id" value="{{user.id}}">
+
+	<input type="submit" class="btn btn-primary" value="Update">
+</form>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.0/chosen.jquery.min.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script>
+	$("#user-form").ajaxForm()
+	$("#language").chosen()
+</script>

@@ -4,7 +4,7 @@ module.exports.getPending = function(req, res) {
 		auth = true
 	}
 
-	if (auth == false) { 
+	if (auth == false) {
 		res.redirect('http://' + req.headers.host)
 		res.end()
 	}
@@ -15,26 +15,26 @@ module.exports.getPending = function(req, res) {
 			var data = {
 				videos: []
 			}
-			data['videos'] = query
-			for (var i=0;i<data['videos'].length;i++) {
-				var element = data['videos'][i]
+			data.videos = query
+			for (var i=0;i<data.videos.length;i++) {
+				var element = data.videos[i]
 				var eId = element.id
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
 					if (shownotes.length > 0) {
 						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/, '$1…')
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
 					}
-					res.render("screencasters/screencasters-episodes-waiting-list", data)
+					res.render('screencasters/screencasters-episodes-waiting-list', data)
 				})
 			}
 		} else {
-			res.render("screencasters/screencasters-episodes-waiting-list")
+			res.render('screencasters/screencasters-episodes-waiting-list')
 		}
 	}).failure(function(query) {
-		res.render("screencasters/screencasters-episodes-waiting-list")
+		res.render('screencasters/screencasters-episodes-waiting-list')
 	})
 }
 
@@ -44,7 +44,7 @@ module.exports.getApproved = function(req, res) {
 		auth = true
 	}
 
-	if (auth == false) { 
+	if (auth == false) {
 		req.redirect('../')
 		res.end()
 	}
@@ -55,27 +55,27 @@ module.exports.getApproved = function(req, res) {
 			var data = {
 				videos: []
 			}
-			data['videos'] = query
-			for (var i=0;i<data['videos'].length;i++) {
-				var element = data['videos'][i]
+			data.videos = query
+			for (var i=0;i<data.videos.length;i++) {
+				var element = data.videos[i]
 				var eId = element.id
 				sequelize.query('SELECT * FROM Shownotes WHERE EpisodeId = ? LIMIT 1', null, {raw: true}, [eId]).success(function(shownotes) {
 					if (shownotes.length > 0) {
 						shownotes[0].content = shownotes[0].content.toString()
-						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/,"$1…")
+						shownotes[0].shortened = shownotes[0].content.replace(/(([^\s]+\s\s*){30})(.*)/, '$1…')
 						element.shownotes = shownotes
 					} else {
 						element.shownotes = null
 					}
 					console.log(element)
-					res.render("screencasters/screencasters-episodes-approved-list", data)
+					res.render('screencasters/screencasters-episodes-approved-list', data)
 				})
 			}
 		} else {
-			res.render("screencasters/screencasters-episodes-approved-list")
+			res.render('screencasters/screencasters-episodes-approved-list')
 		}
 	}).failure(function(query) {
-		res.render("screencasters/screencasters-episodes-approved-list")
+		res.render('screencasters/screencasters-episodes-approved-list')
 	})
 }
 
@@ -85,11 +85,16 @@ module.exports.getNew = function(req, res) {
 		auth = true
 	}
 
-	if (auth == false) { 
+	if (auth == false) {
 		req.redirect('http://' + req.headers.host)
 		res.end()
 	}
 
-	res.render("screencasters/screencasters-new-episode");
+	res.render('screencasters/screencasters-new-episode')
 
+}
+
+module.exports.heyDanielYouShouldImplementThis = function(req, res) {
+
+	res.render('screencasters/screencasters-new-episode')
 }

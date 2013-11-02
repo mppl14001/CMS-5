@@ -9,6 +9,7 @@ var express = require('express')
 var exphbs = require('express3-handlebars')
 var RedisStore = require('connect-redis')(express)
 var sessionStore = new RedisStore
+GLOBAL.languages = require('languages')
 
 // Config
 GLOBAL.config = nconf.argv()
@@ -38,7 +39,7 @@ GLOBAL.Tag = models.tag
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
 var userController = require('./controllers/user.js')
-var screencasterController = require('./controllers/screencaster.js');
+var screencasterController = require('./controllers/screencaster.js')
 
 // Passport
 var TwitterStrategy = passportTwitter.Strategy
@@ -74,7 +75,7 @@ passport.use(new TwitterStrategy({
 		twitter_access_secret: tokenSecret
 	}).success(function(user, created) {
 		if (!created) {
-			user.updateAttributes({ 
+			user.updateAttributes({
 				name: profile.displayName,
 				twitter_id: profile.id,
 				twitter_username: profile.username,
@@ -107,12 +108,15 @@ app.engine('handlebars', exphbs({
 		},
 		userRoleToString: function(role) {
 			switch (role) {
-				case 1:  return "Admin"
-				case 2:  return "Screencaster"
-				case 3:  return "Moderator"
+				case 1:  return 'Admin'
+				case 2:  return 'Screencaster'
+				case 3:  return 'Moderator'
 				// 4 should be viewer, so just let it hit default.
-				default: return "Viewer"
+				default: return 'Viewer'
 			}
+		},
+		ifUserLanguage: function(user, code, block) {
+			return block[code == user.language ? 'fn' : 'inverse'](this)
 		},
 		ifUserIsAdmin: function(user, block) {
 			if (user && user.role == 1 /* admin */) return block.fn(this)
@@ -125,7 +129,11 @@ app.engine('handlebars', exphbs({
 		ifUserIsModerator: function(user, block) {
 			if (user && user.role == 3 /* moderator */) return block.fn(this)
 			return block.inverse(this)
-		}
+		},
+    ifUserIsViewer: function(user, block) {
+      if (user && user.role == 4 /* viewer */) return block.fn(this)
+      return block.inverse(this)
+    }
 	}
 }))
 app.use(express.cookieParser())
@@ -160,12 +168,13 @@ app.get('/logout', function(req, res) {
 	res.redirect('/')
 })
 
-
 /*
 	Screencast submission
 */
 
 app.get('/screencaster', screencasterController.getPending)
+
+app.get('/heyDanielYouShouldImplementThis', screencasterController.heyDanielYouShouldImplementThis)
 
 app.get('/screencaster/approved', screencasterController.getApproved)
 
@@ -181,45 +190,49 @@ app.post('/transcription/:id', episodeController.postTranscription)
 
 app.get('/transcript/:id', episodeController.getTranscript)
 
-app.get('/admin',/*requireAdmin,*/ adminController.get)
+/*
+	Admin routing
+*/
 
-app.get('/admin/episodes',/*requireAdmin,*/ adminController.getEpisodes)
+app.get('/admin', requireAdmin, adminController.get)
 
-app.get('/admin/episodes/pending',/*requireAdmin,*/ adminController.getPendingEpisodes)
+app.get('/admin/episodes', requireAdmin, adminController.getEpisodes)
 
-app.get('/admin/episodes/pending/:id(\\d+)', /*requireAdmin,*/ adminController.getEpisodeById)
+app.get('/admin/episodes/pending', requireAdmin, adminController.getPendingEpisodes)
 
-app.get('/admin/episodes/:id(\\d+)',/*requireAdmin,*/ adminController.getEpisodeById)
+app.get('/admin/episodes/pending/:id(\\d+)', requireAdmin, adminController.getEpisodeById)
 
-app.get('/admin/users',/*requireAdmin,*/ adminController.getUsers)
+app.get('/admin/episodes/:id(\\d+)', requireAdmin, adminController.getEpisodeById)
 
-app.get('/admin/users/:id(\\d+)',/*requireAdmin,*/ adminController.getUserById)
+app.get('/admin/users', requireAdmin, adminController.getUsers)
+
+app.get('/admin/users/:id(\\d+)', requireAdmin, adminController.getUserById)
 
 // Admin APIs
 
-app.post('/api/admin/episode/approve', adminController.approveScreencast)
+app.post('/api/admin/episode/approve', requireAdmin, adminController.approveScreencast)
 
-app.post('/api/admin/episode/remove', adminController.removeScreencast)
+app.post('/api/admin/episode/remove', requireAdmin, adminController.removeScreencast)
 
-app.post('/api/admin/episode/tags/add', adminController.addTag)
+app.post('/api/admin/episode/tags/add', requireAdmin, adminController.addTag)
 
-app.post('/api/admin/episode/tags/remove', adminController.removeTag)
+app.post('/api/admin/episode/tags/remove', requireAdmin, adminController.removeTag)
 
-app.post('/api/admin/episode/transcript/edit', adminController.editTranscription)
+app.post('/api/admin/episode/transcript/edit', requireAdmin, adminController.editTranscription)
 
-app.post('/api/admin/episode/transcript/add', adminController.addTranscription)
+app.post('/api/admin/episode/transcript/add', requireAdmin, adminController.addTranscription)
 
-app.post('/api/admin/episode/transcript/remove', adminController.removeTranscription)
+app.post('/api/admin/episode/transcript/remove', requireAdmin, adminController.removeTranscription)
 
-app.post('/api/admin/episode/transcript/activate', adminController.activateTranscription)
+app.post('/api/admin/episode/transcript/activate', requireAdmin, adminController.activateTranscription)
 
-app.post('/api/admin/episode/transcript/deactivate', adminController.deactivateTranscription)
+app.post('/api/admin/episode/transcript/deactivate', requireAdmin, adminController.deactivateTranscription)
 
-app.post('/api/admin/user/add', adminController.addUser)
+app.post('/api/admin/user/add', requireAdmin, adminController.addUser)
 
-app.post('/api/admin/user/deactivate', adminController.deactivateUser)
+app.post('/api/admin/user/deactivate', requireAdmin, adminController.deactivateUser)
 
-app.post('/api/admin/user/activate', adminController.activateUser)
+app.post('/api/admin/user/activate', requireAdmin, adminController.activateUser)
 
 app.post('/api/admin/user/role', adminController.changeRole)
 
@@ -232,3 +245,35 @@ app.post('/api/pendingEpisodes', userController.postPendingEpisodes)
 app.listen(config.get('port') || 3000)
 
 module.exports.app = app
+
+function requireViewer(req, res, next) {
+	if (req.user && req.user.role === 4) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}
+
+function requireModerator(req, res, next) {
+	if (req.user && (req.user.role === 3 || req.user.role === 1)) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}
+
+function requireScreencaster(req, res, next) {
+	if (req.user && (req.user.role === 2 || req.user.role === 1)) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}
+
+function requireAdmin(req, res, next) {
+	if (req.user && req.user.role === 1) {
+		next()
+	} else {
+		res.redirect('/')
+	}
+}

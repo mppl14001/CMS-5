@@ -35,6 +35,14 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.INTEGER,
 			defaultValue: '1',
 			allowNull:false
+		},
+		language: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			defaultValue: 'en',
+			validate: {
+				len: 2
+			}
 		}
 
 	})
