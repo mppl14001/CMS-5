@@ -25,7 +25,7 @@ module.exports = function(app, key, secret) {
 		consumerKey: twitterConfig.key,
 		consumerSecret: twitterConfig.secret,
 		callbackURL: 'http://localhost:'+ (config.get('port') || 3000) +'/auth/twitter/callback'
-	}, function(token, tokenSecret, profile, done) {
+	}), function(token, tokenSecret, profile, done) {
 		User.findOneAndUpdate({twitter_id: profile.id}, {
 			name: profile.displayName,
 			twitter_id: profile.id,
