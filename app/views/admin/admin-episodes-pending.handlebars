@@ -12,7 +12,7 @@
 				<button type="button" class="btn btn-success" style="float:right;" onclick="approveVideo({{this.id}});">Approve</button>
 			</li>
 				{{/each}}
-			<script type="text/javascript">
+			<script>
 				function approveVideo(id) {
 					$.ajax({
 						url: '/api/admin/episode/approve/',
