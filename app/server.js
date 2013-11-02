@@ -10,6 +10,7 @@ var exphbs = require('express3-handlebars')
 var RedisStore = require('connect-redis')(express)
 var sessionStore = new RedisStore
 GLOBAL.languages = require('languages')
+GLOBAL._ = require('lodash')
 
 // Config
 GLOBAL.config = nconf.argv()
@@ -22,9 +23,6 @@ if (!dbConfig || !dbConfig.name || !dbConfig.user) {
 	console.log('FATAL ERROR: You must specify database information in the configuration to run the server.')
 	process.exit(1)
 }
-
-// Lodash
-GLOBAL._ = require('lodash')
 
 // DB
 GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
