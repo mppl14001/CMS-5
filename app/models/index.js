@@ -1,4 +1,4 @@
 var mongoose = require('mongoose')
 
-var User = require(__dirname + '/user.js')
-var Episode = require(__dirname + '/episode.js')
+GLOBAL.User = require(__dirname + '/user.js')
+GLOBAL.Episode = require(__dirname + '/episode.js')
