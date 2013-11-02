@@ -1,3 +1,15 @@
+function uniqueArray(array) {
+	var unique = []
+	var ids = []
+	for (var i = 0; i < array.length; i++) {
+		if (ids.indexOf(array[i].id) === -1) {
+			unique.push(array[i])
+			ids.push(array[i].id)
+		}
+	}
+	return unique
+}
+
 function retrieveTags(tagStrings, callback) {
 	var tags = []
 	async.each(tagStrings, function(tagString, done) {
@@ -20,8 +32,11 @@ module.exports.getSearch = function(req, res) {
 		if (i !== queries.length - 1) queryString += ','
 	}
 	var filters
-	if (req.query.tags) filters = req.query.tags.split(',')
-	else filters = []
+	if (req.query.tags) {
+		filters = req.query.tags.split(',')
+	} else {
+		filters = []
+	}
 	var matches = []
 	async.parallel([
 		function(callback) {
@@ -72,7 +87,9 @@ module.exports.getSearch = function(req, res) {
 			res.send(JSON.stringify(error))
 			return
 		} else {
-			res.send(matches)
+			//make it unique
+			var unique = uniqueArray(matches)
+			res.send(unique)
 		}
 	})
 }
