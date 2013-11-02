@@ -37,9 +37,9 @@
 	<h3>Tags</h3>
 	<ul class="list-unstyled">
 		{{#tags}}
-			<li style="margin-bottom:5px;">{{this}}</li>
+			<li style="margin-bottom:5px;" data-id="{{this.id}}">{{this.text}}</li>
 		{{/tags}}
-		<li>
+		<li class="button">
 			<a data-toggle="modal" href="#addTag" onclass="showAddTagModal();"><i class="fa fa-plus"></i> Add more</a>
 		</li>
 	</ul>
@@ -195,8 +195,22 @@
 			}
 		})
 	}
-	function removeTage(id) {
-
+	function removeTag(id) {
+		$.ajax({
+			url: '/api/admin/episode/tags/remove',
+			data: {
+				tag: id
+			},
+			type: 'POST',
+			success: function(j) {
+				var json = $.parseJSON(j)
+				if (json.status === 'ok') {
+					$(".tags ul li[data-id="+id+"]").remove()
+				} else {
+					console.log('An error has occured')
+				}
+			}
+		})
 	}
 	function updateTranscription(language) {
 		$.ajax({
@@ -273,4 +287,19 @@
 	function addShownote() {
 
 	}
+	$(".tags .list-unstyled li").hover(function() {
+		if (!$(this).hasClass("button")) {
+			$(this).data('text', $(this).text()).addClass('btn-remove').html('<i class="fa fa-times"></i> Close').addClass('text-danger')
+		}
+	}, function() {
+		if (!$(this).hasClass("button")) {
+			$(this).text($(this).data('text')).removeClass('text-danger').removeClass('btn-remove')
+		}		
+	})
+	$(".tags .list-unstyled li").click(function(li) {
+		if ($(this).hasClass('btn-remove')) {
+			var id = $(this).data('id')
+			removeTag(id)
+		}
+	})
 </script>
