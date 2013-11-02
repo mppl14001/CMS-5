@@ -29,6 +29,7 @@
     "supertest": "latest"
   },
   "scripts": {
-    "start": "node app/server.js"
+    "start": "node app/server.js",
+    "postinstall" : "bower install"
   }
 }
