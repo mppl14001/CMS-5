@@ -1,15 +1,3 @@
-function uniqueArray(array) {
-	var unique = []
-	var ids = []
-	for (var i = 0; i < array.length; i++) {
-		if (ids.indexOf(array[i].id) === -1) {
-			unique.push(array[i])
-			ids.push(array[i].id)
-		}
-	}
-	return unique
-}
-
 function filterByTags(episodes, tags, callback) {
 	if (tags.length === 0) {
 		callback(null, episodes)
@@ -103,7 +91,7 @@ module.exports.getSearch = function(req, res) {
 			return
 		} else {
 			//make it unique
-			var unique = uniqueArray(matches)
+			var unique = _.uniq(matches, function(match) {return match.id})
 			filterByTags(unique, filters, function(error, filtered) {
 				if (error) {
 					res.send(JSON.stringify(error))
