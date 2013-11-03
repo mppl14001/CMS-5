@@ -1,5 +1,4 @@
 // Node Module Requirements
-var nconf = 
 var path = require('path')
 var passport = require('passport')
 var passportTwitter = require('passport-twitter')
