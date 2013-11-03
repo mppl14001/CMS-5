@@ -6,7 +6,7 @@ var UserSchema = new mongoose.Schema({
 		index: true
 	},
 	name: {type: String},
-	role: {type: Number},
+	permissions: {type: Number},
 	twitter_id: {type: String},
 	twitter_username: {type: String},
 	twitter_access_token: {type: String},

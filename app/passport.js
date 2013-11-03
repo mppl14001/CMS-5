@@ -6,12 +6,12 @@ module.exports = function(app, key, secret) {
 
 	var TwitterStrategy = passportTwitter.Strategy
 	passport.serializeUser(function(user, done) {
-    	done(null, user._id)
+		done(null, user._id)
 	})
 	passport.deserializeUser(function(obj, done) {
-    	models.User.findOne(obj, function(err, user) {
-    		done(err, user)
-    	})
+		models.User.findOne(obj, function(err, user) {
+			done(err, user)
+		})
   	})
 
 	if (!twitterConfig || !twitterConfig.key || !twitterConfig.secret) {
@@ -39,7 +39,7 @@ module.exports = function(app, key, secret) {
 				models.User.create({
 					name: profile.displayName,
 					twitter_id: profile.id,
-					role: 4,
+					permissions: permissions.VIEWER_PERMISSIONS,
 					twitter_username: profile.username,
 					twitter_access_token: token,
 					twitter_access_secret: tokenSecret
