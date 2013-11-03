@@ -8,9 +8,9 @@ It was built in a weekend.
 Installing CodePilot CMS
 --------------------------------------
 This project is currently in heavy development and things might be horribly broken.
-Make sure you have [Node.js](http://nodejs.org/), [MySQL](http://www.mysql.com/), and [Redis](http://redis.io/) installed and running.
+Make sure you have [Node.js](http://nodejs.org/), [MongoDB](http://http://www.mongodb.org/), [Elasticsearch](http://www.elasticsearch.org/), and [Redis](http://redis.io/) installed and running.
 
-1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MySQL details, Twitter OAuth information, and S3 details. If the database schema changes, open `app/models/index.js` and set the `forceDatabaseUpgrade` property to true. Restart the server, and the dabatase will be wiped and updated to the new schema, and seeded with dummy data.
+1. Copy `app/config.example.json` to `app/config.json`. In `app/config.json`, fill in your MongoDB details, Twitter OAuth information, and S3 details. If the database schema changes, open `app/models/index.js` and set the `forceDatabaseUpgrade` property to true. Restart the server, and the dabatase will be wiped and updated to the new schema, and seeded with dummy data.
 2. Run `npm install`
 This'll take a while as it fetches CodePilot's dependencies.
 3. Run `npm start`. Assuming everything is okay, you'll be able to access CodePilot at `http://localhost:3000/`.
@@ -23,7 +23,7 @@ Common Errors and how to fix them
 
 `TypeError: Uncaught, unspecified "error" event.`
 
-This is most likely caused because your MySQL server is not running. Start the server and try again.
+This is most likely caused because your MongoDB server is not running. Start the server and try again.
 
 `Error: OAuthStrategy requires session support. Did you forget app.use(express.session(...))?`
 
