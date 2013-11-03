@@ -11,56 +11,25 @@ function grammerify(string, count){
 
 module.exports.get = function(req, res) {
 	res.locals.page = 'dashboard'
-	var data = {
-			boxes: [
-				{
-					title: 'Video views today',
-					data: 0
-				},
-				{
-					title: 'Videos awaiting approval',
-					data: 0
-				},
-				{
-					title: 'Transcriptions awaiting approval',
-					data: 0
-				},
-				{
-					title: 'Some title here',
-					data: 'Data'
-				},
-				{
-					title: 'Some title here',
-					data: 'Data'
-				},
-				{
-					title: 'Some title here',
-					data: 'Data'
-				}
-			]
+	async.parallel([
+		function(callback) { // Total views
+			callback(null, {title: 'Total views', data: '12,428'})
+		},
+		function(callback) { // Videos awaiting approval
+			models.Episode.find({ approved: false }, function(err, videos) {
+				callback(err, {title: grammerify('Video% awaiting approval', videos.length), data: videos.length})
+			})
+		},
+		function(callback) {
+			models.Transcription.find({ approved: false }, function(err, transcriptions){
+				callback(err, {title: grammerify('Transcription% awaiting approval', transcriptions.length), data: transcriptions.length})
+			})
 		}
-		async.parallel([
-			function(callback) { // Total views
-				callback(null, ['Total views', '12,428'])
-			},
-			function(callback) { // Videos awaiting approval
-				models.Episode.find({ approved: false }, function(err, videos) {
-					callback(err, [grammerify('Video% awaiting approval', videos.length), videos.length])
-				})
-			},
-			function(callback) {
-				models.Transcription.find({ approved: false }, function(err, transcriptions){
-					callback(err, [grammerify('Transcription% awaiting approval', transcriptions.length), transcriptions.length])
-				})
-			}
-		],
-		function(err, callback) {
-			for(var i in callback){
-				data.boxes[i].title = callback[i][0]
-				data.boxes[i].data = callback[i][1]
-			}
-			res.render('admin/admin', data)
-		})
+	],
+	function(err, data) {
+		res.render('admin/admin', {boxes: data})
+	})
+		
 }
 
 module.exports.getEpisodes = function(req, res) {
