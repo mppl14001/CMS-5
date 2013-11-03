@@ -35,9 +35,7 @@ module.exports = function(app, key, secret) {
 				done(err, null)
 				return
 			}
-			console.log(user)
 			if (!user) {
-				console.log(profile)
 				models.User.create({
 					name: profile.displayName,
 					twitter_id: profile.id,

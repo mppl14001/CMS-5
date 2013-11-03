@@ -1,6 +1,5 @@
 module.exports = function(app, controllers) {
   app.get('/', function(req, res) {
-    console.log(req.user)
     res.render('home', {
       user: req.user
     })
@@ -23,23 +22,23 @@ module.exports = function(app, controllers) {
 
   app.get('/fail', controllers.userController.authError)
 
-  app.get('/screencaster', controllers.screencasterController.getPending)
+  app.get('/screencaster', submitVideos, controllers.screencasterController.getPending)
 
-  app.get('/heyDanielYouShouldImplementThis', controllers.screencasterController.heyDanielYouShouldImplementThis)
+  app.get('/heyDanielYouShouldImplementThis', submitVideos, controllers.screencasterController.heyDanielYouShouldImplementThis)
 
-  app.get('/screencaster/approved', controllers.screencasterController.getApproved)
+  app.get('/screencaster/approved', submitVideos, controllers.screencasterController.getApproved)
 
-  app.get('/:id(\\d+)', controllers.episodeController.getEpisodeById)
+  app.get('/:id(\\d+)', viewEpisodes, controllers.episodeController.getEpisodeById)
 
-  app.get('/settings', controllers.userController.getSettings)
+  app.get('/settings', authenticated, controllers.userController.getSettings)
 
-  app.post('/settings', controllers.userController.postSettings)
+  app.post('/settings', authenticated, controllers.userController.postSettings)
 
-  app.get('/transcription/:id', controllers.episodeController.getTranscription)
+  app.get('/transcription/:id', viewEpisodes, controllers.episodeController.getTranscription)
 
-  app.post('/transcription/:id', controllers.episodeController.postTranscription)
+  app.post('/transcription/:id', viewEpisodes, controllers.episodeController.postTranscription)
 
-  app.get('/transcript/:id', controllers.episodeController.getTranscript)
+  app.get('/transcript/:id', viewEpisodes, controllers.episodeController.getTranscript)
 
   /*
     Admin routing
@@ -96,6 +95,14 @@ module.exports = function(app, controllers) {
   // Search
 
   app.get('/search', controllers.searchController.getSearch)
+}
+
+function authenticated(req, res, next) {
+	if (req.user) {
+		next()
+	} else {
+		res.render('status/403')
+	}
 }
 
 function viewEpisodes(req, res, next) {
