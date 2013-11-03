@@ -51,6 +51,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 
 module.exports.getEpisodeById = function(req, res) {
 	res.locals.page = 'episodes'
+
 	var data = {
 		title: null,
 		id: null,

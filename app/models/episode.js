@@ -1,6 +1,7 @@
 var mongoose = require('mongoose')
 
 var EpisodeSchema = new mongoose.Schema({
+	id: {type: Number},
 	title: {type: String},
 	ytURL: {type: String},
 	published: {type: Boolean},
