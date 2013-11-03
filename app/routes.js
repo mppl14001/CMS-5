@@ -1,5 +1,10 @@
 module.exports = function(app, controllers) {
   app.get('/', function(req, res){
+    var newEpisode = new models.Episode({ "title": "Command Line Basics"})
+    newEpisode.save(function (err) {
+      if (err) // ...
+      console.log('meow')
+    })
     res.render('admin/dashboard', {
       user: req.user
     })
@@ -43,6 +48,8 @@ module.exports = function(app, controllers) {
   /*
     Admin routing
   */
+
+  app.post('/search', controllers.episodeController.postSearch)
 
   app.get('/admin', /*requireAdmin, */controllers.adminController.get)
 
