@@ -35,7 +35,7 @@ module.exports.getEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 
 	models.Episode.find({approved: true}, function(err, episodes){
-		if(err){ callback(err) }
+		if(err){ res.send(404) }
 		else res.render('admin/episodes', { videos: episodes })
 	})
 }
@@ -44,7 +44,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 
 	models.Episode.find({approved: false}, function(err, episodes){
-		if(err){ callback(err) }
+		if(err){ res.send(404) }
 		else res.render('admin/episodes', { videos: episodes })
 	})
 }
@@ -52,100 +52,21 @@ module.exports.getPendingEpisodes = function(req, res) {
 module.exports.getEpisodeById = function(req, res) {
 	res.locals.page = 'episodes'
 
-	var data = {
-		title: null,
-		id: null,
-		thumbnail: null,
-		video: null,
-		author: null,
-		shownotes: [],
-		tags: [],
-		status: {
-			approval: 'unapproved'
-		},
-		transcriptions: []
-	}
-	async.series([
-		function(callback) { // Load episode
-			sequelize.query('SELECT title, ytURL, approved, UserId, id FROM Episodes WHERE id = :id', null, {raw: true}, {id: req.params.id}).success(function(returned) {
-				data.title = returned[0].title
-				data.video = returned[0].ytURL
-				data.status.approval = returned[0].approved
-				data.id = returned[0].id
-				data.UserId = returned[0].UserId
-				callback(null, 'data')
-			})
-		},
-		function(callback) { // Load core data
-			sequelize.query('SELECT name FROM Users WHERE id = :id', null, {raw: true}, {id: data.UserId}).success(function(user) {
-				if (user[0].name) {
-					data.author = user[0].name
-				} else {
-					data.author = 'Unknown'
-				}
-				callback(null, 'author')
-			})
-		},
-		function(callback) { // Load shownotes
-			sequelize.query('SELECT content, language FROM Shownotes WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(shownotes) {
-				if (shownotes.lenght > 0) {
-					data.shownotes = shownotes
-				}
-				callback(null, 'shownotes')
-			})
-		},
-		function(callback) { // Load tags
-			sequelize.query('SELECT tagId FROM EpisodesTags WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(tags) {
-				if (tags.length > 0) {
-					tags.forEach(function(item) {
-						sequelize.query('SELECT id, text FROM Tags WHERE id = :tagId LIMIT 1', null, {raw: true}, {tagId: item.tagId}).success(function(tag) {
-							tag.forEach(function(rawTag) {
-								var tags = {}
-								tags.id   = rawTag.id
-								tags.text = rawTag.text
-								data.tags.push(tags)
-							})
-							callback(null, 'tags')
-						})
-					})
-				} else {
-					callback(null, 'tags')
-				}
-			})
-		},
-		function(callback) { // Load transcriptions
-			sequelize.query('SELECT * FROM Transcriptions WHERE EpisodeId = :id', null, {raw: true}, {id: data.id}).success(function(trans) {
-				_.each(trans, function(item) {
-					var elem = item
-					var language = languages.getLanguageInfo(elem.language)
-					if (language.name) {
-						elem.language = language.name
-					} else {
-						elem.language = 'Unsupported language'
-					}
-					if (elem.approved == 1) {
-						elem.isActive = true
-						elem.showApproval = false
-					} else {
-						elem.isActive = false
-						elem.showApproval = true
-					}
-					data.transcriptions.push(elem)
-				})	
-				callback(null, 'transcriptions')
-			})
+	models.Episode.findOne({id: req.params.id}, function(err, episode){
+		if(!episode){ res.send(404) }
+		else {
+			res.render('admin/episode', episode)
 		}
-	], function(err, results) {
-		res.render('admin/admin-episodes-specific', data)
 	})
 }
 
 module.exports.getUsers = function(req, res) {
 	res.locals.page = 'users'
-	User.findAll().success(function(query) {
-		res.render('admin/admin-users', {
-			users: query
-		})
+	models.User.find().success(function(users) {
+		if(!users){ res.send(404) }
+		else {
+			res.render('admin/users', {users: users})
+		}
 	})
 }
 
@@ -156,110 +77,68 @@ module.exports.getUserById = function(req, res) {
 
 module.exports.approveScreencast = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('UPDATE Episodes SET approved = 1 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1
+		models.Episode.findOne({id: req.body.id}, function(episode){
+			if(episode.approved){ res.send(304)	}
+			else {
+				episode.approved = true
+				episode.save()
+				res.send(200)
 			}
-			res.write(JSON.stringify(successJson))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null
-			}
-			res.write(errorJson)
-			res.end()
 		})
 	}
+	else { res.send(404) }
 }
 
 module.exports.removeScreencast = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('UPDATE Episodes SET approved = 0 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1
+		models.Episode.findOne({id: req.body.id}, function(episode){
+			if(!episode.approved){ res.send(304) }
+			else {
+				episode.approved = false
+				episode.save()
+				res.send(200)
 			}
-			res.write(JSON.stringify(successJson))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null
-			}
-			res.write(errorJson)
-			res.end()
 		})
 	}
+	else { res.send(404) }
 }
 
 module.exports.addTag = function(req, res) {
 	if (req.xhr) {
-		var tag, episode
-		async.parallel([
-			function(callback) {
-				Episode.find({where: {id: req.body.id}, limit: 1}).success(function(retrievedEpisode) {
-					episode = retrievedEpisode
-					callback(null, retrievedEpisode)
-				}).failure(function(error) {
-					callback(error, null)
-				})
-			}, function(callback) {
-				Tag.findOrCreate({text: req.body.tag}, {}).success(function(retrievedTag) {
-					tag = retrievedTag
-					callback(null, retrievedTag)
-				}).failure(function(error) {
-					callback(error, null)
-				})
+
+		models.Episode.find({id: req.body.id}, function(episode){
+
+			if(_.contains(episode.tags, req.body.tag)){
+				res.send(304)
 			}
-		], function(error, results) {
-			if (error) {
-				var json = {
-					status: 'error',
-					tagAdded: null,
-					error: error
-				}
-				res.send(JSON.stringify(json))
-				return
+			else {
+				episode.tags.concat({ text: req.body.tag })
+				episode.save()
+				res.send(200)
 			}
-			episode.addTag(tag).success(function() {
-				var json = {
-					status: 'ok',
-					tagAdded: req.body.tag
-				}
-				res.send(JSON.stringify(json))
-			}).failure(function(error) {
-				var json = {
-					status: 'error',
-					tagAdded: null,
-					error: error
-				}
-				res.send(JSON.stringify(json))
-			})
+
 		})
 	}
+	else { res.send(400) }
 }
 
 module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('DELETE FROM EpisodesTags WHERE TagId = :id LIMIT 1', null, {raw: true}, {id: req.body.tag}).success(function() {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
+
+		models.Episode.find({id: req.body.id}, function(episode){
+
+			if(!_.contains(episode.tags, req.body.tag)){
+				res.send(304)
 			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: null,
-				error: error
+			else {
+				episode.tags[{ text: req.body.tag }] = undefined
+				episode.save()
+				res.send(200)
 			}
-			res.write(JSON.stringify(json))
-			res.end()
+
 		})
 	}
+	else { res.send(400) }
 }
 
 module.exports.editTranscription = function(req, res) {

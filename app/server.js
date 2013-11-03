@@ -32,6 +32,28 @@ GLOBAL.User = models.user
 GLOBAL.Transcription = models.transcriptions
 GLOBAL.Tag = models.tag
 
+// WILL'S DEBUG CODE
+
+// var test = new models.Episode({
+// 	id: 0,
+// 	title: 'Hello, world',
+// 	ytURL: 'http://google.com',
+// 	published: false,
+// 	approved: false,
+// 	shownotes: [
+// 		{
+// 			text: 'ABCDEF',
+// 			language: 'en'
+// 		},
+// 		{
+// 			text: 'YOLOSWAG',
+// 			language: 'es'
+// 		},
+// 	]
+// })
+
+// test.save()
+
 // Controllers
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
