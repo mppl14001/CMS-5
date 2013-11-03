@@ -9,7 +9,7 @@ module.exports = function(app, key, secret) {
     	done(null, user._id)
 	})
 	passport.deserializeUser(function(obj, done) {
-    	models.User.findById(obj, function(err, user) {
+    	models.User.find(obj, function(err, user) {
     		done(err, user)
     	})
   	})
