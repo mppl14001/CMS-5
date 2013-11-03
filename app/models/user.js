@@ -1,50 +1,16 @@
-module.exports = function(sequelize, DataTypes) {
+var mongoose = require('mongoose')
 
-	return sequelize.define('User', {
+var UserSchema = new mongoose.Schema({
+	name: {type: String},
+	role: {type: Number},
+	twitter_id: {type: String},
+	twitter_username: {type: String},
+	twitter_access_token: {type: String},
+	twitter_access_secret: {type: String},
+	active: {type: Number},
+	language: {type: String}
+})
 
-		name: {
-			allowNull: false,
-			type: DataTypes.STRING
-		},
-		role: {
-			// documented in userRoleToString (server.js)
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			validate: {
-				min: 1,
-				max: 4
-			}
-		},
-		twitter_id: {
-			allowNull: false,
-			type: DataTypes.STRING
-		},
-		twitter_username: {
-			allowNull: false,
-			type: DataTypes.STRING
-		},
-		twitter_access_token: {
-			allowNull: false,
-			type: DataTypes.STRING
-		},
-		twitter_access_secret: {
-			allowNull: false,
-			type: DataTypes.STRING
-		},
-		active: {
-			type: DataTypes.INTEGER,
-			defaultValue: '1',
-			allowNull:false
-		},
-		language: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			defaultValue: 'en',
-			validate: {
-				len: 2
-			}
-		}
+var UserModel = mongoose.model('User', UserSchema)
 
-	})
-
-}
+module.exports = UserModel

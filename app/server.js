@@ -32,6 +32,34 @@ GLOBAL.User = models.user
 GLOBAL.Transcription = models.transcriptions
 GLOBAL.Tag = models.tag
 
+// Fixtures
+if (config.get('seed-data')) {
+	var fixtures = require('./misc/fixtures.js')
+	fixtures()
+}
+
+// WILL'S DEBUG CODE
+
+// var test = new models.Episode({
+// 	id: 0,
+// 	title: 'Hello, world',
+// 	ytURL: 'http://google.com',
+// 	published: false,
+// 	approved: false,
+// 	shownotes: [
+// 		{
+// 			text: 'ABCDEF',
+// 			language: 'en'
+// 		},
+// 		{
+// 			text: 'YOLOSWAG',
+// 			language: 'es'
+// 		},
+// 	]
+// })
+
+// test.save()
+
 // Controllers
 var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
@@ -58,6 +86,13 @@ require("./routes.js")(app, {
 	screencasterController: screencasterController,
 	searchController: searchController,
 	passport: passport
+})
+
+app.use(app.router)
+
+app.use(function(err, req, res, next) {
+  console.error(err)
+  res.redirect('/fail')
 })
 
 app.listen(config.get('port') || 3000)

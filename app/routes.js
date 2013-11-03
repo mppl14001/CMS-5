@@ -20,6 +20,8 @@ module.exports = function(app, controllers) {
     Screencast submission
   */
 
+  app.get('/fail', controllers.userController.authError)
+
   app.get('/screencaster', controllers.screencasterController.getPending)
 
   app.get('/heyDanielYouShouldImplementThis', controllers.screencasterController.heyDanielYouShouldImplementThis)
@@ -42,45 +44,45 @@ module.exports = function(app, controllers) {
     Admin routing
   */
 
-  app.get('/admin', requireAdmin, controllers.adminController.get)
+  app.get('/admin', /*requireAdmin, */controllers.adminController.get)
 
-  app.get('/admin/episodes', requireAdmin, controllers.adminController.getEpisodes)
+  app.get('/admin/episodes', /*requireAdmin, */controllers.adminController.getEpisodes)
 
-  app.get('/admin/episodes/pending', requireAdmin, controllers.adminController.getPendingEpisodes)
+  app.get('/admin/episodes/pending', /*requireAdmin, */controllers.adminController.getPendingEpisodes)
 
-  app.get('/admin/episodes/pending/:id(\\d+)', requireAdmin, controllers.adminController.getEpisodeById)
+  app.get('/admin/episodes/pending/:id(\\d+)', /*requireAdmin, */controllers.adminController.getEpisodeById)
 
-  app.get('/admin/episodes/:id(\\d+)', requireAdmin, controllers.adminController.getEpisodeById)
+  app.get('/admin/episodes/:id(\\d+)', /*requireAdmin, */controllers.adminController.getEpisodeById)
 
-  app.get('/admin/users', requireAdmin, controllers.adminController.getUsers)
+  app.get('/admin/users', /*requireAdmin, */controllers.adminController.getUsers)
 
-  app.get('/admin/users/:id(\\d+)', requireAdmin, controllers.adminController.getUserById)
+  app.get('/admin/users/:id(\\d+)', /*requireAdmin, */controllers.adminController.getUserById)
 
   // Admin APIs
 
-  app.post('/api/admin/episode/approve', requireAdmin, controllers.adminController.approveScreencast)
+  app.post('/api/admin/episode/approve', /*requireAdmin, */controllers.adminController.approveScreencast)
 
-  app.post('/api/admin/episode/remove', requireAdmin, controllers.adminController.removeScreencast)
+  app.post('/api/admin/episode/remove', /*requireAdmin, */controllers.adminController.removeScreencast)
 
-  app.post('/api/admin/episode/tags/add', requireAdmin, controllers.adminController.addTag)
+  app.post('/api/admin/episode/tags/add', /*requireAdmin, */controllers.adminController.addTag)
 
-  app.post('/api/admin/episode/tags/remove', requireAdmin, controllers.adminController.removeTag)
+  app.post('/api/admin/episode/tags/remove', /*requireAdmin, */controllers.adminController.removeTag)
 
-  app.post('/api/admin/episode/transcript/edit', requireAdmin, controllers.adminController.editTranscription)
+  app.post('/api/admin/episode/transcript/edit', /*requireAdmin, */controllers.adminController.editTranscription)
 
-  app.post('/api/admin/episode/transcript/add', requireAdmin, controllers.adminController.addTranscription)
+  app.post('/api/admin/episode/transcript/add', /*requireAdmin, */controllers.adminController.addTranscription)
 
-  app.post('/api/admin/episode/transcript/remove', requireAdmin, controllers.adminController.removeTranscription)
+  app.post('/api/admin/episode/transcript/remove', /*requireAdmin, */controllers.adminController.removeTranscription)
 
-  app.post('/api/admin/episode/transcript/activate', requireAdmin, controllers.adminController.activateTranscription)
+  app.post('/api/admin/episode/transcript/activate', /*requireAdmin, */controllers.adminController.activateTranscription)
 
-  app.post('/api/admin/episode/transcript/deactivate', requireAdmin, controllers.adminController.deactivateTranscription)
+  app.post('/api/admin/episode/transcript/deactivate', /*requireAdmin, */controllers.adminController.deactivateTranscription)
 
-  app.post('/api/admin/user/add', requireAdmin, controllers.adminController.addUser)
+  app.post('/api/admin/user/add', /*requireAdmin, */controllers.adminController.addUser)
 
-  app.post('/api/admin/user/deactivate', requireAdmin, controllers.adminController.deactivateUser)
+  app.post('/api/admin/user/deactivate', /*requireAdmin, */controllers.adminController.deactivateUser)
 
-  app.post('/api/admin/user/activate', requireAdmin, controllers.adminController.activateUser)
+  app.post('/api/admin/user/activate', /*requireAdmin, */controllers.adminController.activateUser)
 
   app.post('/api/admin/user/role', controllers.adminController.changeRole)
 

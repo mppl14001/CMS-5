@@ -1,26 +1,26 @@
-module.exports = function(sequelize, DataTypes) {
+var mongoose = require('mongoose')
 
-	return sequelize.define('Episode', {
+var EpisodeSchema = new mongoose.Schema({
+	id: {type: [Number], index: true},
+	title: {type: String},
+	ytURL: {type: String},
+	published: {type: Boolean},
+	approved: {type: Boolean},
+	tags: [{
+		text: String
+	}],
+	shownotes: [{
+		text: Buffer,
+		language: String
+	}],
+	transcriptions: [{
+		approved: Boolean,
+		text: Buffer,
+		language: String
+	}],
+	creator: {type: mongoose.Schema.Types.ObjectId}
+})
 
-		title: {
-			type: DataTypes.STRING
-		},
-		ytURL: {
-			type: DataTypes.STRING,
-			isURL: true,
-			is: ['^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))(?:\S+)?$']
-		},
-		published: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false
-		},
-		approved: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false
-		}
+var EpisodeModel = mongoose.model('Episode', EpisodeSchema)
 
-	})
-
-}
+module.exports = EpisodeModel

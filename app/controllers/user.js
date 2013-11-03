@@ -31,6 +31,10 @@ module.exports.getSettings = function(req, res) {
 	}
 }
 
+module.exports.authError = function(req, res) {
+	res.render('status/403')
+}
+
 module.exports.postSettings = function (req, res) {
 	if (req.xhr) {	
 		sequelize.query('UPDATE Users SET language = :language WHERE id = :id', null, { raw: true }, {

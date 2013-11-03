@@ -1,20 +1,10 @@
-module.exports = function(sequelize, DataTypes) {
+var mongoose = require('mongoose')
 
-	return sequelize.define('Shownotes', {
+var ShownotesSchema = new mongoose.Schema({
+	content: {type: Buffer},
+	language: {type: String}
+})
 
-		content: {
-			allowNull: false,
-			type: DataTypes.TEXT
-		},
-		language: { // ISO 639-1
-			type: DataTypes.STRING,
-			allowNull: false,
-			defaultValue: 'en',
-			validate: {
-				len: 2
-			}
-		}
+var ShownotesModel = mongoose.model('Shownotes', ShownotesSchema)
 
-	})
-
-}
+module.exports = ShownotesModel

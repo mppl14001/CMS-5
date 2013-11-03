@@ -1,27 +1,11 @@
-module.exports = function(sequelize, DataTypes) {
+var mongoose = require('mongoose')
 
-	return sequelize.define('Transcriptions', {
-		approved: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false
-		},
-		text: {
-			type: DataTypes.TEXT,
-			allowNull: false
-		},
-		language: { // ISO 639-1
-			type: DataTypes.STRING,
-			allowNull: false,
-			defaultValue: 'en',
-			validate: {
-				len: 2
-			}
-		},
-    human: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    }
-	})
-}
+var TranscriptionSchema = new mongoose.Schema({
+	approved: {type: Boolean},
+	text: {type: Buffer},
+	language: {type: String}
+})
+
+var TranscriptionModel = mongoose.model('Transcription', TranscriptionSchema)
+
+module.exports = TranscriptionModel

@@ -16,11 +16,11 @@
 					"approved": true,
 					"shownotes": [
 						{
-							"content": "I coded stuff.",
+							"text": "I coded stuff.",
 							"language": "en"
 						},
 						{
-							"content": "I coded stuff in Spanish.",
+							"text": "I coded stuff in Spanish.",
 							"language": "es"
 						}
 					],
@@ -52,11 +52,11 @@
 					"approved": true,
 					"shownotes": [
 						{
-							"content": "I coded a lot of stuff.",
+							"text": "I coded a lot of stuff.",
 							"language": "en"
 						},
 						{
-							"content": "I coded a lot of stuff in Spanish.",
+							"text": "I coded a lot of stuff in Spanish.",
 							"language": "es"
 						}
 					],
