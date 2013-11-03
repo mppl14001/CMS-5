@@ -1,7 +1,10 @@
 var mongoose = require('mongoose')
 
 var EpisodeSchema = new mongoose.Schema({
-	id: {type: [Number], index: true},
+	id: {
+		type: [Number],
+		index: true
+	},
 	title: {type: String},
 	ytURL: {type: String},
 	published: {type: Boolean},
@@ -10,12 +13,12 @@ var EpisodeSchema = new mongoose.Schema({
 		text: String
 	}],
 	shownotes: [{
-		text: Buffer,
+		text: String,
 		language: String
 	}],
 	transcriptions: [{
 		approved: Boolean,
-		text: Buffer,
+		text: String,
 		language: String
 	}],
 	creator: {type: mongoose.Schema.Types.ObjectId}

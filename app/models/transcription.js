@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 
 var TranscriptionSchema = new mongoose.Schema({
 	approved: {type: Boolean},
-	text: {type: Buffer},
+	text: {type: String},
 	language: {type: String}
 })
 
