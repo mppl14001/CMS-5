@@ -33,11 +33,11 @@ module.exports.get = function(req, res) {
 				callback(null, '12,428')
 			},
 			function(callback) { // Videos awaiting approval
-				Episode.findAll({ where: { approved: 0 } }).success(function(query) {
-					var grammar = query.length === 1 ?
+				models.Episode.find({ approved: true }, function(err, videos) {
+					var grammar = videos.length === 1 ?
 								  'Video awaiting approval' :
 								  'Videos awaiting approval'
-					callback(null, [grammar, query.length])
+					callback(null, [grammar, videos.length])
 				})
 			},
 			function(callback) {
@@ -77,7 +77,7 @@ module.exports.getEpisodes = function(req, res) {
 
 	async.series([
 		function (callback) {
-			Episode.findAll({ where: { approved: 1} }).success(function(query) {
+			models.Episode.findAll({ where: { approved: 1} }).success(function(query) {
 				if (query.length > 0) {
 					var l = 0
 					async.eachSeries(query, function (item, callback2) {
@@ -119,7 +119,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 
 	async.series([
 		function (callback) {
-			Episode.findAll({ where: { approved: 0} }).success(function(query) {
+			models.Episode.findAll({ where: { approved: 0} }).success(function(query) {
 				if (query.length > 0) {
 					var l = 0
 					async.eachSeries(query, function (item, callback2) {
