@@ -1,0 +1,23 @@
+<section style="box-sizing:border-box;margin-top:25px;">
+	<div class="row">
+		<ul class="list-unstyled">
+			{{#if videos}}
+				{{#each videos}}
+			<li class="box text-center col-md-4" style="display:inline-block;border:1px solid #eee;">
+				<a href="/admin/episodes/{{this.id}}" style="color:black;margin:25px;">
+					<div class="thumbnail col-md-6 text-center" style="margin-bottom:15px;float:none;margin:0 auto;">
+						<img src="/img/borked.png" width="100" height="75">
+					</div>
+					<h3 style="color:black;">{{this.title}}</h3>
+					<p style="font-size:13px;color:#aaa;">{{this.shownotes.0.shortened}}</p>
+				</a>
+			</li>
+				{{/each}}
+			{{else}}
+			<li class="box text-center col-md-12" style="display:inline-block;padding:25px 0px;">
+				<h3>There are no videos to show.</h3>
+			</li>
+			{{/if}}
+		</ul>
+	</div>
+</section>
