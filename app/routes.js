@@ -98,34 +98,83 @@ module.exports = function(app, controllers) {
   app.get('/search', controllers.searchController.getSearch)
 }
 
-function requireViewer(req, res, next) {
-  if (req.user && req.user.role === 4) {
-    next()
-  } else {
-    res.render('status/403')
-  }
+function viewEpisodes(req, res, next) {
+	next()
 }
 
-function requireModerator(req, res, next) {
-  if (req.user && (req.user.role === 3 || req.user.role === 1)) {
-    next()
-  } else {
-    res.render('status/403')
-  }
+function submitVideos(req, res, next) {
+	if (req.user) {
+		var permissions = permissions.levelToPermissions(req.user.permissions)
+		if (permissions.submit_videos === 1) {
+    		next()
+  		} else {
+    		res.render('status/403')
+  		}
+	}
 }
 
-function requireScreencaster(req, res, next) {
-  if (req.user && (req.user.role === 2 || req.user.role === 1)) {
-    next()
-  } else {
-    res.render('status/403')
-  }
+function submitShownoteTranslations(req, res, next) {
+	if (req.user) {
+		var permissions = permissions.levelToPermissions(req.user.permissions)
+		if (permissions.submit_shownote_translations === 1) {
+    		next()
+  		} else {
+    		res.render('status/403')
+  		}
+	}
 }
 
-function requireAdmin(req, res, next) {
-  if (req.user && req.user.role === 1) {
-    next()
-  } else {
-    res.render('status/403')
-  }
+function editShownoteTranslations(req, res, next) {
+	if (req.user) {
+		var permissions = permissions.levelToPermissions(req.user.permissions)
+		if (permissions.submit_shownote_translations === 1) {
+    		next()
+  		} else {
+    		res.render('status/403')
+  		}
+	}
+}
+
+function approveShownoteTranslations(req, res, next) {
+	if (req.user) {
+		var permissions = permissions.levelToPermissions(req.user.permissions)
+		if (permissions.approve_shownote_translations === 1) {
+    		next()
+  		} else {
+    		res.render('status/403')
+  		}
+	}
+}
+
+function approveEpisodes(req, res, next) {
+	if (req.user) {
+		var permissions = permissions.levelToPermissions(req.user.permissions)
+		if (permissions.approve_episodes === 1) {
+    		next()
+  		} else {
+    		res.render('status/403')
+  		}
+	}
+}
+
+function promoteUsers(req, res, next) {
+	if (req.user) {
+		var permissions = permissions.levelToPermissions(req.user.permissions)
+		if (permissions.promote_users === 1) {
+    		next()
+  		} else {
+    		res.render('status/403')
+  		}
+	}
+}
+
+function promoteUsersToAdmin(req, res, next) {
+	if (req.user) {
+		var permissions = permissions.levelToPermissions(req.user.permissions)
+		if (permissions.promoteUsersToAdmin === 1) {
+    		next()
+  		} else {
+    		res.render('status/403')
+  		}
+	}
 }
