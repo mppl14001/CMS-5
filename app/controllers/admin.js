@@ -35,7 +35,7 @@ module.exports.getEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 
 	models.Episode.find({approved: true}, function(err, episodes){
-		if(err){ callback(err) }
+		if(err){ res.send(404) }
 		else res.render('admin/episodes', { videos: episodes })
 	})
 }
@@ -44,7 +44,7 @@ module.exports.getPendingEpisodes = function(req, res) {
 	res.locals.page = 'episodes'
 
 	models.Episode.find({approved: false}, function(err, episodes){
-		if(err){ callback(err) }
+		if(err){ res.send(404) }
 		else res.render('admin/episodes', { videos: episodes })
 	})
 }
@@ -55,17 +55,18 @@ module.exports.getEpisodeById = function(req, res) {
 	models.Episode.findOne({id: req.params.id}, function(err, episode){
 		if(!episode){ res.send(404) }
 		else {
-			res.render('admin/admin-episodes-specific', episode)
+			res.render('admin/episode', episode)
 		}
 	})
 }
 
 module.exports.getUsers = function(req, res) {
 	res.locals.page = 'users'
-	User.findAll().success(function(query) {
-		res.render('admin/admin-users', {
-			users: query
-		})
+	models.User.find().success(function(users) {
+		if(!users){ res.send(404) }
+		else {
+			res.render('admin/users', {users: users})
+		}
 	})
 }
 
@@ -76,21 +77,19 @@ module.exports.getUserById = function(req, res) {
 
 module.exports.approveScreencast = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('UPDATE Episodes SET approved = 1 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1
+		models.Episode.findOne({id: req.body.id}, function(episode){
+			if(episode.approved){
+				res.send(304)
 			}
-			res.write(JSON.stringify(successJson))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null
+			else {
+				episode.approved = true
+				episode.save()
+				res.send(200)
 			}
-			res.write(errorJson)
-			res.end()
 		})
+	}
+	else {
+		res.send(404)
 	}
 }
 
