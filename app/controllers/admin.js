@@ -41,17 +41,23 @@ module.exports.get = function(req, res) {
 				})
 			},
 			function(callback) {
-				sequelize.query('SELECT * FROM Transcriptions WHERE approved = 0').success(function(query2) {
-					if (query2.length > 0) {
-						var grammar = query2.length === 1 ?
-									  'Transcription awaiting approval' :
-									  'Transcriptions awaiting approval'
-						callback(null, [grammar, query2.length])
-					} else {
-						callback(null, 0)
+				models.Transcription.find({ approved: false }, function(err, transcriptions){
+
+					if(err){
+						callback(null, 'Error')
 					}
-				}).error(function(error) {
-					callback(null, 'Error')
+					else {
+
+						if (transcriptions.length > 0) {
+							var grammar = transcriptions.length === 1 ?
+										  'Transcription awaiting approval' :
+										  'Transcriptions awaiting approval'
+							callback(null, [grammar, transcriptions.length])
+						} else {
+							callback(null, 0)
+						}
+
+					}
 				})
 			}
 		],
