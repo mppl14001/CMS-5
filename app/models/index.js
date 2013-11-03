@@ -1,24 +1,7 @@
-var mongoose = require('mongoose')
+require("./connect")
 
-var EpisodeSchema = new mongoose.Schema({
-	title: {type: String},
-	ytURL: {type: String},
-	published: {type: Boolean},
-	approved: {type: Boolean},
-	tags: [{
-		text: String
-	}],
-	shownotes: [{
-		text: Buffer,
-		language: String
-	}],
-	transcriptions: [{
-		approved: Boolean,
-		text: Buffer,
-		language: String
-	}]
-})
-
-var EpisodeModel = mongoose.model('Episode', EpisodeSchema)
-
-module.exports.Episode
+module.exports.User = require(__dirname + '/user.js')
+module.exports.Episode = require(__dirname + '/episode.js')
+module.exports.Shownotes = require(__dirname + '/shownotes.js')
+module.exports.Tag = require(__dirname + '/tag.js')
+module.exports.Transcription = require(__dirname + '/transcription.js')
