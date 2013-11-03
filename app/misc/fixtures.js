@@ -20,8 +20,8 @@ function createEpisode(episode, episodeCallback) {
 		published: episode.published,
 		approved: episode.approved,
 		tags: episode.tags,
-		shownotes: episode.shownotes,
-		transcriptions: episode.transcriptions
+		shownotes: episode.shownotes
+		//transcriptions: episode.transcriptions
 	}, episodeCallback)
 }
 
@@ -44,7 +44,7 @@ function generateFixtures() {
 					})
 				}, function(err) {
 					if (err) {
-						console.log('An error occurred while generating seed data')
+						console.log('An error occurred while generating seed data: ' + err)
 					}
 				})
 			})

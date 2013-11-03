@@ -7,6 +7,9 @@ GLOBAL._ = require('lodash')
 // Config
 GLOBAL.config = require('nconf').argv().env().file({ file: path.join(__dirname, 'config.json') })					 
 
+// Permissions
+GLOBAL.permissions = require('./misc/permissions.js')
+
 // Models
 GLOBAL.models = require('./models')
 

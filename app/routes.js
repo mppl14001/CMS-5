@@ -1,5 +1,6 @@
 module.exports = function(app, controllers) {
-  app.get('/', function(req, res){
+  app.get('/', function(req, res) {
+    console.log(req.user)
     res.render('home', {
       user: req.user
     })

@@ -65,9 +65,9 @@ function permissionsToLevel(permissions) {
 	level[5] = permissions['approve_episodes']
 	level[6] = permissions['promote_users']
 	level[7] = permissions['promote_users_to_admin']
-	
+
 	level = parseInt(level.reverse().join(""),2)
-	
+
 	return level
 }
 
