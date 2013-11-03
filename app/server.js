@@ -82,6 +82,13 @@ require("./routes.js")(app, {
 	passport: passport
 })
 
+app.use(app.router)
+
+app.use(function(err, req, res, next) {
+  console.error(err)
+  res.redirect('/fail')
+})
+
 app.listen(config.get('port') || 3000)
 
 module.exports.app = app

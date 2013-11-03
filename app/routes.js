@@ -20,6 +20,8 @@ module.exports = function(app, controllers) {
     Screencast submission
   */
 
+  app.get('/fail', controllers.userController.authError)
+
   app.get('/screencaster', controllers.screencasterController.getPending)
 
   app.get('/heyDanielYouShouldImplementThis', controllers.screencasterController.heyDanielYouShouldImplementThis)
