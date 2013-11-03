@@ -78,9 +78,7 @@ module.exports.getUserById = function(req, res) {
 module.exports.approveScreencast = function(req, res) {
 	if (req.xhr) {
 		models.Episode.findOne({id: req.body.id}, function(episode){
-			if(episode.approved){
-				res.send(304)
-			}
+			if(episode.approved){ res.send(304)	}
 			else {
 				episode.approved = true
 				episode.save()
@@ -88,29 +86,21 @@ module.exports.approveScreencast = function(req, res) {
 			}
 		})
 	}
-	else {
-		res.send(404)
-	}
+	else { res.send(404) }
 }
 
 module.exports.removeScreencast = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('UPDATE Episodes SET approved = 0 WHERE id = :id', null, {raw: true}, {id: req.body.id}).success(function(approved) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1
+		models.Episode.findOne({id: req.body.id}, function(episode){
+			if(!episode.approved){ res.send(304) }
+			else {
+				episode.approved = false
+				episode.save()
+				res.send(200)
 			}
-			res.write(JSON.stringify(successJson))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null
-			}
-			res.write(errorJson)
-			res.end()
 		})
 	}
+	else { res.send(404) }
 }
 
 module.exports.addTag = function(req, res) {
