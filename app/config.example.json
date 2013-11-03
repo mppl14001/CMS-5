@@ -1,9 +1,5 @@
 {
-	"db": {
-		"name": "",
-		"user": "",
-		"password": ""
-	},
+	"db": "mongodb://",
 	"port": 3000,
 	"twitter": {
 		"key": "",
