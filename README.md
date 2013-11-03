@@ -63,7 +63,7 @@ To test the app, run `make test`.
 |   Will Smidlein   |              [ws](https://github.com/ws)              |            [ws](https://twitter.com/ws)            |
 |    Joe Torraca    |        [jtorraca](https://github.com/jtorraca)        |      [jtorraca](https://twitter.com/jtorraca)      |
 |    Lenny Khazan   |     [LennyKhazan](https://github.com/LennyKhazan)     |   [LennyKhazan](https://twitter.com/LennyKhazan)   |
-|    Ross Penman    |      [rosspenman](https://github.com/rosspenman)      |    [PenmanRoss](https://twitter.com/PenmanRoss)    |
+|    Ross Penman    |          [penman](https://github.com/penman)          |    [PenmanRoss](https://twitter.com/PenmanRoss)    |
 | Charley Hutchison |      [glenwayguy](https://github.com/glenwayguy)      |    [glenwayguy](https://twitter.com/glenwayguy)    |
 |     Nick Frey     |        [NickFrey](https://github.com/nickfrey)        |      [NickFrey](https://twitter.com/NickFrey)      |
 | Daniel Tomlinson  | [DanielTomlinson](https://github.com/DanielTomlinson) |       [dantoml](https://twitter.com/dantoml)       |
