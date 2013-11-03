@@ -287,7 +287,7 @@ module.exports.deactivateUser = function(req, res) {
 		var roles = {
 			admin: 1,
 			screencaster: 2,
-      moderator: 3,
+			moderator: 3,
 			viewer: 4
 		}
 		sequelize.query('UPDATE Users SET active = 0 WHERE id = :id AND role = :role', null, {raw: true}, {
