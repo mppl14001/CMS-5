@@ -33,7 +33,7 @@ module.exports.get = function(req, res) {
 				callback(null, '12,428')
 			},
 			function(callback) { // Videos awaiting approval
-				models.Episode.find({ approved: true }, function(err, videos) {
+				models.Episode.find({ approved: false }, function(err, videos) {
 					var grammar = videos.length === 1 ?
 								  'Video awaiting approval' :
 								  'Videos awaiting approval'
