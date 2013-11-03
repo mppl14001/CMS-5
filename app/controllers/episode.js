@@ -39,3 +39,10 @@ module.exports.postTranscription = function(req, res) {
 		res.redirect('/transcript/' + result.id)
 	})
 }
+
+module.exports.postSearch = function(req, res) {
+	models.Episode.search({query: req.body.query}, function(err, results) {
+		if (err) res.send(500, {error: 'An unknown error has occured.'})
+		res.send(results)
+	})
+}

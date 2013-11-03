@@ -1,4 +1,5 @@
 var mongoose = require('mongoose')
+var mongoosastic = require('mongoosastic')
 
 var EpisodeSchema = new mongoose.Schema({
 	id: {
@@ -23,5 +24,7 @@ var EpisodeSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId, ref: 'User'
 	}
 })
+
+EpisodeSchema.plugin(mongoosastic)
 
 module.exports = mongoose.model('Episode', EpisodeSchema)
