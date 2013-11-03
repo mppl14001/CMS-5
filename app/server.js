@@ -32,6 +32,12 @@ GLOBAL.User = models.user
 GLOBAL.Transcription = models.transcriptions
 GLOBAL.Tag = models.tag
 
+// Fixtures
+if (config.get('seed-data')) {
+	var fixtures = require('./misc/fixtures.js')
+	fixtures()
+}
+
 // WILL'S DEBUG CODE
 
 // var test = new models.Episode({
