@@ -1,3 +1,14 @@
+function grammerify(string, count){
+
+	if(count == 1){
+		return string.replace('%', '')
+	}
+	else {
+		return string.replace('%', 's')
+	}
+
+}
+
 module.exports.get = function(req, res) {
 	res.locals.page = 'dashboard'
 	var data = {
@@ -30,47 +41,25 @@ module.exports.get = function(req, res) {
 		}
 		async.parallel([
 			function(callback) { // Total views
-				callback(null, '12,428')
+				callback(null, ['Total views', '12,428'])
 			},
 			function(callback) { // Videos awaiting approval
 				models.Episode.find({ approved: false }, function(err, videos) {
-					var grammar = videos.length === 1 ?
-								  'Video awaiting approval' :
-								  'Videos awaiting approval'
-					callback(null, [grammar, videos.length])
+					callback(err, [grammerify('Video% awaiting approval', videos.length), videos.length])
 				})
 			},
 			function(callback) {
 				models.Transcription.find({ approved: false }, function(err, transcriptions){
-
-					if(err){
-						callback(null, 'Error')
-					}
-					else {
-
-						if (transcriptions.length > 0) {
-							var grammar = transcriptions.length === 1 ?
-										  'Transcription awaiting approval' :
-										  'Transcriptions awaiting approval'
-							callback(null, [grammar, transcriptions.length])
-						} else {
-							callback(null, 0)
-						}
-
-					}
+					callback(err, [grammerify('Transcription% awaiting approval', transcriptions.length), transcriptions.length])
 				})
 			}
 		],
 		function(err, callback) {
-			for (var i in callback) {
-				if (typeof(callback[i]) === 'object') { // Grammar easter egg
-					data.boxes[i].title = callback[i][0]
-					data.boxes[i].data = callback[i][1]
-				} else {
-					data.boxes[i].data = callback[i]
-				}
-				if (i == callback.length - 1) res.render('admin/admin', data)
+			for(var i in callback){
+				data.boxes[i].title = callback[i][0]
+				data.boxes[i].data = callback[i][1]
 			}
+			res.render('admin/admin', data)
 		})
 }
 
@@ -83,11 +72,11 @@ module.exports.getEpisodes = function(req, res) {
 
 	async.series([
 		function (callback) {
-			models.Episode.findAll({ where: { approved: 1} }).success(function(query) {
-				if (query.length > 0) {
+			models.Episode.find({ approved: 1 }, function(err, episodes) {
+				if (episodes.length > 0) {
 					var l = 0
-					async.eachSeries(query, function (item, callback2) {
-						viewData.videos.push(query[l].dataValues)
+					async.eachSeries(episodes, function (item, callback2) {
+						viewData.videos.push(episodes[l].dataValues)
 						sequelize.query('SELECT * FROM Shownotes INNER JOIN Episodes ON Episodes.id = Shownotes.EpisodeId WHERE Episodes.id = :eID ORDER BY approved DESC', null, {raw: true}, {eID: viewData.videos[l].id})
 						.success(function(q2) {
 							if (q2.length > 0) {
