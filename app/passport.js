@@ -6,12 +6,10 @@ module.exports = function(app, key, secret) {
 
 	var TwitterStrategy = passportTwitter.Strategy
 	passport.serializeUser(function(user, done) {
-      console.log('serialize')
     	done(null, user._id)
 	})
 	passport.deserializeUser(function(obj, done) {
     	models.User.findOne(obj, function(err, user) {
-        console.log(user)
     		done(err, user)
     	})
   	})
