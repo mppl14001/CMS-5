@@ -72,7 +72,13 @@ module.exports.getUsers = function(req, res) {
 
 module.exports.getUserById = function(req, res) {
 	res.locals.page = 'users'
-	res.render('admin/admin')
+
+	models.User.findOne({id: req.params.id}).success(function(users) {
+		if(!users){ res.send(404) }
+		else {
+			res.render('admin/user', {user: user})
+		}
+	})
 }
 
 module.exports.approveScreencast = function(req, res) {
@@ -251,6 +257,8 @@ module.exports.deactivateTranscription = function(req, res) {
 
 module.exports.addUser = function(req, res) {
 
+	// I'll fix this later
+
 	var user = new models.User({
 		name: req.body.name,
 		role: req.body.role,
@@ -272,6 +280,9 @@ module.exports.addUser = function(req, res) {
 }
 
 module.exports.deactivateUser = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		var roles = {
 			admin: 1,
@@ -303,6 +314,9 @@ module.exports.deactivateUser = function(req, res) {
 }
 
 module.exports.activateUser = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		var roles = {
 			admin: 1,
@@ -331,6 +345,9 @@ module.exports.activateUser = function(req, res) {
 }
 
 module.exports.changeRole = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		var roles = {
 			admin: 1,
