@@ -49,6 +49,10 @@ module.exports.getPendingEpisodes = function(req, res) {
 	})
 }
 
+/**
+ * Requires:
+ *   - id : ID of the episode
+ */
 module.exports.getEpisodeById = function(req, res) {
 	res.locals.page = 'episodes'
 
@@ -70,17 +74,25 @@ module.exports.getUsers = function(req, res) {
 	})
 }
 
+/**
+ * Requires: 
+ *   - id : ID of the user
+ */
 module.exports.getUserById = function(req, res) {
 	res.locals.page = 'users'
 
 	models.User.findOne({id: req.params.id}).success(function(users) {
 		if(!users){ res.send(404) }
 		else {
-			res.render('admin/user', {user: user})
+			res.render('admin/user', {user: users})
 		}
 	})
 }
 
+/**
+ * Requires:
+ *   - id : ID of the episode
+ */
 module.exports.approveScreencast = function(req, res) {
 	if (req.xhr) {
 		models.Episode.findOne({id: req.body.id}, function(episode){
@@ -95,6 +107,10 @@ module.exports.approveScreencast = function(req, res) {
 	else { res.send(404) }
 }
 
+/**
+ * Requires:
+ *   - id : ID of the episode 
+ */
 module.exports.removeScreencast = function(req, res) {
 	if (req.xhr) {
 		models.Episode.findOne({id: req.body.id}, function(episode){
@@ -109,6 +125,11 @@ module.exports.removeScreencast = function(req, res) {
 	else { res.send(404) }
 }
 
+/**
+ * Requires:
+ *   - id : ID of the episode
+ *   - tag : Text of the tag
+ */
 module.exports.addTag = function(req, res) {
 	if (req.xhr) {
 
@@ -128,6 +149,11 @@ module.exports.addTag = function(req, res) {
 	else { res.send(400) }
 }
 
+/**
+ * Requires:
+ *   - id : ID of the episode
+ *   - tag : Text of the tag
+ */
 module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
 
@@ -170,43 +196,72 @@ module.exports.editTranscription = function(req, res) {
 	}
 }
 
+/**
+ * Requires:
+ *   - id : ID of the episode
+ *   - language : Language of the new transcription
+ *   - text : Text of the transcription
+ *   - approved : Status of the transcription 
+ */
 module.exports.addTranscription = function(req, res) {
 
-	// I'll fix this later
+	if (req.xhr) {
+
+		models.Episode.findById(req.body.id, function(err, episode) {
+			if (_.contains(episode.transcriptions, req.body.language)) {
+				res.send(304)
+			}
+			else {
+				episode.transcriptions.push({approved: false, text: req.body.text, language: req.body.language })
+				episode.save(function(err, episode) {
+					if (!err) {
+						res.send(200)
+					} else {
+						res.send(500)
+					}
+				})
+			}
+		})
+
+	}
+	else { res.send(400) }
+
+}
+
+/**
+ * Requires:
+ *   - id : ID of the episode
+ *   - language : Language of the transcription
+ */
+module.exports.removeTranscription = function(req, res) {
 
 	if (req.xhr) {
-		sequelize.query('INSERT INTO Transcriptions (approved, text, language, EpisodeId) VALUES (0, :content, :language, :episode)', null, {raw: true}, {
-		  content: req.body.content,
-		  language: req.body.language,
-		  episode: req.body.episodeId
-		}).success(function(success) {
-			var sJSON = {
-				status: 'ok',
-				rowsModified: 1
+		models.Episode.findById(req.body.id, function(err, episode) {
+			console.log(episode)
+			if (!_.contains(episode.transcriptions, req.body.language)) {
+				res.send(304)
 			}
-			res.write(JSON.stringify(sJSON))
-			res.end()
-		}).error(function(error) {
-			var eJSON = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
+			else {
+				console.log(req.body.language)
+				episode.transcriptions.find({language: req.body.language}, function(err, transcription) {
+					if (!err) {
+						transcription.approved = false
+						transcription.save()
+						res.send(200)
+					} else {
+						res.send(500)
+					}
+				})
 			}
-			res.write(JSON.stringify(eJSON))
-			res.end()
 		})
 	}
 }
 
-module.exports.removeTranscription = function(req, res) {
-
-	// I'll fix this later
-
-	if (req.xhr) {
-		//sequelize.query('')
-	}
-}
-
+/**
+ * Requires:
+ *   - id : ID of the episode
+ *   - language : Language of the transcription
+ */
 module.exports.activateTranscription = function(req, res) {
 
 	// I'll fix this later
