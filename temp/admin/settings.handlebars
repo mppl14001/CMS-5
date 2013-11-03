@@ -1,0 +1,30 @@
+<h1>{{user.name}}</h1>
+
+<form method="post" id="user-form">
+	<table class="table">
+		{{#ifUserIsViewer user}}
+		{{else}}
+      <tr>
+        <th>Role</th>
+        <td>{{userRoleToString user.role}}</td>
+      </tr>
+		{{/ifUserIsViewer}}
+		<tr>
+		 	<th><label for="language">Language</label></th>
+			<td>
+				<select name="language" id="language" class="form-control">
+					{{#each languages}}
+						<option value="{{code}}" {{#if selected}}selected{{/if}}>{{languageNativeName code}}</option>
+					{{/each}}
+				</select>
+			</td>
+		 </tr>
+	</table>
+
+	<input type="submit" class="btn btn-primary" value="Update">
+</form>
+
+<script>
+	$("#user-form").ajaxForm()
+	$("#language").chosen()
+</script>
