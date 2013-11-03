@@ -17,11 +17,11 @@ var EpisodeSchema = new mongoose.Schema({
 		language: String
 	}],
 	transcriptions: [{
-		approved: Boolean,
-		text: String,
-		language: String
+		type: mongoose.Schema.Types.ObjectId, ref: 'Transcription'
 	}],
-	creator: {type: mongoose.Schema.Types.ObjectId}
+	creator: {
+		type: mongoose.Schema.Types.ObjectId, ref: 'User'
+	}
 })
 
 module.exports = mongoose.model('Episode', EpisodeSchema)
