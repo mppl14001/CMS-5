@@ -9,8 +9,5 @@
 		"key": "",
 		"secret": "",
 		"bucket": ""
-	},
-	"logging": {
-		"sequelize": true
 	}
 }

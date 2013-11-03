@@ -45,8 +45,8 @@ require("./routes.js")(app, {
 app.use(app.router)
 
 app.use(function(err, req, res, next) {
-  console.error(err)
-  res.redirect('/fail')
+	console.error(err)
+	res.redirect('/fail')
 })
 
 app.listen(config.get('port') || 3000)
