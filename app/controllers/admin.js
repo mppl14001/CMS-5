@@ -105,49 +105,21 @@ module.exports.removeScreencast = function(req, res) {
 
 module.exports.addTag = function(req, res) {
 	if (req.xhr) {
-		var tag, episode
-		async.parallel([
-			function(callback) {
-				Episode.find({where: {id: req.body.id}, limit: 1}).success(function(retrievedEpisode) {
-					episode = retrievedEpisode
-					callback(null, retrievedEpisode)
-				}).failure(function(error) {
-					callback(error, null)
-				})
-			}, function(callback) {
-				Tag.findOrCreate({text: req.body.tag}, {}).success(function(retrievedTag) {
-					tag = retrievedTag
-					callback(null, retrievedTag)
-				}).failure(function(error) {
-					callback(error, null)
-				})
+
+		models.Episode.find({id: req.body.id}, function(episode){
+
+			if(_.contains(episode.tags, req.body.tag)){
+				res.send(304)
 			}
-		], function(error, results) {
-			if (error) {
-				var json = {
-					status: 'error',
-					tagAdded: null,
-					error: error
-				}
-				res.send(JSON.stringify(json))
-				return
+			else {
+				episode.tags.concat({ text: req.body.tag })
+				episode.save()
+				res.send(200)
 			}
-			episode.addTag(tag).success(function() {
-				var json = {
-					status: 'ok',
-					tagAdded: req.body.tag
-				}
-				res.send(JSON.stringify(json))
-			}).failure(function(error) {
-				var json = {
-					status: 'error',
-					tagAdded: null,
-					error: error
-				}
-				res.send(JSON.stringify(json))
-			})
+
 		})
 	}
+	else { res.send(400) }
 }
 
 module.exports.removeTag = function(req, res) {
