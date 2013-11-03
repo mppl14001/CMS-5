@@ -1,4 +1,5 @@
 var fs = require('fs')
+var async = require('async')
 
 function createUser(data, callback) {
 	models.User.create({

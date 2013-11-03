@@ -1,13 +1,4 @@
-function grammerify(string, count){
-
-	if(count == 1){
-		return string.replace('%', '')
-	}
-	else {
-		return string.replace('%', 's')
-	}
-
-}
+var async = require('async')
 
 module.exports.get = function(req, res) {
 	res.locals.page = 'dashboard'
@@ -430,4 +421,15 @@ module.exports.changeRole = function(req, res) {
 			res.end()
 		})
 	}
+}
+
+function grammerify(string, count){
+
+	if(count == 1){
+		return string.replace('%', '')
+	}
+	else {
+		return string.replace('%', 's')
+	}
+
 }

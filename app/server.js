@@ -4,7 +4,6 @@ var path = require('path')
 var passport = require('passport')
 var passportTwitter = require('passport-twitter')
 var Sequelize = require('sequelize')
-GLOBAL.async = require('async')
 GLOBAL.languages = require('languages')
 GLOBAL._ = require('lodash')
 

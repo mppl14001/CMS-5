@@ -1,32 +1,4 @@
-function filterByTags(episodes, tags, callback) {
-	if (tags.length === 0) {
-		callback(null, episodes)
-		return
-	}
-	var filtered = []
-	async.each(episodes, function(episode, done) {
-		episode.getTags().success(function(episodeTags) {
-			for (var i = 0; i < episodeTags.length; i++) {
-				console.log(tags.indexOf(episodeTags[i].text))
-				if (tags.indexOf(episodeTags[i].text) !== -1) {
-					filtered.push(episode)
-					done(null)
-					return
-				}
-			}
-			done(null)
-			return
-		}).failure(function(error) {
-			done(error)
-		})
-	}, function(error) {
-		if (error) {
-			callback(error, null)
-		} else {
-			callback(null, filtered)
-		}
-	})
-}
+var async = require('async')
 
 module.exports.getSearch = function(req, res) {
 	var queries = req.query.queryString.split(' ')
@@ -100,6 +72,36 @@ module.exports.getSearch = function(req, res) {
 				}
 
 			})
+		}
+	})
+}
+
+function filterByTags(episodes, tags, callback) {
+	if (tags.length === 0) {
+		callback(null, episodes)
+		return
+	}
+	var filtered = []
+	async.each(episodes, function(episode, done) {
+		episode.getTags().success(function(episodeTags) {
+			for (var i = 0; i < episodeTags.length; i++) {
+				console.log(tags.indexOf(episodeTags[i].text))
+				if (tags.indexOf(episodeTags[i].text) !== -1) {
+					filtered.push(episode)
+					done(null)
+					return
+				}
+			}
+			done(null)
+			return
+		}).failure(function(error) {
+			done(error)
+		})
+	}, function(error) {
+		if (error) {
+			callback(error, null)
+		} else {
+			callback(null, filtered)
 		}
 	})
 }

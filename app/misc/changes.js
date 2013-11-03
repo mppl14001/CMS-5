@@ -1,3 +1,5 @@
+var async = require('async')
+
 function trackChanges(table) {
 	var historyTable = table + '_history'
 	async.series([

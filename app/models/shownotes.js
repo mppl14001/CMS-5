@@ -9,7 +9,7 @@ var ShownotesSchema = new mongoose.Schema({
 	}
 })
 
-ShownotesSchema.path('language').validate(function (v) { return v.length == 2 }, 'Language must be in iso-639-1'); 
+ShownotesSchema.path('language').validate(function (v) { return v.length == 2 }, 'Language must be in iso-639-1')
 
 var ShownotesModel = mongoose.model('Shownotes', ShownotesSchema)
 
