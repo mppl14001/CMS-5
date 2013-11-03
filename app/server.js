@@ -3,7 +3,6 @@ var nconf = require('nconf')
 var path = require('path')
 var passport = require('passport')
 var passportTwitter = require('passport-twitter')
-var Sequelize = require('sequelize')
 GLOBAL._ = require('lodash')
 
 // Config
@@ -18,17 +17,9 @@ if (!dbConfig || !dbConfig.name || !dbConfig.user) {
 	process.exit(1)
 }
 
-// DB
-GLOBAL.sequelize = new Sequelize(dbConfig.name, dbConfig.user, dbConfig.password, {
-	logging: config.get('logging:sequelize') || false
-})
+
 // Models
 GLOBAL.models = require('./models')
-GLOBAL.Episode = models.episode
-GLOBAL.Shownotes = models.shownotes
-GLOBAL.User = models.user
-GLOBAL.Transcription = models.transcriptions
-GLOBAL.Tag = models.tag
 
 // Fixtures
 if (config.get('seed-data')) {
