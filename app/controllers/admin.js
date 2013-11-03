@@ -57,8 +57,8 @@ module.exports.getEpisodeById = function(req, res) {
 
 module.exports.getUsers = function(req, res) {
 	res.locals.page = 'users'
-	models.User.find({}, function(users) {
-		if(!users){ res.send(404) }
+	models.User.find({}, function(err, users) {
+		if(err){ res.send(404) }
 		else {
 			res.render('admin/users', {users: users})
 		}
