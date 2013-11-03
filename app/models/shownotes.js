@@ -1,7 +1,10 @@
 var mongoose = require('mongoose')
 
 var ShownotesSchema = new mongoose.Schema({
-	content: {type: Buffer},
+	content: {
+		type: Buffer,
+		get: function(a){ return a.toString('utf-8') }
+	},
 	language: {type: String}
 })
 
