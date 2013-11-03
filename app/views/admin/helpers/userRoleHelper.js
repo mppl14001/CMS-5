@@ -1,4 +1,4 @@
-function userRoleToString(role){
+function roleToString(role){
 	switch (role) {
 		case 1:	return 'Admin'
 		case 2:	return 'Screencaster'
@@ -8,4 +8,4 @@ function userRoleToString(role){
 	}	
 }
 
-module.exports.userRoleToString = userRoleToString
+module.exports.roleToString = roleToString
