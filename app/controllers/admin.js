@@ -124,23 +124,21 @@ module.exports.addTag = function(req, res) {
 
 module.exports.removeTag = function(req, res) {
 	if (req.xhr) {
-		sequelize.query('DELETE FROM EpisodesTags WHERE TagId = :id LIMIT 1', null, {raw: true}, {id: req.body.tag}).success(function() {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
+
+		models.Episode.find({id: req.body.id}, function(episode){
+
+			if(!_.contains(episode.tags, req.body.tag)){
+				res.send(304)
 			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: null,
-				error: error
+			else {
+				episode.tags[{ text: req.body.tag }] = undefined
+				episode.save()
+				res.send(200)
 			}
-			res.write(JSON.stringify(json))
-			res.end()
+
 		})
 	}
+	else { res.send(400) }
 }
 
 module.exports.editTranscription = function(req, res) {
