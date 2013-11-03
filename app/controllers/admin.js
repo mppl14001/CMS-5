@@ -142,6 +142,9 @@ module.exports.removeTag = function(req, res) {
 }
 
 module.exports.editTranscription = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		sequelize.query('UPDATE Transcriptions SET text = :text AND language = :language WHERE id = :id', null, {raw: true}, {text: req.body.text, language: req.body.language, id: req.body.id}).success(function(data) {
 			var json = {
@@ -162,6 +165,9 @@ module.exports.editTranscription = function(req, res) {
 }
 
 module.exports.addTranscription = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		sequelize.query('INSERT INTO Transcriptions (approved, text, language, EpisodeId) VALUES (0, :content, :language, :episode)', null, {raw: true}, {
 		  content: req.body.content,
@@ -187,12 +193,18 @@ module.exports.addTranscription = function(req, res) {
 }
 
 module.exports.removeTranscription = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		//sequelize.query('')
 	}
 }
 
 module.exports.activateTranscription = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		sequelize.query('UPDATE Transcriptions SET approved = 1 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
 			var json = {
@@ -214,6 +226,9 @@ module.exports.activateTranscription = function(req, res) {
 }
 
 module.exports.deactivateTranscription = function(req, res) {
+
+	// I'll fix this later
+
 	if (req.xhr) {
 		sequelize.query('UPDATE Transcriptions SET approved = 0 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
 			var json = {
@@ -235,31 +250,25 @@ module.exports.deactivateTranscription = function(req, res) {
 }
 
 module.exports.addUser = function(req, res) {
-	if (req.xhr) {
 
-		User.create({
-		  name: res.body.name,
-		  role: res.body.role,
-		  twitter_username: res.body.twHandle,
-		  twitter_access_token: res.body.twAccessToken,
-		  twitter_access_secret: res.body.twAccessSecret
-		}).success(function(user) {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
-			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null,
-				error: error
-			}
-			res.write(JSON.stringify(errorJson))
-			res.end()
-		})
-	}
+	var user = new models.User({
+		name: req.body.name,
+		role: req.body.role,
+		twitter_username: req.body.twHandle,
+		twitter_access_token: req.body.twAccessToken,
+		twitter_access_secret: req.body.twAccessSecret
+	})
+
+	user.save(function(err, user){
+
+		if(err){
+			res.send(200)
+		}
+		else {
+			res.send(304)
+		}
+
+	})
 }
 
 module.exports.deactivateUser = function(req, res) {
