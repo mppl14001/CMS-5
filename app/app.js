@@ -8,9 +8,9 @@ var app = express()
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
 app.engine('handlebars', exphbs({
-	partialsDir: path.join(__dirname, 'views', 'partials'),
-	defaultLayout: path.join(__dirname, 'views', 'layouts', 'main.handlebars'),
-	helpers: require("./views/helpers.js")
+	partialsDir: path.join(__dirname, 'views', 'admin', 'partials'),
+	defaultLayout: path.join(__dirname, 'views', 'admin' , 'layouts', 'main.handlebars'),
+	helpers: require(path.join(__dirname, 'views', 'admin', 'helpers'))
 }))
 app.use(express.cookieParser())
 app.use(express.json())

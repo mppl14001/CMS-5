@@ -1,5 +1,4 @@
 // Node Module Requirements
-var nconf = 
 var path = require('path')
 var passport = require('passport')
 var passportTwitter = require('passport-twitter')
@@ -44,10 +43,10 @@ require("./routes.js")(app, {
 
 app.use(app.router)
 
-app.use(function(err, req, res, next) {
-	console.error(err)
-	res.redirect('/fail')
-})
+// app.use(function(err, req, res, next) {
+// 	console.error(err)
+// 	res.redirect('/fail')
+// })
 
 app.listen(config.get('port') || 3000)
 
