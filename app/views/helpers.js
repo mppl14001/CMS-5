@@ -19,6 +19,86 @@ module.exports = {
 	languageNativeName: function(languageCode) {
 		return languages.getLanguageInfo(languageCode).nativeName
 	},
+	ifViewEpisodes: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.view_episodes === 1) {
+				return block.fn(this)
+			} else {
+				return block.inverse(fn)
+			}
+		}
+	},
+	submitVideos: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.submit_videos === 1) {
+	    		return block.fn(this)
+	  		} else {
+	    		return block.inverse(this)
+	  		}
+		}
+	},
+	submitShownoteTranslations: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.submit_shownote_translations === 1) {
+	    		return block.fn(this)
+	  		} else {
+	    		return block.inverse(this)
+	  		}
+		}
+	},
+	editShownoteTranslations: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.submit_shownote_translations === 1) {
+	    		block.fn(this)
+	  		} else {
+	    		block.inverse(this)
+	  		}
+		}
+	},
+	approveShownoteTranslations: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.approve_shownote_translations === 1) {
+	    		block.fn(this)
+	  		} else {
+	    		block.inverse(this)
+	  		}
+		}
+	},
+	approveEpisodes: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.approve_episodes === 1) {
+	    		block.fn(this)
+	  		} else {
+	    		block.inverse(this)
+	  		}
+		}
+	},
+	promoteUsers: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.promote_users === 1) {
+	    		block.fn(this)
+	  		} else {
+	    		block.inverse(this)
+	  		}
+		}
+	},
+	promoteUsersToAdmin: function(user, block) {
+		if (user) {
+			var permissions = permissions.levelToPermissions(user.permissions)
+			if (permissions.promoteUsersToAdmin === 1) {
+	    		block.fn(this)
+	  		} else {
+	    		block.inverse(this)
+	  		}
+		}
+	},
 	ifUserLanguage: function(user, code, block) {
 		return block[code == user.language ? 'fn' : 'inverse'](this)
 	},
