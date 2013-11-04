@@ -40,9 +40,15 @@ module.exports = function(app, controllers) {
 
   app.get('/transcript/:id', controllers.episodeController.getTranscript)
 
+  app.get('/search', controllers.episodeController.getSearch)
+
+  app.post('/search', controllers.episodeController.postSearch)
+
   /*
     Admin routing
   */
+
+  app.post('/api/search', controllers.episodeController.postAPISearch)
 
   app.get('/admin', /*requireAdmin, */controllers.adminController.get)
 
@@ -94,7 +100,6 @@ module.exports = function(app, controllers) {
 
   // Search
 
-  app.get('/search', controllers.searchController.getSearch)
 }
 
 function requireViewer(req, res, next) {

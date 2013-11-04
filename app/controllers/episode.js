@@ -4,7 +4,7 @@ module.exports.getEpisodeById = function(req, res) {
 
 	if (episodeNumber) {
 
-		Episode.find(episodeNumber).success(function(episode) {
+		models.Episode.find(episodeNumber).success(function(episode) {
 
 			if (episode) {
 				// Return episode
@@ -37,5 +37,28 @@ module.exports.postTranscription = function(req, res) {
 	  EpisodeId: req.params.id
   }).success(function(result) {
 		res.redirect('/transcript/' + result.id)
+	})
+}
+
+module.exports.getSearch = function(req, res) {
+	res.render('search')
+}
+
+module.exports.postSearch = function(req, res) {
+	console.log(req.body.query)
+	models.Episode.search({query: req.body.query}, function(err, results) {
+		if (err) res.send(500, {error: 'An unknown error has occured.'})
+		console.log('Hits + ' + results.hits.hits, results)
+		res.render('search-results', {
+			result: results.hits.hits,
+			query: req.body.query
+		})
+	})
+}
+
+module.exports.postAPISearch = function(req, res) {
+	models.Episode.search({query: req.body.query}, function(err, results) {
+		if (err) res.send(500, {error: 'An unknown error has occured.'})
+		res.send(results)
 	})
 }

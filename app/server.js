@@ -18,7 +18,6 @@ var adminController = require('./controllers/admin.js')
 var episodeController = require('./controllers/episode.js')
 var userController = require('./controllers/user.js')
 var screencasterController = require('./controllers/screencaster.js')
-var searchController = require('./controllers/search.js')
 
 // Express
 var app = require("./app")
@@ -37,7 +36,6 @@ require("./routes.js")(app, {
 	episodeController: episodeController,
 	userController: userController,
 	screencasterController: screencasterController,
-	searchController: searchController,
 	passport: passport
 })
 
