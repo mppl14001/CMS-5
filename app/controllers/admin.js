@@ -228,12 +228,10 @@ module.exports.removeTranscription = function(req, res) {
 
 	if (req.xhr) {
 		models.Episode.findById(req.body.id, function(err, episode) {
-			console.log(episode)
 			if (!_.contains(episode.transcriptions, req.body.language)) {
 				res.send(304)
 			}
 			else {
-				console.log(req.body.language)
 				episode.transcriptions.find({language: req.body.language}, function(err, transcription) {
 					if (!err) {
 						transcription.approved = false
