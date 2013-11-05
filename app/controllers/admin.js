@@ -237,7 +237,8 @@ module.exports.removeTranscription = function(req, res) {
 						transcription.approved = false
 						transcription.save()
 						res.send(200)
-					} else {
+					}
+					else {
 						res.send(500)
 					}
 				})
@@ -253,25 +254,24 @@ module.exports.removeTranscription = function(req, res) {
  */
 module.exports.activateTranscription = function(req, res) {
 
-	// I'll fix this later
-
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET approved = 1 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
+		models.Episode.findById(req.body.eId, function(err, episode) {
+			if (!_.contains(episode.transcriptions, req.body.language)) {
+				res.send(304)
 			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
+			else {
+				episode.transcriptions.find({language: req.body.language}, function(err, transcription) {
+					if (!err) {
+						transcription.approved = true
+						transcription.save()
+						res.send(200)
+					}
+					else {
+						res.send(500)
+					}
+				})
 			}
-			res.write(JSON.stringify(json))
-			res.end()
-		})
+		}
 	}
 }
 
