@@ -9,7 +9,7 @@ module.exports = function(app, key, secret) {
     	done(null, user._id)
 	})
 	passport.deserializeUser(function(obj, done) {
-    	models.User.findOne(obj, function(err, user) {
+    	models.User.findById(obj, function(err, user) {
     		done(err, user)
     	})
   	})
@@ -31,6 +31,7 @@ module.exports = function(app, key, secret) {
 			twitter_access_token: token,
 			twitter_access_secret: tokenSecret
 		}, function(err, user) {
+			console.log(user)
 			if (err) {
 				done(err, null)
 				return
@@ -43,9 +44,7 @@ module.exports = function(app, key, secret) {
 					twitter_username: profile.username,
 					twitter_access_token: token,
 					twitter_access_secret: tokenSecret
-				}, function(err, newUser) {
-					done(err, newUser)
-				})
+				}, done)
 			} else {
 				done(err, user)
 			}
