@@ -2,6 +2,7 @@ var async = require('async')
 
 module.exports.get = function(req, res) {
 	res.locals.page = 'dashboard'
+
 	async.parallel([
 		function(callback) { // Total views
 			callback(null, {title: 'Total views', data: '12,428'})
@@ -57,6 +58,7 @@ module.exports.getEpisodeById = function(req, res) {
 
 module.exports.getUsers = function(req, res) {
 	res.locals.page = 'users'
+	
 	models.User.find({}, function(err, users) {
 		if(err){ res.send(404) }
 		else {
