@@ -271,7 +271,7 @@ module.exports.activateTranscription = function(req, res) {
 					}
 				})
 			}
-		}
+		})
 	}
 }
 
