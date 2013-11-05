@@ -26,32 +26,33 @@ function createEpisode(episode, episodeCallback) {
 }
 
 function generateFixtures() {
-	try {
-		var fixtures = JSON.parse(fs.readFileSync(__dirname + '/fixtures.json', 'utf8'))
-		async.each(fixtures.users, function(user, userCallback) {
-			var episodes = []
-			createUser(user, function(error, createdUser) {
-				async.each(user.episodes, function(episode, episodeCallback) {
-					createEpisode(episode, function(error, episode) {
-						if (!error) {
-							episode.creator = createdUser._id
-							episode.save(function(error, newEpisode) {
-								episodeCallback(error, newEpisode)
-							})
-						} else {
-							episodeCallback(error, null)
-						}
-					})
-				}, function(err) {
-					if (err) {
-						console.log('An error occurred while generating seed data')
+	var fixturesFile = __dirname + '/fixtures.json'
+	if (!fs.existsSync(fixturesFile)) {
+		console.log('Fixtures file not found.')
+		return;
+	}
+	var fixtures = JSON.parse(fs.readFileSync(fixturesFile, 'utf8'))
+	async.each(fixtures.users, function(user, userCallback) {
+		var episodes = []
+		createUser(user, function(error, createdUser) {
+			async.each(user.episodes, function(episode, episodeCallback) {
+				createEpisode(episode, function(error, episode) {
+					if (!error) {
+						episode.creator = createdUser._id
+						episode.save(function(error, newEpisode) {
+							episodeCallback(error, newEpisode)
+						})
+					} else {
+						episodeCallback(error, null)
 					}
 				})
+			}, function(err) {
+				if (err) {
+					console.log('An error occurred while generating seed data')
+				}
 			})
 		})
-	} catch (err) {
-		console.log('Did not seed data: ' + err)
-	}
+	})
 }
 
 module.exports = generateFixtures
