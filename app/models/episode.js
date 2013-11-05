@@ -25,6 +25,4 @@ var EpisodeSchema = new mongoose.Schema({
 	}
 })
 
-EpisodeSchema.plugin(mongoosastic)
-
-module.exports = mongoose.model('Episode', EpisodeSchema)
+module.exports = EpisodeSchema

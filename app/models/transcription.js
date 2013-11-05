@@ -10,4 +10,4 @@ var TranscriptionSchema = new mongoose.Schema({
 	language: {type: String}
 })
 
-module.exports = mongoose.model('Transcription', TranscriptionSchema)
+module.exports = TranscriptionSchema

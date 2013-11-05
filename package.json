@@ -22,7 +22,8 @@
     "lodash": "~2.2.1",
     "mongoose": "~3.8.0",
     "validator": "~2.0.0",
-    "mongoosastic": "latest"
+    "mongoosastic": "latest",
+    "mongoose-auto-increment": "~2.0.4"
   },
   "devDependencies": {
     "mocha": "latest",
