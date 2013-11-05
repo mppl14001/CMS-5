@@ -174,15 +174,15 @@ module.exports.editTranscription = function(req, res) {
 				status: 'ok',
 				rowsModified: 1
 			}
-			res.write(JSON.stringify(json))
-			res.end()
+			res.send(JSON.stringify(json))
+			
 		}).error(function(error) {
 			var json = {
 				status: 'error',
 				rowsModified: 0
 			}
-			res.write(JSON.stringify(json))
-			res.end()
+			res.send(JSON.stringify(json))
+			
 		})
 	}
 }
@@ -285,16 +285,14 @@ module.exports.deactivateTranscription = function(req, res) {
 				status: 'ok',
 				rowsModified: 1
 			}
-			res.write(JSON.stringify(json))
-			res.end()
+			res.send(JSON.stringify(json))
 		}).error(function(error) {
 			var json = {
 				status: 'error',
 				rowsModified: null,
 				error: 'sequelize'
 			}
-			res.write(JSON.stringify(json))
-			res.end()
+			res.send(JSON.stringify(json))
 		})
 	}
 }
@@ -343,16 +341,14 @@ module.exports.deactivateUser = function(req, res) {
 				rowsModified: 1,
 				recordRemoved: req.body.twHandle
 			}
-			res.write(JSON.stringify(successJson))
-			res.end()
+			res.send(JSON.stringify(successJson))
 		}).error(function(error) {
 			var errorJson = {
 				status: 'error',
 				rowsModified: null,
 				error: 'sequelize'
 			}
-			res.write(JSON.stringify(errorJson))
-			res.end()
+			res.send(JSON.stringify(errorJson))
 		})
 	}
 }
@@ -374,16 +370,14 @@ module.exports.activateUser = function(req, res) {
 				rowsModified: 1,
 				recordRemoved: req.body.twHandle
 			}
-			res.write(JSON.stringify(successJson))
-			res.end()
+			res.send(JSON.stringify(successJson))
 		}).error(function(error) {
 			var errorJson = {
 				status: 'error',
 				rowsModified: null,
 				error: 'sequelize'
 			}
-			res.write(JSON.stringify(errorJson))
-			res.end()
+			res.send(JSON.stringify(errorJson))
 		})
 	}
 }
@@ -407,16 +401,14 @@ module.exports.changeRole = function(req, res) {
 				status: 'ok',
 				rowsModified: 1
 			}
-			res.write(JSON.stringify(successJson))
-			res.end()
+			res.send(JSON.stringify(successJson))
 		}).error(function(error) {
 			var errorJson = {
 				status: 'error',
 				rowsModified: null,
 				error: 'sequelize'
 			}
-			res.write(JSON.stringify(errorJson))
-			res.end()
+			res.send(JSON.stringify(errorJson))
 		})
 	}
 }

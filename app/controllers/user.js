@@ -43,18 +43,16 @@ module.exports.postSettings = function (req, res) {
 			language: req.body.language,
 			id: req.user.id
 		}).success(function() {
-			res.write(JSON.stringify({
+			res.send(JSON.stringify({
 				status: 'ok',
 				rowsModified: 1
 			}))
-			res.end()
 		}).error(function() {
-			res.write(JSON.stringify({
+			res.send(JSON.stringify({
 				status: 'error',
 				rowsModified: null,
 				error: 'sequelize'
 			}))
-			res.end()
 		})
 	}
 }
