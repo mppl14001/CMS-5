@@ -169,20 +169,9 @@ module.exports.editTranscription = function(req, res) {
 	// I'll fix this later
 
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET text = :text AND language = :language WHERE id = :id', null, {raw: true}, {text: req.body.text, language: req.body.language, id: req.body.id}).success(function(data) {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
-			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: 0
-			}
-			res.write(JSON.stringify(json))
-			res.end()
+		models.Transcription.findByIdAndUpdate(req.body.id, { text: req.body.text, language: req.body.language }, function(err, result) {
+			if (err) res.send(500, 'An unknown error occured.')
+			res.send(result)
 		})
 	}
 }
@@ -258,21 +247,9 @@ module.exports.activateTranscription = function(req, res) {
 	// I'll fix this later
 
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET approved = 1 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
-			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
-			}
-			res.write(JSON.stringify(json))
-			res.end()
+		models.Transcription.findByIdAndUpdate(req.body.id, { approved: 1 }, function(err, results) {
+			if(err) res.send(500, 'An unknown error occured.')
+			res.send(results)
 		})
 	}
 }
@@ -280,23 +257,11 @@ module.exports.activateTranscription = function(req, res) {
 module.exports.deactivateTranscription = function(req, res) {
 
 	// I'll fix this later
-
+	
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET approved = 0 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
-			}
-			res.write(JSON.stringify(json))
-			res.end()
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
-			}
-			res.write(JSON.stringify(json))
-			res.end()
+		models.Transcription.findByIdAndUpdate(req.body.id, { approved: 0 }, function(err, results) {
+			if(err) res.send(500, 'An unknown error occured.')
+			res.send(results)
 		})
 	}
 }
@@ -336,25 +301,9 @@ module.exports.deactivateUser = function(req, res) {
 			moderator: 3,
 			viewer: 4
 		}
-		sequelize.query('UPDATE Users SET active = 0 WHERE id = :id AND role = :role', null, {raw: true}, {
-		  id: req.body.id,
-		  role: roles[req.body.role]
-		}).success(function(deleted) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1,
-				recordRemoved: req.body.twHandle
-			}
-			res.write(JSON.stringify(successJson))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
-			}
-			res.write(JSON.stringify(errorJson))
-			res.end()
+		models.User.findByIdAndUpdate(req.body.id, { active: 0 }, function(err, result) {
+			if (err) res.send(500, 'An unkown error occured')
+			res.send(result)
 		})
 	}
 }
@@ -370,22 +319,9 @@ module.exports.activateUser = function(req, res) {
 			moderator: 3,
 			viewer:4
 		}
-		sequelize.query('UPDATE Users SET active = 1 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1,
-				recordRemoved: req.body.twHandle
-			}
-			res.write(JSON.stringify(successJson))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
-			}
-			res.write(JSON.stringify(errorJson))
-			res.end()
+		models.User.findByIdAndUpdate(req.body.id, { active: 1 }, function(err, result) {
+			if (err) res.send(500, 'An unkown error occured')
+			res.send(result)
 		})
 	}
 }
@@ -401,24 +337,9 @@ module.exports.changeRole = function(req, res) {
 			moderator: 3,
 			viewer:4
 		}
-		sequelize.query('Update Users SET role = :role WHERE id = :id', null, {raw: true}, {
-		  role: roles[req.body.role],
-		  id: req.body.id
-		}).success(function(data) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1
-			}
-			res.write(JSON.stringify(successJson))
-			res.end()
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
-			}
-			res.write(JSON.stringify(errorJson))
-			res.end()
+		models.User.findByIdAndUpdate(req.body.id, { role: req.body.role }, function(err, result) {
+			if (err) res.send(500, 'An unkown error occured')
+			res.send(result)
 		})
 	}
 }
