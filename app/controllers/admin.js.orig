@@ -175,9 +175,22 @@ module.exports.removeTag = function(req, res) {
 module.exports.editTranscription = function(req, res) {
 
 	if (req.xhr) {
+<<<<<<< HEAD
 		models.Transcription.findByIdAndUpdate(req.body.id, { text: req.body.text, language: req.body.language }, function(err, result) {
 			if (err) res.send(500, 'An unknown error occured.')
 			res.send(result)
+=======
+
+		models.Episode.find({id: req.body.id}, function(episode) {
+			if (!_.contains(episode.transcription, req.body.language)) {
+				res.send(304)
+			}
+			else {
+				episode.transcriptions[{ language: req.body.language }] = req.body.text
+				episode.save()
+				res.send(200)
+			}
+>>>>>>> 6010babe16c8f29e80e99fa027a66b1879e03782
 		})
 
 	}
@@ -252,19 +265,61 @@ module.exports.removeTranscription = function(req, res) {
 module.exports.activateTranscription = function(req, res) {
 
 	if (req.xhr) {
+<<<<<<< HEAD
 		models.Transcription.findByIdAndUpdate(req.body.id, { approved: 1 }, function(err, results) {
 			if(err) res.send(500, 'An unknown error occured.')
 			res.send(results)
+=======
+		models.Episode.findById(req.body.eId, function(err, episode) {
+			if (!_.contains(episode.transcriptions, req.body.language)) {
+				res.send(304)
+			}
+			else {
+				episode.transcriptions.find({language: req.body.language}, function(err, transcription) {
+					if (!err) {
+						transcription.approved = true
+						transcription.save()
+						res.send(200)
+					}
+					else {
+						res.send(500)
+					}
+				})
+			}
+>>>>>>> 6010babe16c8f29e80e99fa027a66b1879e03782
 		})
 	}
 }
 
 module.exports.deactivateTranscription = function(req, res) {
 
+<<<<<<< HEAD
+	// I'll fix this later
+	
 	if (req.xhr) {
 		models.Transcription.findByIdAndUpdate(req.body.id, { approved: 0 }, function(err, results) {
 			if(err) res.send(500, 'An unknown error occured.')
 			res.send(results)
+=======
+	if (req.xhr) {
+
+		models.Episode.findById(req.body.eId, function(err, episode) {
+			if (!_.contains(episode.transcriptions, req.body.language)) {
+				res.send(304)
+			}
+			else {
+				episode.transcriptions.find( { language: req.body.language }, function (err, transcription) {
+					if (!err) {
+						transcription.approved = false
+						transcription.save()
+						res.send(200)
+					}
+					else {
+						res.send(500)
+					}
+				})
+			}
+>>>>>>> 6010babe16c8f29e80e99fa027a66b1879e03782
 		})
 
 	}
@@ -303,6 +358,7 @@ module.exports.addUser = function(req, res) {
 module.exports.deactivateUser = function(req, res) {
 
 	if (req.xhr) {
+<<<<<<< HEAD
 		var roles = {
 			admin: 1,
 			screencaster: 2,
@@ -312,6 +368,18 @@ module.exports.deactivateUser = function(req, res) {
 		models.User.findByIdAndUpdate(req.body.id, { active: 0 }, function(err, result) {
 			if (err) res.send(500, 'An unkown error occured')
 			res.send(result)
+=======
+
+		models.User.findById(req.body.id, function(err, user) {
+			if (!err) {
+				user.approved = false
+				user.save()
+				res.send(200)
+			}
+			else {
+				res.send(500)
+			}
+>>>>>>> 6010babe16c8f29e80e99fa027a66b1879e03782
 		})
 
 	}
@@ -327,6 +395,7 @@ module.exports.deactivateUser = function(req, res) {
 module.exports.activateUser = function(req, res) {
 
 	if (req.xhr) {
+<<<<<<< HEAD
 		var roles = {
 			admin: 1,
 			screencaster: 2,
@@ -336,6 +405,18 @@ module.exports.activateUser = function(req, res) {
 		models.User.findByIdAndUpdate(req.body.id, { active: 1 }, function(err, result) {
 			if (err) res.send(500, 'An unkown error occured')
 			res.send(result)
+=======
+
+		models.User.findById(req.body.id, function (err, user) {
+			if (!err) {
+				user.approved = true
+				user.save()
+				res.send(200)
+			}
+			else {
+				res.send(500)
+			}
+>>>>>>> 6010babe16c8f29e80e99fa027a66b1879e03782
 		})
 
 	}
@@ -352,9 +433,28 @@ module.exports.changeRole = function(req, res) {
 			moderator: 3,
 			viewer:4
 		}
+<<<<<<< HEAD
 		models.User.findByIdAndUpdate(req.body.id, { role: req.body.role }, function(err, result) {
 			if (err) res.send(500, 'An unkown error occured')
 			res.send(result)
+=======
+		sequelize.query('Update Users SET role = :role WHERE id = :id', null, {raw: true}, {
+		  role: roles[req.body.role],
+		  id: req.body.id
+		}).success(function(data) {
+			var successJson = {
+				status: 'ok',
+				rowsModified: 1
+			}
+			res.send(JSON.stringify(successJson))
+		}).error(function(error) {
+			var errorJson = {
+				status: 'error',
+				rowsModified: null,
+				error: 'sequelize'
+			}
+			res.send(JSON.stringify(errorJson))
+>>>>>>> 6010babe16c8f29e80e99fa027a66b1879e03782
 		})
 	}
 }
