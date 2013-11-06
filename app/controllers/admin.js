@@ -166,27 +166,29 @@ module.exports.removeTag = function(req, res) {
 	else { res.send(400) }
 }
 
+/**
+ * Requires:
+ *   - id : ID of the episode
+ *   - language : Language of the transcription to be modified
+ *   - text : Text of the transcription
+ */
 module.exports.editTranscription = function(req, res) {
 
-	// I'll fix this later
-
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET text = :text AND language = :language WHERE id = :id', null, {raw: true}, {text: req.body.text, language: req.body.language, id: req.body.id}).success(function(data) {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
+
+		models.Episode.find({id: req.body.id}, function(episode) {
+			if (!_.contains(episode.transcription, req.body.language)) {
+				res.send(304)
 			}
-			res.send(JSON.stringify(json))
-			
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: 0
+			else {
+				episode.transcriptions[{ language: req.body.language }] = req.body.text
+				episode.save()
+				res.send(200)
 			}
-			res.send(JSON.stringify(json))
-			
 		})
+
 	}
+
 }
 
 /**
