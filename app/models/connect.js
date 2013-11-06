@@ -1,5 +1,7 @@
 var mongoose = require('mongoose')
-var db = mongoose.connection
+
+var db = mongoose.createConnection(config.get('db'))
 
 db.on('error', console.error)
-mongoose.connect(config.get('db'))
+
+module.exports = db

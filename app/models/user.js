@@ -15,4 +15,4 @@ var UserSchema = new mongoose.Schema({
 	language: {type: String}
 })
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = UserSchema
