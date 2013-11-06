@@ -281,29 +281,34 @@ module.exports.activateTranscription = function(req, res) {
 
 module.exports.deactivateTranscription = function(req, res) {
 
-	// I'll fix this later
-
 	if (req.xhr) {
-		sequelize.query('UPDATE Transcriptions SET approved = 0 WHERE id = :id AND EpisodeId = :eId', null, {raw: true}, {id: req.body.id, eId: req.body.eId}).success(function(query) {
-			var json = {
-				status: 'ok',
-				rowsModified: 1
+
+		models.Episode.findById(req.body.eId, function(err, episode) {
+			if (!_.contains(episode.transcriptions, req.body.language)) {
+				res.send(304)
 			}
-			res.send(JSON.stringify(json))
-		}).error(function(error) {
-			var json = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
+			else {
+				episode.transcriptions.find( { language: req.body.language }, function (err, transcription) {
+					if (!err) {
+						transcription.approved = false
+						transcription.save()
+						res.send(200)
+					}
+					else {
+						res.send(500)
+					}
+				})
 			}
-			res.send(JSON.stringify(json))
 		})
+
 	}
+	else {
+		res.send(404)
+	}
+
 }
 
 module.exports.addUser = function(req, res) {
-
-	// I'll fix this later
 
 	var user = new models.User({
 		name: req.body.name,
@@ -315,7 +320,7 @@ module.exports.addUser = function(req, res) {
 
 	user.save(function(err, user){
 
-		if(err){
+		if (err){
 			res.send(200)
 		}
 		else {
@@ -325,64 +330,50 @@ module.exports.addUser = function(req, res) {
 	})
 }
 
+/**
+ * Requires:
+ *   - id : ID of the user 
+ */
 module.exports.deactivateUser = function(req, res) {
 
-	// I'll fix this later
-
 	if (req.xhr) {
-		var roles = {
-			admin: 1,
-			screencaster: 2,
-			moderator: 3,
-			viewer: 4
-		}
-		sequelize.query('UPDATE Users SET active = 0 WHERE id = :id AND role = :role', null, {raw: true}, {
-		  id: req.body.id,
-		  role: roles[req.body.role]
-		}).success(function(deleted) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1,
-				recordRemoved: req.body.twHandle
+
+		models.User.findById(req.body.id, function(err, user) {
+			if (!err) {
+				user.approved = false
+				user.save()
+				res.send(200)
 			}
-			res.send(JSON.stringify(successJson))
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
+			else {
+				res.send(500)
 			}
-			res.send(JSON.stringify(errorJson))
 		})
+
+	}
+	else {
+		res.send(404)
 	}
 }
 
+/**
+ * Requires:
+ *   - id : ID of the user
+ */
 module.exports.activateUser = function(req, res) {
 
-	// I'll fix this later
-
 	if (req.xhr) {
-		var roles = {
-			admin: 1,
-			screencaster: 2,
-			moderator: 3,
-			viewer:4
-		}
-		sequelize.query('UPDATE Users SET active = 1 WHERE id = :id AND role = :role', null, {raw: true}, {id: req.body.id, role: roles[req.body.role]}).success(function(deleted) {
-			var successJson = {
-				status: 'ok',
-				rowsModified: 1,
-				recordRemoved: req.body.twHandle
+
+		models.User.findById(req.body.id, function (err, user) {
+			if (!err) {
+				user.approved = true
+				user.save()
+				res.send(200)
 			}
-			res.send(JSON.stringify(successJson))
-		}).error(function(error) {
-			var errorJson = {
-				status: 'error',
-				rowsModified: null,
-				error: 'sequelize'
+			else {
+				res.send(500)
 			}
-			res.send(JSON.stringify(errorJson))
 		})
+
 	}
 }
 
@@ -417,9 +408,9 @@ module.exports.changeRole = function(req, res) {
 	}
 }
 
-function grammerify(string, count){
+function grammerify(string, count) {
 
-	if(count == 1){
+	if (count == 1) {
 		return string.replace('%', '')
 	}
 	else {
