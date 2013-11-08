@@ -40,7 +40,7 @@ the command line and `config.json`, then the command line argument value will be
 Unit Tests
 ----------
 
-To test the app, run `make test`.
+  To test the app, run `make test`, or `mocha`.
 
 ---
 
