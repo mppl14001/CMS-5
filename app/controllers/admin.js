@@ -274,6 +274,14 @@ module.exports.deactivateTranscription = function(req, res) {
 
 }
 
+/**
+ * Requires:
+ *   - name : name of the user
+ *   - role : role of the user
+ *   - twHandle : Twitter handle
+ *   - twAccessToken: Twitter Access Token
+ *   - twAccessSecret: Twitter Access Secret
+ */
 module.exports.addUser = function(req, res) {
 
 	var user = new models.User({
@@ -341,9 +349,12 @@ module.exports.activateUser = function(req, res) {
 	}
 }
 
+/**
+ * Requires:
+ *   - id : ID of the user
+ *   - role : New role of the user (string)
+ */
 module.exports.changeRole = function(req, res) {
-
-	// I'll fix this later
 
 	if (req.xhr) {
 		var roles = {
