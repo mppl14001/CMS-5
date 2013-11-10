@@ -100,6 +100,11 @@ module.exports = function(app, controllers) {
 
   // Search
 
+  // Fallback
+  app.get('*', function (req, res) {
+    res.render('error/403');
+  })
+
 }
 
 function requireViewer(req, res, next) {
