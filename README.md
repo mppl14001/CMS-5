@@ -50,7 +50,7 @@ Unit Tests
 |:-----------------:|:-----------------------------------------------------:|:--------------------------------------------------:|
 |   Will Smidlein   |              [ws](https://github.com/ws)              |            [ws](https://twitter.com/ws)            |
 |    Joe Torraca    |        [jtorraca](https://github.com/jtorraca)        |      [jtorraca](https://twitter.com/jtorraca)      |
-|    Lenny Khazan   |     [LennyKhazan](https://github.com/LennyKhazan)     |   [LennyKhazan](https://twitter.com/LennyKhazan)   |
+|    Lenny Khazan   |              [LK](https://github.com/LK)              |   [LennyKhazan](https://twitter.com/LennyKhazan)   |
 |    Ross Penman    |          [penman](https://github.com/penman)          |    [PenmanRoss](https://twitter.com/PenmanRoss)    |
 | Charley Hutchison |      [glenwayguy](https://github.com/glenwayguy)      |    [glenwayguy](https://twitter.com/glenwayguy)    |
 |     Nick Frey     |        [NickFrey](https://github.com/nickfrey)        |      [NickFrey](https://twitter.com/NickFrey)      |
